@@ -1,0 +1,198 @@
+/* Patient text-size accessibility control: fixed bottom-left, opposite the chat button. */
+.patient-text-size-control.patient-text-size-floating {
+  position: fixed !important;
+  left: 18px !important;
+  right: auto !important;
+  bottom: 18px !important;
+  top: auto !important;
+  z-index: 11050 !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  width: auto;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.patient-text-size-trigger {
+  min-width: 110px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border: 1px solid #cfdbea;
+  border-radius: 10px;
+  background: #fff;
+  color: #0b3d91;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(15, 47, 91, .13);
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.patient-text-size-trigger:hover,
+.patient-text-size-trigger[aria-expanded="true"] {
+  border-color: #8fb0df;
+  background: #f5f8fd;
+}
+
+.patient-text-size-trigger:active { transform: translateY(1px); }
+
+.patient-text-size-aa {
+  color: #0b3d91;
+  font-size: 16px;
+  font-weight: 850;
+  letter-spacing: -.05em;
+}
+
+.patient-text-size-trigger-label { font-size: 13px; }
+
+.patient-text-size-popover {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 9px);
+  top: auto;
+  right: auto;
+  z-index: 11060;
+  width: 190px;
+  padding: 12px;
+  border: 1px solid #d7e1ee;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(15, 39, 73, .18);
+}
+
+.patient-text-size-popover[hidden] { display: none !important; }
+
+.patient-text-size-popover::after {
+  content: "";
+  position: absolute;
+  left: 22px;
+  bottom: -6px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid #d7e1ee;
+  border-bottom: 1px solid #d7e1ee;
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+.patient-text-size-popover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #172033;
+  font-size: 13px;
+}
+
+.patient-text-size-popover-head span {
+  color: #64748b;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.patient-text-size-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  padding: 4px;
+  border: 1px solid #dbe3ef;
+  border-radius: 9px;
+  background: #f3f6fa;
+}
+
+.patient-text-size-option {
+  min-height: 38px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #475569;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.patient-text-size-option:hover { background: #e7eef8; color: #0b3d91; }
+.patient-text-size-option.is-active {
+  background: #fff;
+  color: #0b3d91;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, .14);
+}
+
+.patient-text-size-trigger:focus-visible,
+.patient-text-size-option:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, .24);
+  outline-offset: 2px;
+}
+
+/* Any old menu copy is suppressed; JavaScript also removes it. */
+.patient-text-size-mobile-row { display: none !important; }
+
+/* Large mode stays moderate so cards and navigation remain usable. */
+html.patient-text-large body { font-size: 17px; }
+html.patient-text-large .page-header p,
+html.patient-text-large .stat-label,
+html.patient-text-large .stat-sub,
+html.patient-text-large .patient-announcement-heading p,
+html.patient-text-large .patient-announcement-content p,
+html.patient-text-large .dash-queue-note,
+html.patient-text-large .action-text small,
+html.patient-text-large label,
+html.patient-text-large input,
+html.patient-text-large select,
+html.patient-text-large textarea,
+html.patient-text-large button,
+html.patient-text-large .btn,
+html.patient-text-large table,
+html.patient-text-large .patient-menu-item,
+html.patient-text-large .mobile-menu a,
+html.patient-text-large .mobile-menu button { font-size: 1rem !important; }
+html.patient-text-large .page-header h1,
+html.patient-text-large .page-header h2 { font-size: 2rem !important; }
+html.patient-text-large .patient-announcement-content h4,
+html.patient-text-large .q-card-title,
+html.patient-text-large .quick-title { font-size: 1.12rem !important; }
+html.patient-text-large .patient-text-size-trigger,
+html.patient-text-large .patient-text-size-option,
+html.patient-text-large .patient-text-size-popover-head { font-size: 14px !important; }
+
+@media (max-width: 900px) {
+  .patient-text-size-control.patient-text-size-floating {
+    display: flex !important;
+    left: 12px !important;
+    bottom: 12px !important;
+  }
+  .patient-text-size-trigger {
+    min-width: 102px;
+    min-height: 39px;
+    padding: 7px 10px;
+    border-radius: 10px;
+  }
+  .patient-text-size-aa { font-size: 15px; }
+  .patient-text-size-trigger-label { font-size: 12px; }
+  .patient-text-size-popover { width: 178px; }
+}
+
+@media (max-width: 420px) {
+  .patient-text-size-control.patient-text-size-floating {
+    left: 10px !important;
+    bottom: 10px !important;
+  }
+  .patient-text-size-trigger {
+    min-width: 96px;
+    min-height: 38px;
+    padding: 7px 9px;
+  }
+  .patient-text-size-trigger-label { font-size: 11.5px; }
+}

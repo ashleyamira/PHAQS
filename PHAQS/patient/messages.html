@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Help Center | Pulilan Health Center</title>
+  <link rel="icon" href="images/mhc-logo.png">
+  <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f3f6fa;color:#10213f;font-family:Inter,"Segoe UI",Arial,sans-serif}
+    .page{max-width:1160px;margin:0 auto;padding:32px 22px 46px}
+    .page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:20px}
+    .page-header h1{font-size:25px;margin:0 0 5px;color:#0f274f}
+    .page-header p{font-size:12px;color:#64748b;margin:0}
+    .support-status{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid #bbf7d0;border-radius:7px;background:#f0fdf4;color:#166534;font-size:11px;font-weight:700}
+    .support-status i{font-size:8px;color:#22c55e}
+    .help-layout{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;min-height:620px}
+    .side-card,.chat{background:#fff;border:1px solid #dbe4ef;border-radius:10px;box-shadow:0 5px 18px rgba(15,39,79,.045)}
+    .side-card{padding:20px;height:max-content}
+    .side-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:8px;background:#eaf2ff;color:#0b3d91;font-size:17px;margin-bottom:15px}
+    .side-card h2{font-size:15px;margin:0 0 7px;color:#10213f}
+    .side-card>p{font-size:11.5px;line-height:1.6;color:#64748b;margin:0 0 18px}
+    .field-label{display:flex;align-items:center;gap:7px;margin-bottom:7px;color:#334155;font-size:11px;font-weight:750}
+    .info-tip{position:relative;display:inline-flex}
+    .info-tip button{width:18px;height:18px;border:1px solid #93acd0;border-radius:50%;background:#fff;color:#0b3d91;padding:0;font-size:11px;font-weight:900;cursor:help;line-height:16px}
+    .info-tip span{position:absolute;z-index:20;left:50%;bottom:calc(100% + 9px);width:245px;transform:translateX(-50%) translateY(4px);padding:10px 11px;border-radius:7px;background:#102b58;color:#fff;font-size:10.5px;font-weight:500;line-height:1.5;box-shadow:0 8px 20px rgba(15,39,79,.2);opacity:0;visibility:hidden;transition:.15s;pointer-events:none}
+    .info-tip span:after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#102b58}
+    .info-tip:hover span,.info-tip:focus-within span{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+    .branch-select{width:100%;height:42px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#10213f;padding:0 10px;font-size:12px;outline:none}
+    .branch-select:focus{border-color:#0b3d91;box-shadow:0 0 0 3px rgba(11,61,145,.09)}
+    .route-box{margin-top:12px;padding:11px;border-left:3px solid #0b3d91;background:#f4f8ff;color:#475569;font-size:10.5px;line-height:1.5}
+    .route-box strong{display:block;color:#0b3d91;margin-bottom:2px}
+    .help-list{margin:18px 0 0;padding-top:17px;border-top:1px solid #edf2f7;display:grid;gap:11px}
+    .help-item{display:grid;grid-template-columns:26px 1fr;gap:9px;align-items:start}
+    .help-item i{width:26px;height:26px;border-radius:6px;display:grid;place-items:center;background:#f1f5f9;color:#48617f;font-size:11px}
+    .help-item strong{display:block;font-size:11px;color:#334155}.help-item span{display:block;font-size:9.5px;color:#94a3b8;margin-top:2px;line-height:1.35}
+    .chat{display:flex;flex-direction:column;overflow:hidden;min-width:0}
+    .chat-head{min-height:68px;padding:14px 18px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:15px}
+    .chat-person{display:flex;align-items:center;gap:11px;min-width:0}
+    .chat-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#0b3d91;color:#fff;font-size:14px;flex:0 0 auto}
+    .chat-head strong{font-size:13px;display:block}.chat-head small{display:block;font-size:9.5px;color:#64748b;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .branch-chip{padding:6px 9px;border:1px solid #cfe0f8;border-radius:999px;background:#f4f8ff;color:#0b3d91;font-size:9.5px;font-weight:750;white-space:nowrap}
+    .messages{flex:1;min-height:0;overflow:auto;padding:20px;background:#f7f9fc;display:flex;flex-direction:column}
+    .empty{margin:auto;text-align:center;color:#64748b;font-size:11px;line-height:1.6}.empty i{display:block;font-size:30px;color:#b5c2d3;margin-bottom:9px}
+    .msg{max-width:72%;padding:10px 12px;border-radius:11px;margin-bottom:9px;font-size:12px;line-height:1.48}
+    .msg.patient{align-self:flex-end;background:#0b3d91;color:#fff;border-bottom-right-radius:3px}
+    .msg.admin{align-self:flex-start;background:#fff;color:#233854;border:1px solid #dbe4ef;border-bottom-left-radius:3px}
+    .msg.automated{border-left:4px solid #d97706;background:#fffbeb;color:#713f12}.auto-tag{display:block;width:max-content;margin-bottom:5px;padding:2px 5px;border-radius:3px;background:#fef3c7;color:#92400e;font-size:8px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+    .msg small{display:block;font-size:8.5px;opacity:.7;margin-top:5px}
+    .send{padding:12px;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:1fr auto;gap:8px;background:#fff}
+    .send input{min-width:0;height:43px;border:1px solid #cbd5e1;border-radius:7px;padding:0 12px;font-size:12px;outline:none}.send input:focus{border-color:#0b3d91;box-shadow:0 0 0 3px rgba(11,61,145,.08)}
+    .send button{height:43px;border:0;background:#0b3d91;color:#fff;border-radius:7px;padding:0 17px;font-size:11px;font-weight:750;cursor:pointer}.send button:hover{background:#082f72}.send button:disabled{opacity:.55;cursor:not-allowed}
+    @media(max-width:800px){.page{padding:22px 14px 36px}.page-header{align-items:flex-start;flex-direction:column}.help-layout{grid-template-columns:1fr}.side-card{padding:17px}.help-list{display:none}.chat{height:590px}.msg{max-width:86%}}
+    @media(max-width:520px){.chat-head{align-items:flex-start}.branch-chip{display:none}.send button span{display:none}.info-tip span{left:0;transform:none}.info-tip:hover span,.info-tip:focus-within span{transform:none}.info-tip span:after{left:9px}}
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/innovation-pages-consistency.css?v=20260721-dashboard-shell">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+<link rel="stylesheet" href="css/patient-text-size.css?v=20260728-floating-left-v1">
+</head>
+<body>
+  <nav class="navbar patient-navbar">
+    <div class="nav-container">
+      <a class="logo-area" href="dashboard.html"><img src="images/mhc-logo.png" class="logo-img" alt="Pulilan Health Center"><div class="logo-text"><h5>Pulilan Health Center</h5><span>PHAQS</span></div></a>
+      <div class="menu">
+        <a href="dashboard.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+        <a href="book.html"><i class="fa-regular fa-calendar-plus"></i><span>Book Appointment</span></a>
+        <a href="appointments.html"><i class="fa-regular fa-calendar-check"></i><span>My Appointments</span></a>
+        <a href="queue.html"><i class="fa-solid fa-list-check"></i><span>Queue Status</span></a>
+        <a class="active" href="messages.html"><i class="fa-regular fa-comments"></i><span>Help Center</span></a>
+        <a href="profile.html"><i class="fa-regular fa-user"></i><span>Profile</span></a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="page">
+
+    <header class="page-header">
+      <div><h1>Help Center</h1><p>Get instant automated guidance, then continue the same conversation with authorized RHU staff.</p></div>
+      <div class="support-status"><i class="fa-solid fa-circle"></i> RHU support messaging</div>
+    </header>
+
+    <div class="help-layout">
+      <aside class="side-card">
+        <div class="side-icon"><i class="fa-solid fa-headset"></i></div>
+        <h2>Contact your RHU</h2>
+        <p>Select the branch that should receive your concern. Only its assigned RHU staff and the System Administrator can view the inquiry.</p>
+        <label class="field-label" for="rhuBranch">Send inquiry to
+          <span class="info-tip"><button type="button" aria-label="What is the RHU filter?">!</button><span>The RHU filter routes your message to the correct health-center branch. Choose the same RHU as your appointment whenever possible.</span></span>
+        </label>
+        <select class="branch-select" id="rhuBranch">
+          <option>RHU I - Poblacion</option><option>RHU II - Cutcot</option><option>RHU III - Tinejero</option><option>RHU IV - Tibag</option>
+        </select>
+        <div class="route-box" id="routeStatus"><strong>Current destination</strong><span>Loading your assigned RHU...</span></div>
+        <div class="help-list">
+          <div class="help-item"><i class="fa-regular fa-calendar-check"></i><div><strong>Appointment concerns</strong><span>Confirmation, reschedule, requirements, or cancellation.</span></div></div>
+          <div class="help-item"><i class="fa-solid fa-list-ol"></i><div><strong>Queue assistance</strong><span>Arrival, queue number, and current serving status.</span></div></div>
+          <div class="help-item"><i class="fa-solid fa-shield-halved"></i><div><strong>Private conversation</strong><span>Your messages are not displayed on the public TV queue.</span></div></div>
+        </div>
+      </aside>
+
+      <section class="chat">
+        <div class="chat-head">
+          <div class="chat-person"><div class="chat-avatar"><i class="fa-solid fa-user-nurse"></i></div><div><strong>Pulilan Health Center Support</strong><small>Automated guidance is labeled; staff replies show the responder's name.</small></div></div>
+          <div class="branch-chip" id="branchChip">RHU</div>
+        </div>
+        <div class="messages" id="messages"><div class="empty"><i class="fa-regular fa-comments"></i>Loading your conversation...</div></div>
+        <form class="send" onsubmit="sendMessage(event)"><input id="messageInput" maxlength="1000" placeholder="Type your message..." required><button id="sendButton"><i class="fa-solid fa-paper-plane"></i> <span>Send</span></button></form>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/patient_nav_shell.js?v=20260721-dashboard-shell"></script>
+  <script src="../ui-utils.js?v=20260721-context-tip"></script>
+  <script>
+    const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    let branchInitialized=false,lastMessageFingerprint='',chatPollTimer=null;
+    async function api(action,data={}){const response=await fetch('../backend/api.php?action='+action,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}),result=await response.json();if(!response.ok||!result.ok)throw Error(result.message||'Request failed');return result}
+    function updateRoute(branch,pending=false){document.getElementById('branchChip').textContent=branch;document.getElementById('routeStatus').innerHTML=`<strong>${pending?'Next message destination':'Current conversation'}</strong><span>${esc(branch)}</span>`}
+    async function load(force=false){const result=await api('chat_messages'),box=document.getElementById('messages'),select=document.getElementById('rhuBranch');if(!branchInitialized){select.value=result.rhu_branch||select.value;branchInitialized=true;updateRoute(select.value)}const messages=result.messages||[],fingerprint=messages.map(message=>`${message.id}:${message.sender_type}:${Number(message.is_automated)}:${message.created_at}`).join('|');if(!force&&fingerprint===lastMessageFingerprint)return;const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<90;lastMessageFingerprint=fingerprint;box.innerHTML=messages.length?messages.map(message=>`<div class="msg ${message.sender_type} ${Number(message.is_automated)?'automated':''}">${Number(message.is_automated)?'<span class="auto-tag">Automated reply</span>':''}${esc(message.message)}<small>${esc(message.name)} · ${esc(message.created_at)}</small></div>`).join(''):'<div class="empty"><i class="fa-regular fa-comments"></i>No messages yet.<br>Choose an RHU and send your first question.</div>';if(force||nearBottom)box.scrollTop=box.scrollHeight}
+    function chatNotice(message){if(window.showPlainAlert)window.showPlainAlert(message,{title:'Unable to load messages',tone:'danger'});else console.error(message)}
+    async function sendMessage(event){event.preventDefault();const input=document.getElementById('messageInput'),button=document.getElementById('sendButton'),text=input.value.trim(),branch=document.getElementById('rhuBranch').value;if(!text)return;input.disabled=true;button.disabled=true;try{await api('chat_send',{message:text,rhu_branch:branch});input.value='';updateRoute(branch);await load(true)}catch(error){chatNotice(error.message)}finally{input.disabled=false;button.disabled=false;input.focus()}}
+    async function pollChat(){clearTimeout(chatPollTimer);if(!document.hidden)await load().catch(()=>{});chatPollTimer=setTimeout(pollChat,15000)}
+    document.getElementById('rhuBranch').addEventListener('change',event=>updateRoute(event.target.value,true));
+    load(true).then(()=>{chatPollTimer=setTimeout(pollChat,15000)}).catch(error=>{chatNotice(error.message);if(/login/i.test(error.message))location.href='login.html'});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)load().catch(()=>{})});
+  </script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+<style id="helpNotificationArrivalStyle">
+@keyframes helpNotificationArrival {
+  0% { box-shadow: 0 0 0 0 rgba(11,61,145,.28); }
+  70% { box-shadow: 0 0 0 12px rgba(11,61,145,0); }
+  100% { box-shadow: none; }
+}
+.help-notification-arrival {
+  animation: helpNotificationArrival 1.4s ease-out 2;
+}
+</style>
+<script id="helpNotificationArrivalScript">
+document.addEventListener('DOMContentLoaded', function () {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('from') !== 'notification') return;
+
+  const conversation =
+    document.querySelector('.messages-panel') ||
+    document.querySelector('.chat-panel') ||
+    document.querySelector('.messages-card') ||
+    document.querySelector('#messagesBox') ||
+    document.querySelector('#messageList') ||
+    document.querySelector('main');
+
+  if (conversation) {
+    conversation.classList.add('help-notification-arrival');
+    setTimeout(function () {
+      conversation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 250);
+  }
+
+  setTimeout(function () {
+    const input =
+      document.querySelector('#messageInput') ||
+      document.querySelector('textarea[name="message"]') ||
+      document.querySelector('input[name="message"]');
+    input?.focus();
+  }, 700);
+
+  history.replaceState({}, document.title, 'messages.html');
+});
+</script>
+
+<script src="js/patient-text-size.js?v=20260728-floating-left-v1"></script>
+</body>
+</html>

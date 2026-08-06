@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHAQS | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="css/theme-clean.css">
+<link rel="stylesheet" href="css/patient_index.css?v=20260721-balanced-healthcare">
+<link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+<link rel="stylesheet" href="css/landing-premium.css?v=20260721-dark-blue-contrast-v2">
+<link rel="stylesheet" href="css/landing-final.css?v=20260802-mobile-menu-compact-v2">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+</head>
+<body class="landing-page landing-premium-page">
+
+<a class="landing-skip-link" href="#mainContent">Skip to main content</a>
+
+<nav class="navbar" id="mainNavbar" aria-label="Public navigation">
+  <div class="nav-container">
+    <button class="logo-area" type="button" onclick="scrollToTop()" aria-label="Pulilan Health Center home">
+      <img src="images/mhc-logo.png" alt="Pulilan Health Center logo" onerror="this.style.display='none'">
+      <span class="logo-text">
+        <strong>Pulilan Health Center</strong>
+        <small>PHAQS</small>
+      </span>
+    </button>
+    <div class="nav-links">
+      <button class="nav-link-item" data-nav-target="about" onclick="scrollToSection('about')">About</button>
+      <button class="nav-link-item" data-nav-target="services" onclick="scrollToSection('services')">Services</button>
+      <button class="nav-link-item" data-nav-target="map-section" onclick="scrollToSection('map-section')">RHU Locations</button>
+      <button class="nav-link-item" data-nav-target="health-updates" onclick="scrollToSection('health-updates')">Updates</button>
+      <button class="nav-link-item" data-nav-target="faq" onclick="scrollToSection('faq')">Help</button>
+      <div class="nav-divider"></div>
+      <button class="btn-nav-login" onclick="goLogin()">Sign in</button>
+      <button class="btn-nav-register" onclick="goRegister()">Create account</button>
+    </div>
+    <button class="hamburger-btn" onclick="toggleMenu()" id="hamburgerBtn" aria-label="Open navigation menu" aria-controls="mobileMenu" aria-expanded="false">
+      <i class="fas fa-bars" id="hamburgerIcon"></i>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <button onclick="scrollToSection('about');toggleMenu()">About</button>
+      <button onclick="scrollToSection('services');toggleMenu()">Services</button>
+      <button onclick="scrollToSection('map-section');toggleMenu()">RHU Locations</button>
+      <button onclick="scrollToSection('health-updates');toggleMenu()">Updates</button>
+      <button onclick="scrollToSection('faq');toggleMenu()">Help</button>
+      <div class="mob-divider"></div>
+      <button class="btn-mob-login" onclick="goLogin()">Sign in</button>
+      <button class="btn-mob-register" onclick="goRegister()">Create account</button>
+    </div>
+  </div>
+</nav>
+
+<section class="public-advisory" id="publicAdvisory" aria-live="polite" hidden>
+  <div class="public-advisory-inner">
+    <span class="public-advisory-icon" aria-hidden="true"><i class="fa-solid fa-bullhorn"></i></span>
+    <div class="public-advisory-copy">
+      <span class="public-advisory-label" id="publicAdvisoryLabel">Health advisory</span>
+      <strong id="publicAdvisoryTitle"></strong>
+      <p id="publicAdvisoryMessage"></p>
+    </div>
+    <button class="public-advisory-action" type="button" onclick="scrollToSection('health-updates')">View full notice <i class="fa-solid fa-arrow-right"></i></button>
+    <button class="public-advisory-close" id="publicAdvisoryClose" type="button" aria-label="Dismiss advisory"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+</section>
+
+<main id="mainContent">
+  <section class="hero landing-care-hero landing-signature-hero premium-hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="hero-badge"><i class="fa-solid fa-heart-pulse"></i> Patient appointment and queue portal</div>
+          <h1>Care begins before you <span class="highlight">reach the RHU.</span></h1>
+          <p>Check branch schedules, choose a service and time, save your appointment pass, and follow your queue from one patient account.</p>
+          <div class="hero-buttons">
+            <button class="btn-hero-main" onclick="goLogin()"><i class="fa-regular fa-calendar-check"></i> Book an appointment</button>
+            <button class="btn-hero-outline" onclick="goRegister()">Create patient account <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+          <div class="hero-proof-grid" aria-label="Available patient services">
+            <div><strong>Four RHU branches</strong><span>Choose the location that serves you</span></div>
+            <div><strong>Live queue after check-in</strong><span>See your number and people ahead after arrival</span></div>
+            <div><strong>Digital arrival pass</strong><span>Keep your QR ready on your phone</span></div>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <div class="hero-visual-frame">
+            <div class="hero-image-label"><span>Pulilan community care</span><b>Connected RHU services</b></div>
+            <div class="hero-carousel" id="heroCarousel" aria-label="Pulilan health services photo gallery">
+              <div class="hero-carousel-track">
+                <div class="hero-slide active"><img src="images/pic2.jpg" alt="Pulilan health facility"></div>
+                <div class="hero-slide"><img src="images/consultation.jpg" alt="Health consultation service"></div>
+                <div class="hero-slide"><img src="images/rhu2.jpg" alt="Pulilan Rural Health Unit II"></div>
+                <div class="hero-slide"><img src="images/prenatal.jpg" alt="Maternal healthcare service"></div>
+              </div>
+              <div class="hero-carousel-dots" role="group" aria-label="Choose gallery image">
+                <button class="hero-carousel-dot active" type="button" data-slide="0" aria-label="Show image 1" aria-current="true"></button>
+                <button class="hero-carousel-dot" type="button" data-slide="1" aria-label="Show image 2"></button>
+                <button class="hero-carousel-dot" type="button" data-slide="2" aria-label="Show image 3"></button>
+                <button class="hero-carousel-dot" type="button" data-slide="3" aria-label="Show image 4"></button>
+              </div>
+            </div>
+            <div class="hero-photo-caption">
+              <span class="hero-caption-mark" aria-hidden="true"><i class="fa-solid fa-route"></i></span>
+              <div><strong>One connected patient journey</strong><span>From choosing a schedule to following your queue</span></div>
+              <button type="button" onclick="scrollToSection('map-section')">View RHU locations <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="landing-access-section" aria-label="Start your health center visit">
+    <div class="container">
+      <div class="landing-action-shell">
+        <div class="landing-action-intro">
+          <span>Start here</span>
+          <strong>What do you need today?</strong>
+        </div>
+        <nav class="landing-primary-actions" aria-label="Patient online services">
+          <button type="button" onclick="goLogin()"><span><i class="fa-regular fa-calendar-check"></i></span><div><strong>Book a visit</strong><small>Select a branch, service, date and time</small></div><i class="fa-solid fa-arrow-right"></i></button>
+          <button type="button" onclick="goLogin()"><span><i class="fa-solid fa-list-ol"></i></span><div><strong>Track my queue</strong><small>View your live position after check-in</small></div><i class="fa-solid fa-arrow-right"></i></button>
+          <button type="button" onclick="scrollToSection('map-section')"><span><i class="fa-solid fa-location-dot"></i></span><div><strong>Find an RHU</strong><small>See locations, services and today's hours</small></div><i class="fa-solid fa-arrow-right"></i></button>
+        </nav>
+      </div>
+
+      <aside class="landing-live-board" id="landingLiveCard" aria-live="polite">
+        <div class="landing-live-summary">
+          <div class="landing-live-head"><span><i></i> Today's RHU access</span><time id="landingStatusDate">Today</time></div>
+          <strong id="landingOpenSummary">Checking current schedules…</strong>
+          <p id="landingOpenDetail">Loading the configured clinic hours.</p>
+          <button type="button" onclick="scrollToSection('map-section')">Open branch directory <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="landing-branch-dots" id="landingBranchDots" aria-label="RHU branch status"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="visit-readiness" aria-label="Before your visit">
+    <div class="container visit-readiness-grid">
+      <div class="readiness-title"><span>Before you go</span><strong>A few things to prepare</strong></div>
+      <article><i class="fa-regular fa-id-card"></i><div><strong>Bring a valid ID</strong><span>Keep your appointment details ready.</span></div></article>
+      <article><i class="fa-solid fa-qrcode"></i><div><strong>Save your QR pass</strong><span>It stays available in your account.</span></div></article>
+      <article><i class="fa-regular fa-clock"></i><div><strong>Arrive 15 minutes early</strong><span>Late arrival may affect your queue slot.</span></div></article>
+      <article class="visit-readiness-alert"><i class="fa-solid fa-triangle-exclamation"></i><div><strong>For emergencies</strong><span>Proceed to the nearest emergency facility.</span></div></article>
+    </div>
+  </section>
+
+  <section class="landing-updates" id="health-updates" aria-labelledby="landingUpdatesTitle">
+    <div class="container landing-updates-shell">
+      <header class="landing-updates-intro">
+        <span><i class="fa-solid fa-bullhorn"></i> Public health updates</span>
+        <h2 id="landingUpdatesTitle">Know before you visit.</h2>
+        <p>Current municipality-wide advisories are shown here. Branch-specific notices remain inside the secure patient portal.</p>
+        <button type="button" onclick="goLogin()">Open patient announcements <i class="fa-solid fa-arrow-right"></i></button>
+      </header>
+      <div class="landing-update-list" id="landingUpdateList" aria-live="polite">
+        <article class="landing-update-empty">
+          <span><i class="fa-solid fa-shield-heart"></i></span>
+          <div><strong>Checking current health advisories…</strong><p>Only active public notices will appear here.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section premium-about" id="about">
+    <div class="container">
+      <div class="about-layout">
+        <div class="about-image">
+          <img src="images/pulilan-rhu-community-facility.png" alt="Pulilan community health facility">
+          <div class="about-image-note"><span>Mobile-ready access</span><strong>Your visit details stay with you.</strong></div>
+        </div>
+        <div class="about-content">
+          <div class="tag">One patient portal</div>
+          <h2>One patient journey across every RHU branch.</h2>
+          <p>Prepare before leaving home and keep the right information at every step—from available schedules and appointment passes to queue updates and branch announcements.</p>
+          <ul class="about-benefits">
+            <li><i class="fa-solid fa-check"></i><div><strong>Plan around real schedules</strong><span>Availability follows the selected branch, service, date and clinic configuration.</span></div></li>
+            <li><i class="fa-solid fa-check"></i><div><strong>Know what happens next</strong><span>Your dashboard keeps the appointment, QR pass and queue position together.</span></div></li>
+            <li><i class="fa-solid fa-check"></i><div><strong>Support family care</strong><span>Approved caregivers can manage eligible dependent visits without mixing patient records.</span></div></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section care-journey-section">
+    <div class="container">
+      <div class="section-header journey-heading">
+        <div><div class="tag"><i class="fa-solid fa-route"></i> Your visit</div><h2>Three moments. One clear path.</h2></div>
+        <p>Use the portal before, during and after arrival so every step is easier to follow.</p>
+      </div>
+      <div class="care-journey">
+        <article><span class="journey-step">01</span><div class="journey-icon"><i class="fa-solid fa-hospital-user"></i></div><div><h3>Choose your care</h3><p>Select the RHU and service that match your needs.</p></div></article>
+        <article><span class="journey-step">02</span><div class="journey-icon"><i class="fa-regular fa-calendar-check"></i></div><div><h3>Reserve and prepare</h3><p>Pick an available time and save your appointment pass.</p></div></article>
+        <article><span class="journey-step">03</span><div class="journey-icon"><i class="fa-solid fa-qrcode"></i></div><div><h3>Arrive and follow</h3><p>Present your QR and monitor your live queue from your phone.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section premium-services" id="services">
+    <div class="container">
+      <div class="section-header services-heading">
+        <div><div class="tag"><i class="fa-solid fa-stethoscope"></i> Health services</div><h2>Care for different stages of life.</h2></div>
+        <p>Choose a service during booking to see the RHU branches and schedules currently available.</p>
+      </div>
+      <div class="service-showcase">
+        <button type="button" class="service-card service-feature service-consultation" onclick="selectLandingService('consultation', true)" aria-label="View guidance for general medical consultation">
+          <img src="images/consultation.jpg" alt="General medical consultation">
+          <div class="service-overlay"><span><i class="fa-solid fa-stethoscope"></i> Primary care</span><h3>General medical consultation</h3><p>Consultation and health assessment for common health concerns.</p></div>
+        </button>
+        <button type="button" class="service-card service-feature service-vaccine" onclick="selectLandingService('vaccination', true)" aria-label="View guidance for vaccination and immunization">
+          <img src="images/vaccine.jpg" alt="Vaccination service">
+          <div class="service-overlay"><span><i class="fa-solid fa-syringe"></i> Prevention</span><h3>Vaccination and immunization</h3><p>Routine vaccination services for eligible children and adults.</p></div>
+        </button>
+        <button type="button" class="service-card service-compact" onclick="selectLandingService('prenatal', true)" aria-label="View guidance for prenatal care"><span class="service-icon"><i class="fa-solid fa-person-pregnant"></i></span><div><small>Maternal health</small><h3>Prenatal care</h3><p>Regular monitoring and support for expecting mothers.</p></div><i class="fa-solid fa-arrow-right"></i></button>
+        <button type="button" class="service-card service-compact" onclick="selectLandingService('child', true)" aria-label="View guidance for child immunization"><span class="service-icon"><i class="fa-solid fa-baby"></i></span><div><small>Child health</small><h3>Child immunization</h3><p>Vaccination and health support for infants and children.</p></div><i class="fa-solid fa-arrow-right"></i></button>
+        <button type="button" class="service-card service-compact" onclick="selectLandingService('family', true)" aria-label="View guidance for family planning"><span class="service-icon"><i class="fa-solid fa-people-roof"></i></span><div><small>Family wellness</small><h3>Family planning</h3><p>Counseling and services for informed family health decisions.</p></div><i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section visit-planner-section" id="visit-planner" aria-labelledby="visitPlannerTitle">
+    <div class="container">
+      <div class="visit-planner-shell">
+        <aside class="visit-planner-intro">
+          <div class="visit-planner-tag"><i class="fa-solid fa-compass"></i> Visit planner</div>
+          <h2 id="visitPlannerTitle">Not sure which service to choose?</h2>
+          <p>Select what you need and review the suggested RHU service and documents to prepare before booking.</p>
+          <div class="visit-planner-points">
+            <span><i class="fa-solid fa-check"></i> Service guidance</span>
+            <span><i class="fa-solid fa-check"></i> Preparation checklist</span>
+            <span><i class="fa-solid fa-check"></i> Direct schedule access</span>
+          </div>
+        </aside>
+        <div class="visit-planner-workspace">
+          <div class="visit-planner-question">
+            <span>What do you need help with?</span>
+            <small>Choose one to see the visit guide.</small>
+          </div>
+          <div class="visit-planner-options" role="tablist" aria-label="Choose a health center service">
+            <button type="button" role="tab" data-service-choice="consultation" onclick="selectLandingService('consultation')"><i class="fa-solid fa-stethoscope"></i><span>General concern</span></button>
+            <button type="button" role="tab" data-service-choice="vaccination" onclick="selectLandingService('vaccination')"><i class="fa-solid fa-syringe"></i><span>Vaccination</span></button>
+            <button type="button" role="tab" data-service-choice="prenatal" onclick="selectLandingService('prenatal')"><i class="fa-solid fa-person-pregnant"></i><span>Pregnancy care</span></button>
+            <button type="button" role="tab" data-service-choice="child" onclick="selectLandingService('child')"><i class="fa-solid fa-baby"></i><span>Child health</span></button>
+            <button type="button" role="tab" data-service-choice="family" onclick="selectLandingService('family')"><i class="fa-solid fa-people-roof"></i><span>Family planning</span></button>
+          </div>
+          <article class="visit-planner-result" role="tabpanel" aria-live="polite">
+            <span class="visit-planner-result-icon" aria-hidden="true"><i id="visitPlannerIcon" class="fa-solid fa-stethoscope"></i></span>
+            <div class="visit-planner-result-copy">
+              <small id="visitPlannerLabel">Suggested service</small>
+              <h3 id="visitPlannerResultTitle">General medical consultation</h3>
+              <p id="visitPlannerResultDescription">For common health concerns, assessment, and consultation with an RHU healthcare professional.</p>
+              <div class="visit-planner-checklist">
+                <strong><i class="fa-regular fa-clipboard"></i> What to prepare</strong>
+                <ul id="visitPlannerRequirements"></ul>
+              </div>
+            </div>
+            <div class="visit-planner-result-action">
+              <button type="button" onclick="goLogin()">Sign in to check schedules <i class="fa-solid fa-arrow-right"></i></button>
+              <span><i class="fa-solid fa-circle-info"></i> This guide helps route your visit and does not diagnose symptoms.</span>
+            </div>
+          </article>
+        </div>
+      </div>
+      <p class="visit-planner-emergency"><i class="fa-solid fa-triangle-exclamation"></i><strong>For emergencies:</strong> proceed to the nearest emergency facility. Do not wait for an online appointment.</p>
+    </div>
+  </section>
+
+  <section class="priority-section premium-priority">
+    <div class="container priority-editorial">
+      <div class="priority-intro">
+        <div class="section-label"><i class="fa-solid fa-star"></i> Priority access</div>
+        <h2>Extra support where it matters.</h2>
+        <p>Eligible senior citizens, persons with disability, and pregnant patients can receive priority queue handling after their classification is verified. Emergency cases are handled first through the walk-in emergency workflow.</p>
+      </div>
+      <div class="priority-list">
+        <article><span><i class="fa-solid fa-person-cane"></i></span><div><strong>Senior citizens</strong><p>Patients aged 60 and above can receive priority queue handling.</p></div></article>
+        <article><span><i class="fa-solid fa-wheelchair"></i></span><div><strong>Persons with disability</strong><p>Verified PWD patients can receive priority queue handling.</p></div></article>
+        <article><span><i class="fa-solid fa-person-pregnant"></i></span><div><strong>Pregnant patients</strong><p>Verified pregnant patients can receive priority queue handling.</p></div></article>
+        <article><span><i class="fa-solid fa-truck-medical"></i></span><div><strong>Emergency cases</strong><p>Emergency walk-ins are handled first and should not wait for an online appointment.</p></div></article>
+        <article><span><i class="fa-regular fa-id-card"></i></span><div><strong>Keep your profile accurate</strong><p>Complete the applicable classification and bring supporting identification when requested.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section premium-locator" id="map-section">
+    <div class="container">
+      <div class="section-header locator-heading">
+        <div><div class="tag"><i class="fa-solid fa-location-dot"></i> RHU directory</div><h2>Find care close to home.</h2></div>
+        <p>Explore the four RHU branches, review today's configured schedule, and choose where to book.</p>
+      </div>
+      <div class="locator-shell">
+        <div class="locator-map-panel">
+          <div class="map-filter">
+            <label class="filter-item"><input type="checkbox" id="rhuToggle" checked><span class="filter-icon blue"></span> Rural Health Units</label>
+            <label class="filter-item"><input type="checkbox" id="bhsToggle" checked><span class="filter-icon green"></span> Barangay Health Stations</label>
+          </div>
+          <div id="map"></div>
+        </div>
+        <aside class="locator-directory" aria-label="RHU branch directory">
+          <div class="locator-directory-head"><span>Choose a branch</span><strong>4 RHU locations</strong></div>
+          <article class="locator-branch"><span class="branch-code">RHU I</span><div><strong>Poblacion</strong><small data-landing-rhu-hours="0">Checking today's schedule…</small></div><button onclick="zoomTo(14.9016,120.8506)" aria-label="Show RHU I on map"><i class="fa-solid fa-location-arrow"></i></button></article>
+          <article class="locator-branch"><span class="branch-code">RHU II</span><div><strong>Cutcot</strong><small data-landing-rhu-hours="1">Checking today's schedule…</small></div><button onclick="zoomTo(14.9077,120.8568)" aria-label="Show RHU II on map"><i class="fa-solid fa-location-arrow"></i></button></article>
+          <article class="locator-branch"><span class="branch-code">RHU III</span><div><strong>Tinejero</strong><small data-landing-rhu-hours="2">Checking today's schedule…</small></div><button onclick="zoomTo(14.8979,120.8465)" aria-label="Show RHU III on map"><i class="fa-solid fa-location-arrow"></i></button></article>
+          <article class="locator-branch"><span class="branch-code">RHU IV</span><div><strong>Tibag</strong><small data-landing-rhu-hours="3">Checking today's schedule…</small></div><button onclick="zoomTo(14.9142,120.8421)" aria-label="Show RHU IV on map"><i class="fa-solid fa-location-arrow"></i></button></article>
+          <button class="locator-book-button" onclick="goLogin()"><i class="fa-regular fa-calendar-check"></i> Sign in to view appointments</button>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section faq-section" id="faq">
+    <div class="container faq-layout">
+      <aside class="faq-intro">
+        <div class="tag"><i class="fa-regular fa-circle-question"></i> Patient help</div>
+        <h2>Answers before you book.</h2>
+        <p>Quick guidance for appointments, arrival, queue tracking and priority access.</p>
+        <button onclick="goLogin()">Sign in for account help <i class="fa-solid fa-arrow-right"></i></button>
+      </aside>
+      <div class="accordion faq-accordion" id="faqAccordion">
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq1">How do I book an appointment?</button></h3><div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Create an account, sign in, choose an RHU and service, then select an available date and time before confirming.</div></div></div>
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq2">Are there service fees?</button></h3><div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Availability and any service-specific requirements are confirmed by the selected RHU. Contact the branch through Patient Inquiries if you need clarification.</div></div></div>
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq3">Can I still walk in without an appointment?</button></h3><div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Walk-in accommodation depends on the branch schedule, service and current capacity. Booking ahead gives you a confirmed schedule when slots are available.</div></div></div>
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq4">What should I bring?</button></h3><div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Bring a valid ID, your appointment pass or QR code, and any supporting documents required for the selected service or priority classification.</div></div></div>
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq5">How do I check my queue position?</button></h3><div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">After QR or manual check-in, open Queue Status to view your live queue number, people ahead and current serving number.</div></div></div>
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq6">Can I cancel or reschedule?</button></h3><div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Open My Appointments to view the actions currently available for your appointment. Changes depend on its date and status.</div></div></div>
+        <div class="accordion-item"><h3 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#faq7">Who qualifies for priority access?</button></h3><div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion"><div class="accordion-body">Eligible senior citizens, verified PWD patients, and pregnant patients can receive priority handling. Emergency walk-ins are handled first. Keep your profile classification accurate and bring supporting identification.</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-section premium-cta">
+    <div class="container">
+      <div class="cta-copy"><span>Ready when you are</span><h2>Plan your next RHU visit with less guesswork.</h2><p>Create a patient account or sign in to view live branch and service availability.</p></div>
+      <div class="cta-actions"><button class="btn-cta" onclick="goRegister()"><i class="fa-solid fa-user-plus"></i> Create patient account</button><button class="btn-cta-outline" onclick="goLogin()">Sign in to book <i class="fa-solid fa-arrow-right"></i></button></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer premium-footer">
+  <div class="container">
+    <div class="footer-main">
+      <div class="footer-brand-copy">
+        <div class="footer-brand"><img src="images/mhc-logo.png" alt="Pulilan Health Center logo" onerror="this.style.display='none'"><div><h5 id="landingFacilityName">Pulilan Health Center</h5><p>PHAQS</p></div></div>
+        <p class="footer-desc">Patient scheduling, digital arrival passes, branch information and live queue guidance for Pulilan health center visits.</p>
+      </div>
+      <div class="footer-groups">
+        <div><h6>Explore</h6><button onclick="scrollToSection('services')">Services</button><button onclick="scrollToSection('map-section')">RHU locations</button><button onclick="scrollToSection('faq')">Patient help</button></div>
+        <div><h6>Patient access</h6><button onclick="goLogin()">Sign in</button><button onclick="goRegister()">Create account</button><button onclick="scrollToSection('about')">How it works</button></div>
+        <div><h6>Contact</h6><p id="landingSupportPhone" hidden><i class="fa-solid fa-phone"></i> <span></span></p><p id="landingSupportEmail" hidden><i class="fa-solid fa-envelope"></i> <span></span></p><p><i class="fa-solid fa-location-dot"></i> <span id="landingMunicipality">Pulilan, Bulacan</span></p></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 PHAQS — Pulilan Health Appointment and Queueing System</span><span>Clinic hours shown in the portal follow the configured RHU schedule.</span></div>
+  </div>
+</footer>
+
+<script src="../assets/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+
+<script src="js/patient_index.js?v=20260721-public-announcements-v9"></script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

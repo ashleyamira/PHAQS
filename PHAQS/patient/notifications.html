@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/theme-clean.css">
+<link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+<link rel="stylesheet" href="css/notifications.css?v=20260724-textfix">
+
+<style>
+.navbar-notif-btn{position:relative!important}
+.navbar-notif-btn.has-unread{
+  border-color:#fecaca!important;
+  background:#fff1f2!important;
+  color:#dc2626!important;
+}
+.navbar-notif-btn.has-unread i{color:#dc2626!important}
+.notif-count{
+  position:absolute!important;
+  top:4px!important;
+  right:3px!important;
+  min-width:18px!important;
+  height:18px!important;
+  padding:0 5px!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  border:2px solid #fff!important;
+  border-radius:999px!important;
+  background:#dc2626!important;
+  color:#fff!important;
+  font-size:9px!important;
+  font-weight:800!important;
+}
+</style>
+
+<style>
+.patient-navbar .menu{position:relative}
+.notification-popover{
+  position:absolute;
+  top:calc(100% + 10px);
+  right:72px;
+  z-index:1200;
+  width:360px;
+  overflow:hidden;
+  border:1px solid #dbe4ef;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 18px 42px rgba(15,23,42,.18);
+}
+.notification-popover[hidden]{display:none!important}
+.notification-popover::before{
+  content:"";
+  position:absolute;
+  top:-7px;
+  right:76px;
+  width:14px;
+  height:14px;
+  transform:rotate(45deg);
+  border-left:1px solid #dbe4ef;
+  border-top:1px solid #dbe4ef;
+  background:#fff;
+}
+.notification-popover-head{
+  min-height:58px;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid #edf2f7;
+}
+.notification-popover-head strong,
+.notification-popover-head span{display:block}
+.notification-popover-head strong{
+  color:#0f172a;
+  font-size:13px;
+  font-weight:800;
+}
+.notification-popover-head span{
+  margin-top:2px;
+  color:#94a3b8;
+  font-size:9px;
+}
+.notification-popover-head button{
+  border:0;
+  background:transparent;
+  color:#1e40af;
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.notification-popover-list{
+  max-height:340px;
+  overflow-y:auto;
+}
+.notification-popover-item{
+  position:relative;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr);
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid #edf2f7;
+  background:#fff;
+  cursor:pointer;
+}
+.notification-popover-item:hover{background:#f8fbff}
+.notification-popover-item.unread{background:#f4f8ff}
+.notification-popover-item.unread::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:#0b4eea;
+}
+.notification-popover-icon{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#eaf2ff;
+  color:#1e40af;
+  font-size:12px;
+}
+.notification-popover-icon.success{background:#dcfce7;color:#15803d}
+.notification-popover-icon.danger{background:#fee2e2;color:#dc2626}
+.notification-popover-icon.warning{background:#fef3c7;color:#a16207}
+.notification-popover-icon.queue{background:#e0e7ff;color:#4338ca}
+.notification-popover-body h4{
+  margin:0 0 3px;
+  color:#0f172a;
+  font-size:11px;
+  font-weight:800;
+}
+.notification-popover-body p{
+  margin:0;
+  color:#64748b;
+  font-size:9px;
+  line-height:1.45;
+}
+.notification-popover-body time{
+  display:block;
+  margin-top:5px;
+  color:#94a3b8;
+  font-size:8px;
+}
+.notification-popover-footer{
+  min-height:42px;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-top:1px solid #edf2f7;
+  background:#f8fafc;
+  color:#1e40af;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:800;
+}
+.notification-popover-empty,
+.notification-popover-loading{
+  padding:34px 16px;
+  text-align:center;
+  color:#64748b;
+  font-size:10px;
+}
+@media(max-width:700px){
+  .notification-popover{
+    position:fixed;
+    top:78px;
+    left:14px;
+    right:14px;
+    width:auto;
+  }
+}
+</style>
+
+<style>
+/* notification update */
+.notification-popover{
+  position:absolute!important;
+  top:calc(100% + 12px)!important;
+  right:58px!important;
+  z-index:1300!important;
+  width:430px!important;
+  overflow:hidden!important;
+  border:1px solid #d9e2ee!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:0 20px 48px rgba(15,23,42,.20)!important;
+}
+
+.notification-popover[hidden]{
+  display:none!important;
+}
+
+.notification-popover::before{
+  content:""!important;
+  position:absolute!important;
+  top:-8px!important;
+  right:82px!important;
+  width:16px!important;
+  height:16px!important;
+  transform:rotate(45deg)!important;
+  border-left:1px solid #d9e2ee!important;
+  border-top:1px solid #d9e2ee!important;
+  background:#fff!important;
+}
+
+.notification-popover-head{
+  min-height:72px!important;
+  padding:16px 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  border-bottom:1px solid #edf2f7!important;
+  background:#fff!important;
+}
+
+.notification-popover-head strong,
+.notification-popover-head span{
+  display:block!important;
+}
+
+.notification-popover-head strong{
+  color:#0f172a!important;
+  font-size:16px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+}
+
+.notification-popover-head span{
+  margin-top:4px!important;
+  color:#94a3b8!important;
+  font-size:11px!important;
+}
+
+.notification-popover-head button{
+  min-height:34px!important;
+  padding:7px 10px!important;
+  border:0!important;
+  border-radius:7px!important;
+  background:#eff6ff!important;
+  color:#1e40af!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  cursor:pointer!important;
+}
+
+.notification-popover-head button:hover{
+  background:#dbeafe!important;
+}
+
+.notification-popover-list{
+  max-height:410px!important;
+  overflow-y:auto!important;
+  background:#fff!important;
+}
+
+.notification-popover-item{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:46px minmax(0,1fr)!important;
+  gap:13px!important;
+  padding:15px 18px!important;
+  border-bottom:1px solid #edf2f7!important;
+  background:#fff!important;
+  cursor:pointer!important;
+  transition:background .18s ease!important;
+}
+
+.notification-popover-item:hover{
+  background:#f8fbff!important;
+}
+
+.notification-popover-item.unread{
+  background:#f4f8ff!important;
+}
+
+.notification-popover-item.unread::before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  width:4px!important;
+  background:#0b4eea!important;
+}
+
+.notification-popover-icon{
+  width:44px!important;
+  height:44px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:11px!important;
+  background:#eaf2ff!important;
+  color:#1e40af!important;
+  font-size:15px!important;
+}
+
+.notification-popover-icon.success{
+  background:#dcfce7!important;
+  color:#15803d!important;
+}
+
+.notification-popover-icon.danger{
+  background:#fee2e2!important;
+  color:#dc2626!important;
+}
+
+.notification-popover-icon.warning{
+  background:#fef3c7!important;
+  color:#a16207!important;
+}
+
+.notification-popover-icon.queue{
+  background:#e0e7ff!important;
+  color:#4338ca!important;
+}
+
+.notification-popover-body{
+  min-width:0!important;
+}
+
+.notification-popover-body h4{
+  margin:0 0 5px!important;
+  color:#0f172a!important;
+  font-size:13px!important;
+  font-weight:800!important;
+  line-height:1.35!important;
+}
+
+.notification-popover-body p{
+  margin:0!important;
+  color:#64748b!important;
+  font-size:11px!important;
+  line-height:1.55!important;
+}
+
+.notification-popover-body time{
+  display:block!important;
+  margin-top:7px!important;
+  color:#94a3b8!important;
+  font-size:9px!important;
+}
+
+.notification-popover-footer{
+  min-height:52px!important;
+  padding:12px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  border-top:1px solid #edf2f7!important;
+  background:#f8fafc!important;
+  color:#1e40af!important;
+  text-decoration:none!important;
+  font-size:12px!important;
+  font-weight:800!important;
+}
+
+.notification-popover-footer:hover{
+  background:#eff6ff!important;
+  color:#1e40af!important;
+}
+
+.notification-popover-empty,
+.notification-popover-loading{
+  padding:44px 18px!important;
+  color:#64748b!important;
+  text-align:center!important;
+  font-size:11px!important;
+  line-height:1.5!important;
+}
+
+@media(max-width:760px){
+  .notification-popover{
+    position:fixed!important;
+    top:84px!important;
+    left:14px!important;
+    right:14px!important;
+    width:auto!important;
+  }
+
+  .notification-popover::before{
+    display:none!important;
+  }
+
+  .notification-popover-list{
+    max-height:55vh!important;
+  }
+}
+</style>
+
+<style>
+.enable-browser-notifications-btn{
+  width:100%;
+  min-height:38px;
+  padding:8px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  border:0;
+  border-top:1px solid #edf2f7;
+  background:#f8fafc;
+  color:#1e40af;
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.enable-browser-notifications-btn:hover{background:#eff6ff}
+</style>
+
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+  <link rel="stylesheet" href="css/notification-unified-final.css?v=20260715-exact44">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+<link rel="stylesheet" href="css/patient-avatar-perfect-circle.css?v=20260723-circle">
+<link rel="stylesheet" href="../targeted-visual-fixes-20260723.css?v=20260723-c">
+<link rel="stylesheet" href="css/actual-critical-fix-20260724.css?v=20260724-e">
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+<style id="notificationsMobileFinalPolish">
+@media (max-width: 768px) {
+  .notification-item,
+  .notification-card {
+    position: relative !important;
+    padding: 14px 14px 14px 18px !important;
+    border-left: 4px solid #3b82f6 !important;
+  }
+
+  .notification-item[data-type="confirmed"],
+  .notification-card[data-type="confirmed"] {
+    border-left-color: #16a34a !important;
+  }
+
+  .notification-item[data-type="pending"],
+  .notification-card[data-type="pending"] {
+    border-left-color: #f59e0b !important;
+  }
+
+  .notification-item[data-type="cancelled"],
+  .notification-card[data-type="cancelled"] {
+    border-left-color: #dc2626 !important;
+  }
+
+  .notification-item[data-type="announcement"],
+  .notification-card[data-type="announcement"] {
+    border-left-color: #2563eb !important;
+  }
+}
+</style>
+
+<link rel="stylesheet" href="css/patient-text-size.css?v=20260728-floating-left-v1">
+</head>
+<body>
+
+<nav class="navbar patient-navbar">
+  <div class="nav-container">
+    <a class="logo-area" href="dashboard.html" aria-label="Patient dashboard">
+      <img src="images/mhc-logo.png" class="logo-img" alt="Pulilan Health Center Logo">
+      <div class="logo-text"><h5>Pulilan Health Center</h5><span>PHAQS</span></div>
+    </a>
+    <div class="menu">
+      <a class="" href="dashboard.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a class="" href="book.html"><i class="fa-regular fa-calendar-plus"></i><span>Book Appointment</span></a>
+      <a class="" href="appointments.html"><i class="fa-regular fa-calendar-check"></i><span>My Appointments</span></a>
+      <a class="" href="queue.html"><i class="fa-solid fa-list-check"></i><span>Queue Status</span></a>
+      <div class="patient-text-size-control">
+        <button class="patient-text-size-trigger" type="button" aria-label="Change text size" aria-haspopup="true" aria-expanded="false">
+          <span class="patient-text-size-aa" aria-hidden="true">AA</span><span class="patient-text-size-trigger-label">Text</span>
+        </button>
+        <div class="patient-text-size-popover" hidden>
+          <div class="patient-text-size-popover-head"><strong>Text size</strong><span>Current: <b data-text-size-current>Normal</b></span></div>
+          <div class="patient-text-size-options" role="group" aria-label="Choose text size" data-text-size-location="desktop-navbar">
+            <button class="patient-text-size-option" type="button" data-patient-text-size="normal" aria-pressed="false">Normal</button>
+            <button class="patient-text-size-option" type="button" data-patient-text-size="large" aria-pressed="false">Large</button>
+          </div>
+        </div>
+      </div>
+      <button class="navbar-notif-btn" type="button" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="notif-count">0</span></button>
+<div class="notification-popover" id="notificationPopover" hidden>
+  <div class="notification-popover-head">
+    <div>
+      <strong>Notifications</strong>
+      <span id="popoverUnreadText">0 unread</span>
+    </div>
+    <button type="button" id="popoverMarkAll">Mark all as read</button>
+  </div>
+  <div class="notification-popover-list" id="notificationPopoverList">
+    <div class="notification-popover-loading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading...
+    </div>
+  </div>
+  
+<button type="button" class="enable-browser-notifications-btn" data-enable-browser-notifications>
+  <i class="fa-regular fa-bell"></i>
+  Enable browser notifications
+</button>
+
+<a class="notification-popover-footer" href="notifications.html">
+    View all notifications
+    <i class="fa-solid fa-arrow-right"></i>
+  </a>
+</div>
+
+      <div class="user-menu-wrap dropdown">
+        <button class="user-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="avatar" id="avatarBtn">P</span><span class="user-name" id="userName">Loading...</span><i class="fas fa-chevron-down user-chevron"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end patient-user-menu">
+          <li><a class="dropdown-item patient-menu-item " href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item patient-menu-item logout" type="button" onclick="confirmPatientLogout();"><i class="fas fa-right-from-bracket"></i><span>Logout</span></button></li>
+        </ul>
+      </div>
+    </div>
+    <button class="hamburger-btn" onclick="toggleMobileMenu()" id="hamburgerBtn" type="button" aria-label="Open menu"><i class="fas fa-bars" id="hamburgerIcon"></i></button>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mob-user"><div class="mob-avatar" id="mobAvatar">P</div><span id="mobName">Loading...</span></div>
+      <div class="mob-divider"></div>
+      <a class="" href="dashboard.html"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
+      <a class="" href="book.html"><i class="fa-regular fa-calendar-plus me-2"></i>Book Appointment</a>
+      <a class="" href="appointments.html"><i class="fa-regular fa-calendar-check me-2"></i>My Appointments</a>
+      <a class="" href="queue.html"><i class="fa-solid fa-list-check me-2"></i>Queue Status</a>
+      <a class="" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a>
+      <div class="mob-divider"></div>
+      <div class="patient-text-size-mobile-row">
+        <div class="patient-text-size-mobile-label"><span class="patient-text-size-aa" aria-hidden="true">AA</span><span>Text size</span></div>
+        <div class="patient-text-size-options" role="group" aria-label="Choose text size" data-text-size-location="mobile-menu">
+          <button class="patient-text-size-option" type="button" data-patient-text-size="normal" aria-pressed="false">Normal</button>
+          <button class="patient-text-size-option" type="button" data-patient-text-size="large" aria-pressed="false">Large</button>
+        </div>
+      </div>
+      <button class="mob-logout" onclick="confirmPatientLogout();" type="button"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
+    </div>
+  </div>
+</nav>
+
+<main class="notifications-page">
+  <div class="page-heading">
+    <div>
+      <h1>Notifications</h1>
+      <p>View your appointment and queue updates.</p>
+    </div>
+    <button id="markAllBtn" type="button" class="mark-read-btn">
+      <i class="fa-solid fa-check-double"></i>
+      Mark all as read
+    </button>
+  </div>
+
+  <section class="notification-summary-row">
+    <article class="summary-card">
+      <div class="summary-icon"><i class="fa-regular fa-bell"></i></div>
+      <div>
+        <span>Unread Notifications</span>
+        <strong id="heroUnreadCount">0</strong>
+      </div>
+    </article>
+
+    <article class="summary-card">
+      <div class="summary-icon"><i class="fa-solid fa-list-check"></i></div>
+      <div>
+        <span>Recent Updates</span>
+        <strong id="totalNotificationsCount">0</strong>
+      </div>
+    </article>
+  </section>
+
+  <section class="notifications-card">
+    <div class="notifications-card-head">
+      <div>
+        <h2>Recent Updates</h2>
+        <span id="unreadText">0 unread</span>
+      </div>
+      <div class="head-actions">
+        <div class="notification-tabs">
+          <button type="button" class="notif-tab active" data-filter="all">All</button>
+          <button type="button" class="notif-tab" data-filter="unread">Unread</button>
+          <button type="button" class="notif-tab" data-filter="queue">Queue</button>
+          <button type="button" class="notif-tab" data-filter="appointment">Appointments</button>
+        </div>
+        <button id="refreshNotifications" type="button" class="refresh-btn">
+          <i class="fa-solid fa-rotate"></i>
+          Refresh
+        </button>
+      </div>
+    </div>
+
+    <div id="notificationsList" class="notifications-list">
+      <div class="notifications-loading">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+        Loading notifications...
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Pulilan Health Center. All rights reserved.</footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="js/patient_common.js?v=20260724-loginloopfix"></script>
+<script src="js/patient_notifications.js?v=20260711-consistent"></script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+
+<script src="js/actual-critical-fix-20260724.js?v=20260724-e"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+<script src="js/patient-text-size.js?v=20260728-floating-left-v1"></script>
+</body>
+</html>

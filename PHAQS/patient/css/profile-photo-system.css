@@ -1,0 +1,10 @@
+.avatar,.mob-avatar,.profile-avatar-big,.pat-avatar,.pat-modal-avatar{overflow:hidden!important;position:relative;background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important}
+.avatar.has-photo,.mob-avatar.has-photo,.profile-avatar-big.has-photo{color:transparent!important;background-color:#e8eef8!important}
+.patient-avatar-photo{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;display:block!important;border:0!important;border-radius:inherit!important;opacity:1!important;visibility:visible!important;z-index:2!important}
+.avatar.has-photo::before,.mob-avatar.has-photo::before,.profile-avatar-big.has-photo::before{display:none!important}
+.profile-photo-actions{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.profile-photo-btn{min-height:38px;border:1px solid #c8d6ea;border-radius:8px;background:#fff;color:#0b3d91;padding:8px 12px;font:700 12px Inter,Arial,sans-serif;display:inline-flex;align-items:center;gap:7px;cursor:pointer}
+.profile-photo-btn.primary{background:#0b3d91;color:#fff;border-color:#0b3d91}.profile-photo-btn.danger{color:#b42318;border-color:#fecaca}
+.profile-photo-note{font-size:11px;color:#64748b;line-height:1.45}
+.patient-photo-img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+@media(max-width:600px){.profile-photo-actions{width:100%}.profile-photo-btn{flex:1;justify-content:center}.profile-header-top{align-items:flex-start!important}.profile-avatar-big{width:72px!important;height:72px!important;min-width:72px!important}}

@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Family Care | Pulilan Health Center</title>
+  <link rel="icon" href="images/mhc-logo.png"><link rel="apple-touch-icon" href="images/mhc-logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+  <style>
+    *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#0f172a;font-family:Inter,Arial,sans-serif}.nav{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 max(18px,calc((100% - 1320px)/2));border-bottom:1px solid #dbe4ef;background:#fff}.brand,.links{display:flex;align-items:center}.brand{gap:10px;color:#0f172a;text-decoration:none}.brand img{width:42px;height:42px}.brand strong{display:block;font-size:15px}.brand span{display:block;color:#64748b;font-size:11px}.links{gap:8px}.links a{padding:9px 11px;border-radius:7px;color:#334155;text-decoration:none;font-size:12px;font-weight:700}.links a.active{background:#eff6ff;color:#1e40af}.page{width:min(100% - 40px,1320px);margin:0 auto;padding:30px 0 48px}.head{display:flex;justify-content:space-between;gap:16px;margin-bottom:20px}.head h1{margin:0 0 5px;font-size:27px}.head p{margin:0;color:#64748b;font-size:13px}.privacy{max-width:420px;padding:11px 13px;border-left:4px solid #1e40af;background:#eff6ff;color:#1e3a8a;font-size:10.5px;line-height:1.45}.layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:18px;align-items:start}.card{margin-bottom:18px;border:1px solid #dbe4ef;border-radius:12px;background:#fff;box-shadow:0 5px 18px rgba(15,23,42,.04)}.card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 17px;border-bottom:1px solid #e8eef5}.card-head h2{margin:0;font-size:14px}.card-body{padding:17px}.field{display:block;margin-bottom:13px;color:#475569;font-size:10px;font-weight:800;text-transform:uppercase}.field input,.field select{width:100%;margin-top:6px;padding:11px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;font:12px Inter;text-transform:none}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:41px;padding:9px 13px;border:0;border-radius:8px;font:700 11px Inter;cursor:pointer}.btn-primary{width:100%;background:#1e40af;color:#fff}.btn-approve{background:#15803d;color:#fff}.btn-reject,.btn-remove{border:1px solid #fecaca;background:#fff;color:#b91c1c}.person{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:11px;align-items:center;padding:13px 0;border-bottom:1px solid #edf2f7}.person:last-child{border-bottom:0}.avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:8px;background:#dbeafe;color:#1e40af;font-size:12px;font-weight:800}.person h3{margin:0 0 3px;font-size:12px}.person p{margin:0;color:#64748b;font-size:10px}.person-actions{display:flex;gap:6px}.status{display:inline-block;margin-top:5px;padding:3px 6px;border-radius:4px;background:#f1f5f9;color:#475569;font-size:8px;font-weight:800;text-transform:uppercase}.status.Approved{background:#dcfce7;color:#15803d}.status.Pending{background:#fef3c7;color:#a16207}.empty{padding:26px;color:#94a3b8;text-align:center;font-size:11px}.appointment{display:grid;grid-template-columns:80px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #edf2f7}.appointment:last-child{border:0}.appointment time{color:#1e40af;font-size:11px;font-weight:800}.appointment strong{display:block;font-size:12px}.appointment span{color:#64748b;font-size:10px}.queue{padding:5px 8px;border-radius:5px;background:#eff6ff;color:#1e40af;font-size:10px;font-weight:800}.toast{position:fixed;right:18px;bottom:18px;max-width:340px;padding:12px 14px;border-radius:8px;background:#0f172a;color:#fff;font-size:11px;box-shadow:0 12px 30px rgba(15,23,42,.22)}@media(max-width:820px){.links a:not(.active):not(:first-child){display:none}.page{width:min(100% - 24px,1320px);padding-top:22px}.head{flex-direction:column}.layout{grid-template-columns:1fr}.privacy{max-width:none}.person{grid-template-columns:40px 1fr}.person-actions{grid-column:2;flex-wrap:wrap}.appointment{grid-template-columns:70px 1fr}.appointment .queue{grid-column:2;justify-self:start}}
+	  </style><link rel="stylesheet" href="css/innovation-pages-consistency.css?v=20260721-dashboard-shell">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+<link rel="stylesheet" href="css/patient-text-size.css?v=20260728-floating-left-v1">
+</head>
+<body>
+  <nav class="nav"><a class="brand" href="dashboard.html"><img src="images/mhc-logo.png" alt=""><span><strong>Pulilan Health Center</strong><span>PHAQS</span></span></a><div class="links"><a href="dashboard.html"><i class="fas fa-house"></i> Dashboard</a><a href="book.html"><i class="far fa-calendar-plus"></i> Book</a><a class="active" href="family.html"><i class="fas fa-people-roof"></i> Family Care</a><a href="profile.html" id="userName">Patient</a></div></nav>
+  <main class="page"><div class="head"><div><h1>Family & Caregiver Access</h1><p>Manage appointments for a child, senior citizen, PWD, or another dependent—with their consent.</p></div><div class="privacy"><strong><i class="fas fa-shield-halved"></i> Separate and private records</strong><br>Approval permits appointment management only. Each dependent keeps a separate profile, queue ticket, and history, and may revoke access anytime.</div></div>
+    <div class="layout"><aside><section class="card"><div class="card-head"><h2>Request Caregiver Access</h2></div><form class="card-body" id="requestForm" enctype="multipart/form-data"><label class="field">Dependent email or patient ID<input id="familyIdentifier" required autocomplete="off" placeholder="example@email.com or USR-001"></label><label class="field">Relationship<select id="familyRelationship"><option>Parent</option><option>Guardian</option><option>Spouse</option><option>Adult Child</option><option>Sibling</option><option>Other</option></select></label><label class="field">Supporting document type<select id="verificationMethod"><option value="">Select when verification is required</option><option>Birth Certificate</option><option>Guardian ID / Authorization</option><option>Senior Citizen ID</option><option>PWD ID</option><option>Other Supporting Document</option></select></label><label class="field">Supporting document (JPG, PNG, WEBP, or PDF)<input id="verificationDocument" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"></label><div style="margin:-3px 0 13px;padding:10px;border-left:3px solid #d97706;background:#fffbeb;color:#92400e;font-size:9.5px;line-height:1.5"><strong>Required for a minor, senior citizen, or PWD dependent.</strong> Access activates only after the dependent approves and an authorized RHU administrator verifies the document.</div><button class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send Consent Request</button></form></section><section class="card"><div class="card-head"><h2>Requests Requiring My Consent</h2></div><div class="card-body" id="incomingList"><div class="empty">Loading…</div></div></section></aside>
+      <div><section class="card"><div class="card-head"><h2>People I Can Manage</h2><a href="book.html" style="color:#1e40af;font-size:10px;font-weight:800;text-decoration:none">Book for dependent <i class="fas fa-arrow-right"></i></a></div><div class="card-body" id="outgoingList"><div class="empty">Loading…</div></div></section><section class="card"><div class="card-head"><h2>Dependent Appointments</h2></div><div class="card-body" id="dependentAppointments"><div class="empty">Loading…</div></div></section></div>
+    </div></main><div id="toast" class="toast" hidden></div>
+  <script src="js/patient_nav_shell.js?v=20260721-dashboard-shell"></script><script src="js/patient_common.js?v=20260724-loginloopfix"></script><script src="js/patient_family.js?v=20260720-operations"></script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+<script src="js/patient-text-size.js?v=20260728-floating-left-v1"></script>
+</body></html>

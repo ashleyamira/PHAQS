@@ -1,0 +1,11 @@
+{
+  "name":"Pulilan Health Center Patient Portal",
+  "short_name":"Pulilan Health",
+  "description":"Low-data appointments, queue tickets, announcements, and Family Care.",
+  "start_url":"./dashboard.html",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f3f6fb",
+  "theme_color":"#123f83",
+  "icons":[{"src":"images/mhc-logo.png","sizes":"any","type":"image/png","purpose":"any maskable"}]
+}

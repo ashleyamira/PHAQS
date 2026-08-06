@@ -1,0 +1,30 @@
+
+@media (max-width:1100px){
+  html body .patient-navbar{height:76px!important;min-height:76px!important;padding:0 16px!important;overflow:visible!important}
+  html body .patient-navbar .nav-container{height:72px!important;overflow:visible!important}
+  html body .patient-navbar .hamburger-btn{display:inline-flex!important;width:44px!important;height:44px!important;min-width:44px!important;border-radius:12px!important}
+  html body .patient-navbar .mobile-menu,
+  html body .patient-navbar .mobile-menu.show{
+    position:fixed!important;top:76px!important;left:12px!important;right:12px!important;width:auto!important;
+    max-width:none!important;max-height:calc(100dvh - 90px)!important;margin:0!important;padding:14px!important;
+    border:1px solid #d9e3f1!important;border-radius:14px!important;background:#fff!important;
+    box-shadow:0 18px 46px rgba(15,23,42,.18)!important;overflow-y:auto!important;z-index:10050!important
+  }
+  html body .patient-navbar .mobile-menu.show{display:flex!important;flex-direction:column!important;gap:4px!important}
+  html body .patient-navbar .mob-user{min-height:68px!important;padding:10px 12px!important;border-radius:10px!important;background:#f7f9fc!important;gap:12px!important}
+  html body .patient-navbar .mob-avatar{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;flex:0 0 44px!important;aspect-ratio:1/1!important;border-radius:50%!important;overflow:hidden!important}
+  html body .patient-navbar .mob-avatar img{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:50%!important}
+  html body .patient-navbar .mobile-menu a,
+  html body .patient-navbar .mobile-menu button{min-height:48px!important;height:48px!important;flex:0 0 48px!important;padding:0 12px!important;border-radius:8px!important;font-size:14px!important;font-weight:700!important;gap:12px!important}
+  html body .patient-navbar .mobile-menu a i,
+  html body .patient-navbar .mobile-menu button i{width:20px!important;min-width:20px!important;margin:0!important;text-align:center!important;font-size:14px!important}
+  html body .patient-navbar .mobile-menu a.active{background:#eaf1ff!important;color:#0b52e4!important}
+  html body .patient-navbar .mob-divider{margin:6px 0!important}
+}
+@media(max-width:560px){
+  html body .patient-navbar{padding:0 12px!important}
+  html body .patient-navbar .logo-area{gap:10px!important}
+  html body .patient-navbar .logo-img{width:38px!important;height:38px!important}
+  html body .patient-navbar .logo-text h5{font-size:15px!important}
+  html body .patient-navbar .logo-text span{font-size:11px!important}
+}

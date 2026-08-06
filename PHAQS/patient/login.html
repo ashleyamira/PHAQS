@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Login | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+  width:100%;
+  min-height:100%;
+  font-family:'Inter',sans-serif;
+  color:#071a44;
+  background:#fff;
+}
+
+body{overflow-x:hidden}
+
+.login-page{
+  min-height:calc(100vh - 72px);
+  width:100%;
+  display:grid;
+  grid-template-columns:57% 43%;
+  background:#fff;
+}
+
+.left-panel{
+  position:relative;
+  min-height:calc(100vh - 72px);
+  padding:46px 54px 34px;
+  overflow:hidden;
+  background:#dceeff url('images/pulilan-health-center.jpg') center/cover no-repeat;
+}
+
+.left-panel::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    90deg,
+    rgba(247,251,255,.97) 0%,
+    rgba(242,248,255,.90) 38%,
+    rgba(232,242,253,.66) 68%,
+    rgba(226,238,252,.30) 100%
+  );
+  z-index:1;
+}
+
+.left-panel::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.05) 0%,
+    rgba(255,255,255,.12) 48%,
+    rgba(239,247,255,.44) 100%
+  );
+  z-index:1;
+}
+
+.left-content{
+  position:relative;
+  z-index:2;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:54px;
+}
+
+.brand img{
+  width:66px;
+  height:66px;
+  border-radius:50%;
+  object-fit:contain;
+  background:#fff;
+  padding:3px;
+  border:1px solid rgba(18,66,148,.18);
+  filter:drop-shadow(0 3px 5px rgba(30,64,175,.12));
+}
+
+.brand h1{
+  margin:0 0 6px;
+  color:#061a45;
+  font-size:25px;
+  font-weight:800;
+  line-height:1.05;
+  letter-spacing:-.02em;
+}
+
+.brand p{
+  margin:0;
+  color:#2f3f5f;
+  font-size:16px;
+  line-height:1.35;
+}
+
+.hero-copy h2{
+  margin:0 0 18px;
+  color:#071a44;
+  font-size:40px;
+  font-weight:800;
+  line-height:1.12;
+  letter-spacing:-.04em;
+}
+
+.hero-copy h2 span{
+  display:block;
+  color:#139447;
+}
+
+.blue-line{
+  width:68px;
+  height:4px;
+  margin-bottom:22px;
+  border-radius:999px;
+  background:#139447;
+}
+
+.hero-copy>p{
+  width:420px;
+  max-width:100%;
+  margin-bottom:28px;
+  color:#233854;
+  font-size:16px;
+  line-height:1.6;
+}
+
+.login-benefits{
+  display:flex;
+  flex-direction:column;
+  gap:17px;
+}
+
+.benefit{
+  display:grid;
+  grid-template-columns:54px 1fr;
+  gap:15px;
+  align-items:center;
+}
+
+.benefit-icon{
+  width:54px;
+  height:54px;
+  border-radius:12px;
+  background:rgba(255,255,255,.88);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#0d5ad8;
+  font-size:21px;
+  box-shadow:0 10px 22px rgba(30,64,175,.07);
+}
+
+.benefit:nth-child(1) .benefit-icon,
+.benefit:nth-child(3) .benefit-icon{color:#0d9950}
+
+.benefit strong{
+  display:block;
+  margin-bottom:5px;
+  color:#071a44;
+  font-size:15px;
+  font-weight:800;
+}
+
+.benefit span{
+  display:block;
+  color:#233854;
+  font-size:13.5px;
+  line-height:1.42;
+}
+
+.right-panel{
+  min-height:calc(100vh - 72px);
+  padding:38px 52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(180deg,#ffffff 0%,#f7faff 100%);
+}
+
+.login-card{
+  width:min(445px,100%);
+  padding:34px 30px 28px;
+  border:1px solid #dce5f0;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 22px 54px rgba(15,23,42,.10);
+}
+
+.login-top{
+  margin-bottom:24px;
+  text-align:center;
+}
+
+.card-logo{
+  width:70px;
+  height:70px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  object-fit:contain;
+}
+
+.login-top h3{
+  margin-bottom:8px;
+  color:#06255c;
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:-.025em;
+}
+
+.title-line{
+  width:44px;
+  height:3px;
+  margin:0 auto 15px;
+  border-radius:999px;
+  background:#139447;
+}
+
+.login-top p{
+  margin:0;
+  color:#344866;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.form-group{margin-bottom:18px}
+
+.form-label{
+  margin-bottom:8px;
+  color:#071a44;
+  font-size:13px;
+  font-weight:800;
+}
+
+.input-wrap{position:relative}
+
+.input-wrap i.left{
+  position:absolute;
+  top:50%;
+  left:16px;
+  z-index:2;
+  transform:translateY(-50%);
+  color:#71819c;
+  font-size:17px;
+}
+
+.input-wrap i.eye{
+  position:absolute;
+  top:50%;
+  right:16px;
+  z-index:2;
+  transform:translateY(-50%);
+  color:#71819c;
+  font-size:17px;
+  cursor:pointer;
+}
+
+.form-control{
+  height:48px;
+  border:1.5px solid #cfd8e5;
+  border-radius:7px;
+  padding:0 46px;
+  background:#fff;
+  color:#071a44;
+  font-size:14px;
+  box-shadow:none;
+}
+
+.form-control::placeholder{color:#6f7d92}
+
+.form-control:focus{
+  border-color:#0d5ad8;
+  box-shadow:0 0 0 4px rgba(13,90,216,.10);
+}
+
+.row-options{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  margin:2px 0 20px;
+}
+
+.form-check{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0;
+}
+
+.form-check-input{
+  width:16px;
+  height:16px;
+  margin:0;
+  cursor:pointer;
+}
+
+.form-check-label{
+  color:#071a44;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.forgot-link{
+  color:#0d5ad8;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+}
+
+.forgot-link:hover{text-decoration:underline}
+
+.btn-login{
+  width:100%;
+  height:48px;
+  border:0;
+  border-radius:7px;
+  background:#0b4b94;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-size:14px;
+  font-weight:800;
+  box-shadow:0 12px 26px rgba(11,75,148,.18);
+  transition:.2s;
+}
+
+.btn-login:hover{
+  background:#083d7a;
+  transform:translateY(-1px);
+}
+
+.message{
+  display:none;
+  margin-bottom:14px;
+  padding:10px 12px;
+  border-radius:7px;
+  font-size:13px;
+  text-align:left;
+}
+
+.message.error{
+  display:block;
+  border:1px solid #f4a4a8;
+  background:#fde2e3;
+  color:#a51f29;
+}
+
+.message.success{
+  display:block;
+  border:1px solid #9fdfbb;
+  background:#dcf7e8;
+  color:#12643b;
+}
+
+.register-link{
+  margin-top:19px;
+  color:#53627a;
+  text-align:center;
+  font-size:13px;
+}
+
+.register-link a{
+  color:#073d79;
+  text-decoration:none;
+  font-weight:800;
+}
+
+.register-link a:hover{text-decoration:underline}
+
+.portal-links{
+  margin-top:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  font-size:12.5px;
+  font-weight:700;
+}
+.portal-links a{
+  color:#073d79;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.portal-links a:hover{text-decoration:underline}
+
+#capsWarning{
+  display:none;
+  margin-top:6px;
+  color:#dc2626;
+  font-size:12px;
+}
+
+.footer-bar{
+  min-height:72px;
+  padding:11px 46px;
+  background:#0b4b94;
+  color:#fff;
+  display:grid;
+  grid-template-columns:1.5fr repeat(3,1fr);
+  align-items:center;
+  gap:26px;
+}
+
+.footer-brand,
+.footer-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.footer-brand img{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  object-fit:contain;
+}
+
+.footer-brand strong,
+.footer-brand span{display:block}
+
+.footer-brand strong{
+  font-size:13px;
+  font-weight:800;
+}
+
+.footer-brand span{
+  margin-top:3px;
+  color:#dbeafe;
+  font-size:11px;
+}
+
+.footer-item{
+  color:#fff;
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.footer-item i{font-size:17px}
+
+@media(max-height:800px) and (min-width:1001px){
+  .left-panel{padding-top:32px;padding-bottom:26px}
+  .brand{margin-bottom:34px}
+  .hero-copy h2{font-size:35px}
+  .hero-copy>p{margin-bottom:20px}
+  .login-benefits{gap:13px}
+  .benefit-icon{width:48px;height:48px}
+  .benefit{grid-template-columns:48px 1fr}
+  .right-panel{padding-top:24px;padding-bottom:24px}
+}
+
+@media(max-width:1000px){
+  .login-page{grid-template-columns:1fr}
+  .left-panel{min-height:620px}
+  .right-panel{min-height:auto;padding:38px 20px}
+  .footer-bar{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:640px){
+  .left-panel{min-height:auto;padding:28px 20px 34px}
+  .brand{margin-bottom:34px}
+  .brand img{width:54px;height:54px}
+  .brand h1{font-size:20px}
+  .brand p{font-size:13px}
+  .hero-copy h2{font-size:31px}
+  .hero-copy>p{font-size:14px}
+  .benefit{grid-template-columns:48px 1fr}
+  .benefit-icon{width:48px;height:48px}
+  .right-panel{padding:24px 14px}
+  .login-card{padding:30px 20px}
+  .row-options{align-items:flex-start}
+  .footer-bar{grid-template-columns:1fr;padding:18px 22px}
+  .footer-item{white-space:normal}
+}
+</style>
+<link rel="stylesheet" href="css/auth-unified.css">
+<link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+
+<style>
+.navbar-notif-btn{position:relative!important}
+.navbar-notif-btn.has-unread{
+  border-color:#fecaca!important;
+  background:#fff1f2!important;
+  color:#dc2626!important;
+}
+.navbar-notif-btn.has-unread i{color:#dc2626!important}
+.notif-count{
+  position:absolute!important;
+  top:4px!important;
+  right:3px!important;
+  min-width:18px!important;
+  height:18px!important;
+  padding:0 5px!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  border:2px solid #fff!important;
+  border-radius:999px!important;
+  background:#dc2626!important;
+  color:#fff!important;
+  font-size:9px!important;
+  font-weight:800!important;
+}
+</style>
+
+<style>
+.enable-browser-notifications-btn{
+  width:100%;min-height:42px;padding:10px 14px;display:flex;align-items:center;
+  justify-content:flex-start;gap:9px;border:0;border-top:1px solid #e5eaf2;
+  background:#f8fafc;color:#1e40af;font-size:11px;font-weight:700;cursor:pointer
+}
+.enable-browser-notifications-btn:hover{background:#eff6ff}
+</style>
+
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+<link rel="stylesheet" href="css/actual-critical-fix-20260724.css?v=20260724-e">
+<link rel="stylesheet" href="css/final-auth-booking-fix-20260724.css?v=20260724-f">
+
+<style id="patientAuthMobileNoCutoffFinal">
+
+@media (max-width: 900px) {
+  html, body {
+    overflow-x: hidden !important;
+  }
+
+  body.patient-login-page .forgot-page,
+  body.patient-login-page .login-page,
+  body.patient-login-page .auth-page,
+  body.patient-register-page .register-page,
+  body.patient-register-page .auth-page {
+    display: block !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .left-panel,
+  body.patient-register-page .left-panel,
+  body.patient-login-page .login-left,
+  body.patient-register-page .register-left,
+  body.patient-login-page .auth-left,
+  body.patient-register-page .auth-left {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 26px 22px 30px !important;
+    overflow: visible !important;
+    background-size: cover !important;
+    background-position: 60% center !important;
+    background-repeat: no-repeat !important;
+    box-sizing: border-box !important;
+  }
+
+  body.patient-login-page .brand,
+  body.patient-register-page .brand,
+  body.patient-login-page .auth-brand,
+  body.patient-register-page .auth-brand {
+    position: relative !important;
+    z-index: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin: 0 0 28px !important;
+  }
+
+  body.patient-login-page .brand img,
+  body.patient-register-page .brand img,
+  body.patient-login-page .auth-brand img,
+  body.patient-register-page .auth-brand img,
+  body.patient-login-page .brand-logo,
+  body.patient-register-page .brand-logo,
+  body.patient-login-page .brand-logo img,
+  body.patient-register-page .brand-logo img {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    max-width: 48px !important;
+    max-height: 48px !important;
+    object-fit: contain !important;
+    border-radius: 50% !important;
+  }
+
+  body.patient-login-page .hero-copy,
+  body.patient-register-page .hero-copy,
+  body.patient-login-page .left-content,
+  body.patient-register-page .left-content {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .hero-copy h2,
+  body.patient-register-page .hero-copy h2,
+  body.patient-login-page .left-content h2,
+  body.patient-register-page .left-content h2 {
+    margin: 0 !important;
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -1px !important;
+    white-space: normal !important;
+  }
+
+  body.patient-login-page .hero-copy h2 span,
+  body.patient-register-page .hero-copy h2 span,
+  body.patient-login-page .left-content h2 span,
+  body.patient-register-page .left-content h2 span {
+    color: #009846 !important;
+  }
+
+  body.patient-login-page .hero-copy p,
+  body.patient-register-page .hero-copy p,
+  body.patient-login-page .left-content p,
+  body.patient-register-page .left-content p {
+    margin: 20px 0 0 !important;
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  body.patient-login-page .hero-features,
+  body.patient-register-page .hero-features,
+  body.patient-login-page .feature-list,
+  body.patient-register-page .feature-list {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 22px 0 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .hero-feature,
+  body.patient-register-page .hero-feature,
+  body.patient-login-page .feature-item,
+  body.patient-register-page .feature-item {
+    min-height: 56px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .right-panel,
+  body.patient-register-page .right-panel,
+  body.patient-login-page .login-right,
+  body.patient-register-page .register-right,
+  body.patient-login-page .auth-right,
+  body.patient-register-page .auth-right {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 28px 16px 48px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  body.patient-login-page .login-card,
+  body.patient-register-page .register-card,
+  body.patient-login-page .auth-card,
+  body.patient-register-page .auth-card {
+    width: min(100%, 470px) !important;
+    max-width: 470px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page footer,
+  body.patient-register-page footer {
+    position: static !important;
+  }
+}
+
+@media (max-width: 520px) {
+  body.patient-login-page .left-panel,
+  body.patient-register-page .left-panel,
+  body.patient-login-page .login-left,
+  body.patient-register-page .register-left,
+  body.patient-login-page .auth-left,
+  body.patient-register-page .auth-left {
+    padding: 22px 18px 28px !important;
+    background-position: 64% center !important;
+  }
+
+  body.patient-login-page .hero-copy h2,
+  body.patient-register-page .hero-copy h2,
+  body.patient-login-page .left-content h2,
+  body.patient-register-page .left-content h2 {
+    font-size: 28px !important;
+  }
+}
+</style>
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+</head>
+
+<body class="patient-login-page">
+<div class="login-page">
+
+  <section class="left-panel">
+    <div class="left-content">
+
+      <div class="brand">
+        <img src="images/mhc-logo.png" alt="Pulilan Health Center Logo">
+        <div>
+          <h1>PULILAN HEALTH CENTER</h1>
+          <p>Appointment & Queue<br>Management System</p>
+        </div>
+      </div>
+
+      <div class="hero-copy">
+        <h2>Better Healthcare,<span>Easier Access.</span></h2>
+        <div class="blue-line"></div>
+        <p>Login to your account to manage your appointments, view your queue number, and access your health records.</p>
+      </div>
+
+      <div class="login-benefits">
+        <div class="benefit">
+          <div class="benefit-icon"><i class="fa-regular fa-calendar-check"></i></div>
+          <div><strong>Easy Appointment</strong><span>Book appointments online anytime.</span></div>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-icon"><i class="fa-solid fa-users-line"></i></div>
+          <div><strong>Real-time Queue</strong><span>Monitor your queue status in real-time.</span></div>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-icon"><i class="fa-regular fa-building"></i></div>
+          <div><strong>Multiple Health Centers</strong><span>Access services from multiple health centers.</span></div>
+        </div>
+
+        <div class="benefit">
+          <div class="benefit-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div><strong>Secure & Private</strong><span>Your data is protected and kept confidential.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="right-panel">
+    <div class="login-card">
+
+      <div class="login-top">
+        <img class="card-logo" src="images/mhc-logo.png" alt="Pulilan Health Center Logo">
+        <h3>Patient Login</h3>
+        <div class="title-line"></div>
+        <p>Welcome back! Please login to your account<br>to continue.</p>
+      </div>
+
+      <form id="loginForm" action="#" method="post" novalidate>
+        <div class="message" id="loginMessage"></div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <div class="input-wrap">
+            <i class="fa-regular fa-envelope left"></i>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              placeholder="Enter your email address"
+              autocomplete="off" data-lpignore="true" data-1p-ignore="true"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock left"></i>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="form-control"
+              placeholder="Enter your password"
+              autocomplete="new-password" data-lpignore="true" data-1p-ignore="true"
+              required
+            >
+            <i class="fa-regular fa-eye-slash eye" id="togglePassword" aria-label="Show or hide password"></i>
+          </div>
+          <div id="capsWarning">Caps Lock is ON</div>
+        </div>
+
+        <div class="row-options">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember">
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <a id="forgotPasswordLink" href="./forgot-password.html" class="forgot-link" data-forgot-password-link="true">Forgot Password?</a>
+        </div>
+
+        <button class="btn-login" id="loginBtn" type="submit">
+          <i class="fa-regular fa-user"></i> Login
+        </button>
+      </form>
+
+      <div class="auth-divider"><span>or continue with</span></div>
+
+      <button class="google-login-btn" id="googleBtn" type="button">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        Continue with Google
+      </button>
+
+      <div class="register-link">
+        Don’t have an account? <a href="register.html">Register here</a>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer-bar">
+  <div class="footer-brand">
+    <img src="images/pulilan-seal.png" alt="Pulilan Seal">
+    <div>
+      <strong>PHAQS — Pulilan Health Appointment and Queueing System</strong>
+      <span>Secure patient access</span>
+    </div>
+  </div>
+
+  <div class="footer-item">
+    <i class="fa-solid fa-location-dot"></i>
+    <span>Pulilan, Bulacan, Philippines</span>
+  </div>
+
+  <div class="footer-item">
+    <i class="fa-solid fa-house-medical"></i>
+    <span>RHU I–IV patient services</span>
+  </div>
+
+  <div class="footer-item">
+    <i class="fa-regular fa-circle-question"></i>
+    <span>Branch support is available after sign-in</span>
+  </div>
+</footer>
+
+<script src="js/patient_common.js?v=20260724-loginloopfix"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+let GOOGLE_CLIENT_ID='';
+const loginForm = document.getElementById('loginForm');
+const email = document.getElementById('email');
+const password = document.getElementById('password');
+const loginMessage = document.getElementById('loginMessage');
+const googleButton = document.getElementById('googleBtn');
+
+async function openVerifiedPatientDashboard(source){
+  loginMessage.className='message success';
+  loginMessage.textContent=source==='google'
+    ? 'Google account verified. Opening your patient dashboard…'
+    : 'Account verified. Opening your patient dashboard…';
+
+  // session check
+  const session=await api('patient_me',null,'GET');
+  if(!session.ok){
+    loginMessage.className='message error';
+    loginMessage.textContent='Your account was verified, but this browser did not retain the session. Allow cookies for this site, then sign in again.';
+    const button=document.getElementById('loginBtn');
+    button.disabled=false;
+    button.innerHTML='<i class="fa-regular fa-user"></i> Login';
+    googleButton.disabled=false;
+    googleButton.innerHTML='<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
+    return false;
+  }
+  window.setTimeout(()=>window.location.replace('dashboard.html'),350);
+  return true;
+}
+async function loadPublicAuthConfig(){
+  try{
+    const response=await fetch('../backend/api.php?action=public_auth_config',{credentials:'same-origin',cache:'no-store'});
+    const result=await response.json();
+    GOOGLE_CLIENT_ID=result.ok&&result.googleEnabled?String(result.googleClientId||''):'';
+    if(!GOOGLE_CLIENT_ID){googleButton.disabled=true;googleButton.title='Google Sign-In is not configured for this deployment.';}
+  }catch(_){googleButton.disabled=true;googleButton.title='Google Sign-In configuration is unavailable.';}
+}
+window.addEventListener('load', () => {
+  loadPublicAuthConfig();
+  email.value = '';
+  password.value = '';
+  setTimeout(() => {
+    email.value = '';
+    password.value = '';
+  }, 150);
+});
+
+const togglePassword = document.getElementById('togglePassword');
+const capsWarning = document.getElementById('capsWarning');
+
+togglePassword.addEventListener('click', function(){
+  const isHidden = password.type === 'password';
+  password.type = isHidden ? 'text' : 'password';
+  this.classList.toggle('fa-eye', isHidden);
+  this.classList.toggle('fa-eye-slash', !isHidden);
+});
+
+password.addEventListener('keyup', function(event){
+  capsWarning.style.display = event.getModifierState('CapsLock') ? 'block' : 'none';
+});
+
+loginForm.addEventListener('submit', async function(event){
+  event.preventDefault();
+  loginMessage.className = 'message';
+  loginMessage.textContent = '';
+
+  if(!email.validity.valid){
+    loginMessage.className = 'message error';
+    loginMessage.textContent = 'Please enter a valid email address.';
+    email.focus();
+    return;
+  }
+
+  if(password.value.trim() === ''){
+    loginMessage.className = 'message error';
+    loginMessage.textContent = 'Please enter your password.';
+    password.focus();
+    return;
+  }
+
+  const button=document.getElementById('loginBtn');
+  button.disabled=true;
+  button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+  const response=await api('patient_login',{email:email.value.trim(),password:password.value});
+  if(response.ok){
+    await openVerifiedPatientDashboard('password');
+  }else{
+    loginMessage.className='message error';
+    loginMessage.textContent=response.message||'Invalid email or password.';
+    button.disabled=false;
+    button.innerHTML='<i class="fa-regular fa-user"></i> Login';
+  }
+});
+
+googleButton.addEventListener('click',function(){
+  if(!GOOGLE_CLIENT_ID){
+    loginMessage.className='message error';
+    loginMessage.textContent='Google Sign-In is not configured for this website. You can still sign in using your email and password.';
+    return;
+  }
+  if(!window.google?.accounts?.oauth2){
+    loginMessage.className='message error';
+    loginMessage.textContent='Google Sign-In is still loading. Please try again.';
+    return;
+  }
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:GOOGLE_CLIENT_ID,
+    scope:'openid email profile',
+    prompt:'consent select_account',
+    callback:async function(result){
+      if(!result.access_token){
+        loginMessage.className='message error';
+        loginMessage.textContent='Google sign-in was cancelled. No changes were made to your account.';
+        return;
+      }
+      googleButton.disabled=true;
+      googleButton.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Verifying account…';
+      const response=await api('patient_google_access_login',{accessToken:result.access_token});
+      if(response.ok){
+        await openVerifiedPatientDashboard('google');
+      }else{
+        loginMessage.className='message error';
+        loginMessage.textContent=response.message||'We could not verify this Google account. Please try again.';
+        googleButton.disabled=false;
+        googleButton.innerHTML='<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"> Continue with Google';
+      }
+    }
+  });
+  client.requestAccessToken({prompt:'consent select_account'});
+});
+</script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+<script src="js/actual-critical-fix-20260724.js?v=20260724-e"></script>
+
+<script src="js/final-auth-flow-fix-20260724.js?v=20260724-f"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

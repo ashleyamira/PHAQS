@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/theme-clean.css">
+
+  <link rel="stylesheet" href="css/patient_profile.css?v=20260728-rhu-selection-fix">
+<link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+
+<style>
+html body > nav.patient-navbar{
+  width:100%!important;
+  height:88px!important;
+  min-height:88px!important;
+  padding:0!important;
+  background:#fff!important;
+  border-bottom:1px solid #e5eaf3!important;
+  box-shadow:0 2px 10px rgba(15,23,42,.05)!important;
+}
+
+html body > nav.patient-navbar > .nav-container{
+  width:100%!important;
+  max-width:none!important;
+  height:88px!important;
+  margin:0!important;
+  padding:0 34px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:28px!important;
+}
+
+html body > nav.patient-navbar .logo-area{
+  flex:0 0 auto!important;
+  margin-right:auto!important;
+}
+
+html body > nav.patient-navbar .menu{
+  margin-left:auto!important;
+  justify-content:flex-end!important;
+}
+</style>
+
+<style>
+.navbar-notif-btn{position:relative!important}
+.notif-count{position:absolute;top:7px;right:5px;min-width:17px;height:17px;padding:0 4px;display:none;align-items:center;justify-content:center;border-radius:999px;background:#dc2626;color:#fff;font-size:9px;font-weight:800;line-height:1}
+</style>
+
+<style>
+.navbar-notif-btn{position:relative!important}
+.navbar-notif-btn.has-unread{
+  border-color:#fecaca!important;
+  background:#fff1f2!important;
+  color:#dc2626!important;
+}
+.navbar-notif-btn.has-unread i{color:#dc2626!important}
+.notif-count{
+  position:absolute!important;
+  top:4px!important;
+  right:3px!important;
+  min-width:18px!important;
+  height:18px!important;
+  padding:0 5px!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  border:2px solid #fff!important;
+  border-radius:999px!important;
+  background:#dc2626!important;
+  color:#fff!important;
+  font-size:9px!important;
+  font-weight:800!important;
+}
+</style>
+
+<style>
+.patient-navbar .menu{position:relative}
+.notification-popover{
+  position:absolute;
+  top:calc(100% + 10px);
+  right:72px;
+  z-index:1200;
+  width:360px;
+  overflow:hidden;
+  border:1px solid #dbe4ef;
+  border-radius:12px;
+  background:#fff;
+  box-shadow:0 18px 42px rgba(15,23,42,.18);
+}
+.notification-popover[hidden]{display:none!important}
+.notification-popover::before{
+  content:"";
+  position:absolute;
+  top:-7px;
+  right:76px;
+  width:14px;
+  height:14px;
+  transform:rotate(45deg);
+  border-left:1px solid #dbe4ef;
+  border-top:1px solid #dbe4ef;
+  background:#fff;
+}
+.notification-popover-head{
+  min-height:58px;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  border-bottom:1px solid #edf2f7;
+}
+.notification-popover-head strong,
+.notification-popover-head span{display:block}
+.notification-popover-head strong{
+  color:#0f172a;
+  font-size:13px;
+  font-weight:800;
+}
+.notification-popover-head span{
+  margin-top:2px;
+  color:#94a3b8;
+  font-size:9px;
+}
+.notification-popover-head button{
+  border:0;
+  background:transparent;
+  color:#1e40af;
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.notification-popover-list{
+  max-height:340px;
+  overflow-y:auto;
+}
+.notification-popover-item{
+  position:relative;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr);
+  gap:10px;
+  padding:12px 14px;
+  border-bottom:1px solid #edf2f7;
+  background:#fff;
+  cursor:pointer;
+}
+.notification-popover-item:hover{background:#f8fbff}
+.notification-popover-item.unread{background:#f4f8ff}
+.notification-popover-item.unread::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:#0b4eea;
+}
+.notification-popover-icon{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:#eaf2ff;
+  color:#1e40af;
+  font-size:12px;
+}
+.notification-popover-icon.success{background:#dcfce7;color:#15803d}
+.notification-popover-icon.danger{background:#fee2e2;color:#dc2626}
+.notification-popover-icon.warning{background:#fef3c7;color:#a16207}
+.notification-popover-icon.queue{background:#e0e7ff;color:#4338ca}
+.notification-popover-body h4{
+  margin:0 0 3px;
+  color:#0f172a;
+  font-size:11px;
+  font-weight:800;
+}
+.notification-popover-body p{
+  margin:0;
+  color:#64748b;
+  font-size:9px;
+  line-height:1.45;
+}
+.notification-popover-body time{
+  display:block;
+  margin-top:5px;
+  color:#94a3b8;
+  font-size:8px;
+}
+.notification-popover-footer{
+  min-height:42px;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  border-top:1px solid #edf2f7;
+  background:#f8fafc;
+  color:#1e40af;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:800;
+}
+.notification-popover-empty,
+.notification-popover-loading{
+  padding:34px 16px;
+  text-align:center;
+  color:#64748b;
+  font-size:10px;
+}
+@media(max-width:700px){
+  .notification-popover{
+    position:fixed;
+    top:78px;
+    left:14px;
+    right:14px;
+    width:auto;
+  }
+}
+</style>
+
+<style>
+/* notification update */
+.notification-popover{
+  position:absolute!important;
+  top:calc(100% + 12px)!important;
+  right:58px!important;
+  z-index:1300!important;
+  width:430px!important;
+  overflow:hidden!important;
+  border:1px solid #d9e2ee!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:0 20px 48px rgba(15,23,42,.20)!important;
+}
+
+.notification-popover[hidden]{
+  display:none!important;
+}
+
+.notification-popover::before{
+  content:""!important;
+  position:absolute!important;
+  top:-8px!important;
+  right:82px!important;
+  width:16px!important;
+  height:16px!important;
+  transform:rotate(45deg)!important;
+  border-left:1px solid #d9e2ee!important;
+  border-top:1px solid #d9e2ee!important;
+  background:#fff!important;
+}
+
+.notification-popover-head{
+  min-height:72px!important;
+  padding:16px 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  border-bottom:1px solid #edf2f7!important;
+  background:#fff!important;
+}
+
+.notification-popover-head strong,
+.notification-popover-head span{
+  display:block!important;
+}
+
+.notification-popover-head strong{
+  color:#0f172a!important;
+  font-size:16px!important;
+  font-weight:800!important;
+  line-height:1.2!important;
+}
+
+.notification-popover-head span{
+  margin-top:4px!important;
+  color:#94a3b8!important;
+  font-size:11px!important;
+}
+
+.notification-popover-head button{
+  min-height:34px!important;
+  padding:7px 10px!important;
+  border:0!important;
+  border-radius:7px!important;
+  background:#eff6ff!important;
+  color:#1e40af!important;
+  font-size:11px!important;
+  font-weight:700!important;
+  cursor:pointer!important;
+}
+
+.notification-popover-head button:hover{
+  background:#dbeafe!important;
+}
+
+.notification-popover-list{
+  max-height:410px!important;
+  overflow-y:auto!important;
+  background:#fff!important;
+}
+
+.notification-popover-item{
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:46px minmax(0,1fr)!important;
+  gap:13px!important;
+  padding:15px 18px!important;
+  border-bottom:1px solid #edf2f7!important;
+  background:#fff!important;
+  cursor:pointer!important;
+  transition:background .18s ease!important;
+}
+
+.notification-popover-item:hover{
+  background:#f8fbff!important;
+}
+
+.notification-popover-item.unread{
+  background:#f4f8ff!important;
+}
+
+.notification-popover-item.unread::before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  width:4px!important;
+  background:#0b4eea!important;
+}
+
+.notification-popover-icon{
+  width:44px!important;
+  height:44px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:11px!important;
+  background:#eaf2ff!important;
+  color:#1e40af!important;
+  font-size:15px!important;
+}
+
+.notification-popover-icon.success{
+  background:#dcfce7!important;
+  color:#15803d!important;
+}
+
+.notification-popover-icon.danger{
+  background:#fee2e2!important;
+  color:#dc2626!important;
+}
+
+.notification-popover-icon.warning{
+  background:#fef3c7!important;
+  color:#a16207!important;
+}
+
+.notification-popover-icon.queue{
+  background:#e0e7ff!important;
+  color:#4338ca!important;
+}
+
+.notification-popover-body{
+  min-width:0!important;
+}
+
+.notification-popover-body h4{
+  margin:0 0 5px!important;
+  color:#0f172a!important;
+  font-size:13px!important;
+  font-weight:800!important;
+  line-height:1.35!important;
+}
+
+.notification-popover-body p{
+  margin:0!important;
+  color:#64748b!important;
+  font-size:11px!important;
+  line-height:1.55!important;
+}
+
+.notification-popover-body time{
+  display:block!important;
+  margin-top:7px!important;
+  color:#94a3b8!important;
+  font-size:9px!important;
+}
+
+.notification-popover-footer{
+  min-height:52px!important;
+  padding:12px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  border-top:1px solid #edf2f7!important;
+  background:#f8fafc!important;
+  color:#1e40af!important;
+  text-decoration:none!important;
+  font-size:12px!important;
+  font-weight:800!important;
+}
+
+.notification-popover-footer:hover{
+  background:#eff6ff!important;
+  color:#1e40af!important;
+}
+
+.notification-popover-empty,
+.notification-popover-loading{
+  padding:44px 18px!important;
+  color:#64748b!important;
+  text-align:center!important;
+  font-size:11px!important;
+  line-height:1.5!important;
+}
+
+@media(max-width:760px){
+  .notification-popover{
+    position:fixed!important;
+    top:84px!important;
+    left:14px!important;
+    right:14px!important;
+    width:auto!important;
+  }
+
+  .notification-popover::before{
+    display:none!important;
+  }
+
+  .notification-popover-list{
+    max-height:55vh!important;
+  }
+}
+</style>
+
+<style>
+.enable-browser-notifications-btn{
+  width:100%;
+  min-height:38px;
+  padding:8px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  border:0;
+  border-top:1px solid #edf2f7;
+  background:#f8fafc;
+  color:#1e40af;
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+}
+.enable-browser-notifications-btn:hover{background:#eff6ff}
+</style>
+
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+  <link rel="stylesheet" href="css/notification-unified-final.css?v=20260715-exact44">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+<link rel="stylesheet" href="css/patient-avatar-perfect-circle.css?v=20260723-circle">
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+<link rel="stylesheet" href="css/patient-text-size.css?v=20260728-floating-left-v1">
+
+<style id="profileFeedbackDesign20260728">
+.profile-feedback-dialog{max-width:410px;padding:18px}.profile-feedback-card{position:relative;border:0;border-radius:18px;padding:32px 30px 26px;text-align:center;box-shadow:0 24px 70px rgba(10,35,85,.24);overflow:hidden}.profile-feedback-card:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:#1746b5}.profile-feedback-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border:0;border-radius:50%;background:#f1f5f9;color:#64748b;display:grid;place-items:center}.profile-feedback-icon{width:64px;height:64px;margin:2px auto 18px;border-radius:50%;display:grid;place-items:center;background:#e8f7ef;color:#168453;font-size:26px}.profile-feedback-card h5{margin:0 0 8px;color:#0f172a;font-size:21px;font-weight:800}.profile-feedback-card p{margin:0 auto 24px;max-width:310px;color:#64748b;font-size:14px;line-height:1.55}.profile-feedback-button{min-width:128px;height:44px;border:0;border-radius:9px;background:#1746b5;color:#fff;font-weight:750;padding:0 24px}.profile-feedback-card[data-type="info"]:before{background:#2563eb}.profile-feedback-card[data-type="info"] .profile-feedback-icon{background:#eaf2ff;color:#2563eb}.profile-feedback-card[data-type="warning"]:before{background:#d97706}.profile-feedback-card[data-type="warning"] .profile-feedback-icon{background:#fff4dd;color:#b45309}.profile-feedback-card[data-type="error"]:before{background:#c62828}.profile-feedback-card[data-type="error"] .profile-feedback-icon{background:#feecec;color:#c62828}.btn-save[aria-disabled="true"]{opacity:.62;filter:saturate(.65)}.btn-save.has-changes{opacity:1;filter:none;box-shadow:0 5px 14px rgba(23,70,181,.18)}@media(max-width:576px){.profile-feedback-dialog{margin:12px}.profile-feedback-card{padding:30px 22px 24px}}
+</style>
+</head>
+<body>
+
+<nav class="navbar patient-navbar">
+  <div class="nav-container">
+    <a class="logo-area" href="dashboard.html" aria-label="Patient dashboard">
+      <img src="images/mhc-logo.png" class="logo-img" alt="Pulilan Health Center Logo">
+      <div class="logo-text"><h5>Pulilan Health Center</h5><span>PHAQS</span></div>
+    </a>
+    <div class="menu">
+      <a class="" href="dashboard.html"><i class="fa-solid fa-house"></i><span>Dashboard</span></a>
+      <a class="" href="book.html"><i class="fa-regular fa-calendar-plus"></i><span>Book Appointment</span></a>
+      <a class="" href="appointments.html"><i class="fa-regular fa-calendar-check"></i><span>My Appointments</span></a>
+      <a class="" href="queue.html"><i class="fa-solid fa-list-check"></i><span>Queue Status</span></a>
+      <div class="patient-text-size-control">
+        <button class="patient-text-size-trigger" type="button" aria-label="Change text size" aria-haspopup="true" aria-expanded="false">
+          <span class="patient-text-size-aa" aria-hidden="true">AA</span><span class="patient-text-size-trigger-label">Text</span>
+        </button>
+        <div class="patient-text-size-popover" hidden>
+          <div class="patient-text-size-popover-head"><strong>Text size</strong><span>Current: <b data-text-size-current>Normal</b></span></div>
+          <div class="patient-text-size-options" role="group" aria-label="Choose text size" data-text-size-location="desktop-navbar">
+            <button class="patient-text-size-option" type="button" data-patient-text-size="normal" aria-pressed="false">Normal</button>
+            <button class="patient-text-size-option" type="button" data-patient-text-size="large" aria-pressed="false">Large</button>
+          </div>
+        </div>
+      </div>
+      <button class="navbar-notif-btn" type="button" aria-label="Notifications"><i class="fa-regular fa-bell"></i><span class="notif-count">0</span></button>
+<div class="notification-popover" id="notificationPopover" hidden>
+  <div class="notification-popover-head">
+    <div>
+      <strong>Notifications</strong>
+      <span id="popoverUnreadText">0 unread</span>
+    </div>
+    <button type="button" id="popoverMarkAll">Mark all as read</button>
+  </div>
+  <div class="notification-popover-list" id="notificationPopoverList">
+    <div class="notification-popover-loading">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Loading...
+    </div>
+  </div>
+  
+<button type="button" class="enable-browser-notifications-btn" data-enable-browser-notifications>
+  <i class="fa-regular fa-bell"></i>
+  Enable browser notifications
+</button>
+
+<a class="notification-popover-footer" href="notifications.html">
+    View all notifications
+    <i class="fa-solid fa-arrow-right"></i>
+  </a>
+</div>
+
+      <div class="user-menu-wrap dropdown">
+        <button class="user-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="avatar" id="avatarBtn">P</span><span class="user-name" id="userName">Loading...</span><i class="fas fa-chevron-down user-chevron"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end patient-user-menu">
+          <li><a class="dropdown-item patient-menu-item " href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item patient-menu-item logout" type="button" onclick="confirmPatientLogout();"><i class="fas fa-right-from-bracket"></i><span>Logout</span></button></li>
+        </ul>
+      </div>
+    </div>
+    <button class="hamburger-btn" onclick="toggleMobileMenu()" id="hamburgerBtn" type="button" aria-label="Open menu"><i class="fas fa-bars" id="hamburgerIcon"></i></button>
+    <div class="mobile-menu" id="mobileMenu">
+      <div class="mob-user"><div class="mob-avatar" id="mobAvatar">P</div><span id="mobName">Loading...</span></div>
+      <div class="mob-divider"></div>
+      <a class="" href="dashboard.html"><i class="fa-solid fa-house me-2"></i>Dashboard</a>
+      <a class="" href="book.html"><i class="fa-regular fa-calendar-plus me-2"></i>Book Appointment</a>
+      <a class="" href="appointments.html"><i class="fa-regular fa-calendar-check me-2"></i>My Appointments</a>
+      <a class="" href="queue.html"><i class="fa-solid fa-list-check me-2"></i>Queue Status</a>
+      <a class="active" href="profile.html"><i class="fas fa-user me-2"></i>Profile</a>
+      <div class="mob-divider"></div>
+      <div class="patient-text-size-mobile-row">
+        <div class="patient-text-size-mobile-label"><span class="patient-text-size-aa" aria-hidden="true">AA</span><span>Text size</span></div>
+        <div class="patient-text-size-options" role="group" aria-label="Choose text size" data-text-size-location="mobile-menu">
+          <button class="patient-text-size-option" type="button" data-patient-text-size="normal" aria-pressed="false">Normal</button>
+          <button class="patient-text-size-option" type="button" data-patient-text-size="large" aria-pressed="false">Large</button>
+        </div>
+      </div>
+      <button class="mob-logout" onclick="confirmPatientLogout();" type="button"><i class="fa-solid fa-right-from-bracket me-2"></i>Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-container">
+
+  <div class="profile-header-card">
+    <div class="profile-header-top">
+      <div class="profile-avatar-big" id="avatarBig">A</div>
+      <div class="profile-header-info">
+        <p class="profile-header-name" id="headerName">Loading...</p>
+        <p class="profile-header-sub"  id="headerSub">Patient record</p>
+      </div>
+      <div class="profile-header-stats">
+        <div class="phs-item">
+          <span class="phs-label">Status</span>
+          <span class="phs-value"><span class="badge-active">Active</span></span>
+        </div>
+        <div class="phs-divider"></div>
+        <div class="phs-item">
+          <span class="phs-label">Blood Type</span>
+          <span class="phs-value" id="hBlood">-</span>
+        </div>
+        <div class="phs-divider"></div>
+        <div class="phs-item">
+          <span class="phs-label">Preferred RHU</span>
+          <span class="phs-value" id="hRhu">-</span>
+        </div>
+        <div class="phs-divider"></div>
+        <div class="phs-item">
+          <span class="phs-label">4Ps Member</span>
+          <span class="phs-value" id="h4ps">No</span>
+        </div>
+        <div class="phs-divider"></div>
+        <div class="phs-item">
+          <span class="phs-label">Senior Citizen</span>
+          <span class="phs-value" id="hSenior">No</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-header-bottom">
+      <div class="completeness-wrap-inline">
+        <span>Profile Completeness</span>
+        <div class="completeness-track">
+          <div class="completeness-fill" id="pctFill" style="width:0%"></div>
+        </div>
+        <span class="pct-label" id="pctLabel">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="show('personal',this)">
+      <i class="fas fa-user"></i> <span>Personal</span>
+    </button>
+    <button class="tab-btn" onclick="show('contact',this)">
+      <i class="fas fa-map-marker-alt"></i> <span>Contact</span>
+    </button>
+    <button class="tab-btn" onclick="show('health',this)">
+      <i class="fas fa-heart-pulse"></i> <span>Health</span>
+    </button>
+    <button class="tab-btn" onclick="show('rhu',this)">
+      <i class="fas fa-hospital"></i> <span>RHU</span>
+    </button>
+    <button class="tab-btn" onclick="show('philhealth',this)">
+      <i class="fas fa-id-card"></i> <span>PhilHealth</span>
+    </button>
+    <button class="tab-btn" onclick="show('benefits',this)">
+      <i class="fas fa-hand-holding-heart"></i> <span>Benefits</span>
+    </button>
+    <button class="tab-btn" onclick="show('emergency',this)">
+      <i class="fas fa-phone"></i> <span>Emergency</span>
+    </button>
+    <button class="tab-btn" onclick="show('account',this)">
+      <i class="fas fa-lock"></i> <span>Account</span>
+    </button>
+  </div>
+
+  <div class="section-card" id="sec-personal">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-user"></i></div>
+        <div><h6>Personal Information</h6><p>Your basic personal details</p></div>
+      </div>
+      <button class="btn-save" onclick="save('personal')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="firstName" placeholder="First name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lastName" placeholder="Last name">
+        </div>
+        <div class="form-group">
+          <label>Middle Name</label>
+          <input type="text" id="middleName" placeholder="Middle name">
+        </div>
+        <div class="form-group">
+          <label>Suffix</label>
+          <select id="suffix">
+            <option value="">None</option>
+            <option>Jr.</option><option>Sr.</option><option>II</option><option>III</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <input type="date" id="dob">
+        </div>
+        <div class="form-group">
+          <label>Sex</label>
+          <select id="sex">
+            <option value="">Select</option>
+            <option>Female</option><option>Male</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Civil Status</label>
+          <select id="civilStatus">
+            <option value="">Select</option>
+            <option>Single</option><option>Married</option>
+            <option>Widowed</option><option>Separated</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Nationality</label>
+          <input type="text" id="nationality">
+        </div>
+        <div class="form-group">
+          <label>Religion</label>
+          <input type="text" id="religion" placeholder="e.g. Roman Catholic">
+        </div>
+        <div class="form-group">
+          <label>Occupation</label>
+          <input type="text" id="occupation" placeholder="e.g. Farmer, Teacher, Housewife">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" id="sec-contact" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-map-marker-alt"></i></div>
+        <div><h6>Contact & Address</h6><p>Your contact info and location in Pulilan</p></div>
+      </div>
+      <button class="btn-save" onclick="save('contact')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="mobile" placeholder="09XX XXX XXXX">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="email" placeholder="your@email.com">
+        </div>
+        <div class="form-group span2">
+          <label>Barangay</label>
+          <select id="barangay">
+            <option value="">Select Barangay</option>
+            <option>Balatong A</option><option>Balatong B</option>
+            <option>Cutcot</option><option>Dampol 1st</option>
+            <option>Dampol 2nd A</option><option>Dampol 2nd B</option>
+            <option>Dulong Malabon</option><option>Inaon</option>
+            <option>Lumbac</option><option>Paltao</option>
+            <option>Penabatan</option><option>Poblacion</option>
+            <option>Pulilen (Patubig)</option><option>Santa Peregrina</option>
+            <option>Santo Cristo</option><option>Tiaong</option>
+            <option>Tibag</option><option>Tinejero</option>
+          </select>
+        </div>
+        <div class="form-group span2">
+          <label>House No. / Street / Purok</label>
+          <input type="text" id="street" placeholder="House no., street name, purok">
+        </div>
+        <div class="form-group">
+          <label>Municipality</label>
+          <input type="text" value="Pulilan" readonly>
+        </div>
+        <div class="form-group">
+          <label>Province</label>
+          <input type="text" value="Bulacan" readonly>
+        </div>
+        <div class="form-group">
+          <label>ZIP Code</label>
+          <input type="text" id="zip" value="3005">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" id="sec-health" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-heart-pulse"></i></div>
+        <div><h6>Health Information</h6><p>Your medical background</p></div>
+      </div>
+      <button class="btn-save" onclick="save('health')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="form-grid g3">
+        <div class="form-group">
+          <label>Blood Type</label>
+          <select id="bloodType" onchange="updateHeader()">
+            <option value="">Select</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>O+</option><option>O-</option>
+            <option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Height (cm)</label>
+          <input type="number" id="height" placeholder="e.g. 160">
+        </div>
+        <div class="form-group">
+          <label>Weight (kg)</label>
+          <input type="number" id="weight" placeholder="e.g. 55">
+        </div>
+        <div class="form-group span3">
+          <label>Allergies</label>
+          <input type="text" id="allergies" placeholder="e.g. Penicillin, Shellfish (leave blank if none)">
+        </div>
+        <div class="form-group span3">
+          <label>Existing Medical Conditions</label>
+          <textarea id="conditions" placeholder="e.g. Hypertension, Diabetes, Asthma, TB (leave blank if none)"></textarea>
+        </div>
+        <div class="form-group span3">
+          <label>Current Medications</label>
+          <textarea id="medications" placeholder="e.g. Amlodipine 5mg daily (leave blank if none)"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Smoking</label>
+          <select id="smoking">
+            <option value="">Select</option>
+            <option>Non-smoker</option>
+            <option>Former smoker</option>
+            <option>Current smoker</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Alcohol Use</label>
+          <select id="alcohol">
+            <option value="">Select</option>
+            <option>None</option>
+            <option>Occasional</option>
+            <option>Regular</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Vaccination Status</label>
+          <select id="vaccination">
+            <option value="">Select</option>
+            <option>Complete (basic)</option>
+            <option>Incomplete</option>
+            <option>COVID-19 Vaccinated</option>
+            <option>Not vaccinated</option>
+          </select>
+        </div>
+        <div class="form-group span3">
+          <label>For Female Patients - OB/GYN Notes</label>
+          <input type="text" id="obgyn" placeholder="e.g. G2P2, LMP: Jan 2026, Pregnant 3 months (leave blank if not applicable)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" id="sec-rhu" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-hospital"></i></div>
+        <div><h6>RHU Preference</h6><p>Choose your preferred health center in Pulilan</p></div>
+      </div>
+      <button class="btn-save" onclick="save('rhu')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="info-notice">
+        <i class="fas fa-circle-info"></i>
+        Pulilan, Bulacan has 4 Rural Health Units. Select your nearest or preferred RHU. You may still book appointments at any RHU.
+      </div>
+      <div class="rhu-grid">
+        <div class="rhu-card" data-rhu="RHU I - Poblacion" role="radio" aria-checked="false" tabindex="0">
+          <div class="rhu-check"><i class="fas fa-check"></i></div>
+          <div class="rhu-name"><i class="fas fa-hospital" style="color:#1e40af;margin-right:7px;font-size:14px;"></i>RHU I - Poblacion</div>
+          <div class="rhu-address">Poblacion, Pulilan, Bulacan</div>
+          <div class="rhu-hours"><i class="fas fa-clock" style="color:#9ca3af;font-size:12px;"></i>&nbsp;Mon-Fri, 8:00 AM - 5:00 PM</div>
+        </div>
+        <div class="rhu-card" data-rhu="RHU II - Cutcot" role="radio" aria-checked="false" tabindex="0">
+          <div class="rhu-check"><i class="fas fa-check"></i></div>
+          <div class="rhu-name"><i class="fas fa-hospital" style="color:#1e40af;margin-right:7px;font-size:14px;"></i>RHU II - Cutcot</div>
+          <div class="rhu-address">Cutcot, Pulilan, Bulacan</div>
+          <div class="rhu-hours"><i class="fas fa-clock" style="color:#9ca3af;font-size:12px;"></i>&nbsp;Mon-Fri, 8:00 AM - 5:00 PM</div>
+        </div>
+        <div class="rhu-card" data-rhu="RHU III - Tinejero" role="radio" aria-checked="false" tabindex="0">
+          <div class="rhu-check"><i class="fas fa-check"></i></div>
+          <div class="rhu-name"><i class="fas fa-hospital" style="color:#1e40af;margin-right:7px;font-size:14px;"></i>RHU III - Tinejero</div>
+          <div class="rhu-address">Tinejero, Pulilan, Bulacan</div>
+          <div class="rhu-hours"><i class="fas fa-clock" style="color:#9ca3af;font-size:12px;"></i>&nbsp;Mon-Fri, 8:00 AM - 5:00 PM</div>
+        </div>
+        <div class="rhu-card" data-rhu="RHU IV - Tibag" role="radio" aria-checked="false" tabindex="0">
+          <div class="rhu-check"><i class="fas fa-check"></i></div>
+          <div class="rhu-name"><i class="fas fa-hospital" style="color:#1e40af;margin-right:7px;font-size:14px;"></i>RHU IV - Tibag</div>
+          <div class="rhu-address">Tibag, Pulilan, Bulacan</div>
+          <div class="rhu-hours"><i class="fas fa-clock" style="color:#9ca3af;font-size:12px;"></i>&nbsp;Mon-Fri, 8:00 AM - 5:00 PM</div>
+        </div>
+      </div>
+      <div class="rhu-selection-summary" aria-live="polite">
+        <span class="rhu-selection-icon"><i class="fas fa-location-dot"></i></span>
+        <div><small>Selected RHU</small><strong id="selectedRhuLabel">Please select a branch</strong></div>
+      </div>
+      <input type="hidden" id="preferredRhu">
+      <div class="form-group" style="max-width:340px;">
+        <label>Preferred Consultation Time</label>
+        <select id="preferredTime">
+          <option value="">Select</option>
+          <option>Morning (8:00 AM - 12:00 PM)</option>
+          <option>Afternoon (1:00 PM - 5:00 PM)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" id="sec-philhealth" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-id-card"></i></div>
+        <div><h6>PhilHealth</h6><p>Your national health insurance details</p></div>
+      </div>
+      <button class="btn-save" onclick="save('philhealth')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="ph-card">
+        <div class="ph-gov">Republic of the Philippines</div>
+        <div class="ph-corp">Philippine Health Insurance Corporation</div>
+        <div class="ph-num" id="phNum">0000 - 0000 - 0000</div>
+        <div class="ph-row">
+          <div class="ph-field"><small>Member</small><span id="phName">-</span></div>
+          <div class="ph-field"><small>Type</small><span id="phType">-</span></div>
+          <div class="ph-field"><small>Status</small><span id="phStatus">-</span></div>
+        </div>
+      </div>
+      <div class="card-capture-panel">
+        <div class="card-capture-head">
+          <div>
+            <div class="card-title-row">
+              <span class="card-title-icon"><i class="fas fa-id-card"></i></span>
+              <p class="card-capture-title">PhilHealth Card Photo</p>
+            </div>
+            <p class="card-capture-copy">Take a clear photo of the card or type the details manually below.</p>
+          </div>
+          <div class="card-capture-actions">
+            <button type="button" class="btn-soft-blue" onclick="openCardCamera('philhealth')"><i class="fas fa-camera"></i> Camera</button>
+            <button type="button" class="btn-soft-neutral" onclick="document.getElementById('philhealthFile').click()"><i class="fas fa-image"></i> Upload</button>
+            <button type="button" class="btn-soft-neutral" id="philhealthCaptureBtn" onclick="captureCardPhoto('philhealth')" style="display:none;"><i class="fas fa-circle-dot"></i> Capture</button>
+            <button type="button" class="btn-soft-neutral" id="philhealthClearBtn" onclick="clearCardPhoto('philhealth')" style="display:none;"><i class="fas fa-trash"></i> Remove</button>
+          </div>
+        </div>
+        <input type="file" id="philhealthFile" accept="image/*" capture="environment" onchange="loadCardImage(event,'philhealth')" hidden>
+        <input type="hidden" id="philhealthCardImage">
+        <canvas id="philhealthCanvas" style="display:none;"></canvas>
+        <div class="card-preview-wrap">
+          <span class="card-preview-empty" id="philhealthEmpty">No card photo yet.</span>
+          <video id="philhealthVideo" autoplay playsinline style="display:none;"></video>
+          <img id="philhealthPreview" alt="PhilHealth card preview" style="display:none;">
+        </div>
+        <div class="ocr-status" id="philhealthOcrStatus"><i class="fas fa-wand-magic-sparkles"></i> Upload or capture a clear card photo for verification. Enter the card details manually below.</div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>PhilHealth ID Number (PIN)</label>
+          <input type="text" id="philhealthNum" placeholder="00-000000000-0" oninput="updatePh()">
+        </div>
+        <div class="form-group">
+          <label>Membership Type</label>
+          <select id="philhealthType" onchange="updatePh()">
+            <option value="">Select</option>
+            <option>Employed - Private</option>
+            <option>Employed - Government</option>
+            <option>Self-Employed</option>
+            <option>Indigent (4Ps / NHTS)</option>
+            <option>Senior Citizen</option>
+            <option>Lifetime Member</option>
+            <option>OFW</option>
+            <option>Household Service Worker</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>PhilHealth Status</label>
+          <select id="philhealthStatus" onchange="updatePh()">
+            <option value="">Select</option>
+            <option>Active</option>
+            <option>Inactive</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Employer (if Employed)</label>
+          <input type="text" id="philhealthEmployer" placeholder="Employer or company name">
+        </div>
+        <div class="form-group span2">
+          <label>Dependents</label>
+          <input type="text" id="philhealthDependents" placeholder="e.g. Spouse, Child 1 (separate with comma)">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" id="sec-benefits" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-hand-holding-heart"></i></div>
+        <div><h6>Benefits & Special Classifications</h6><p>For eligibility of free or subsidized health services</p></div>
+      </div>
+      <button class="btn-save" onclick="save('benefits')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="info-notice">
+        <i class="fas fa-circle-info"></i>
+        This information helps RHU staff determine your eligibility for free consultations, medicines, and other health programs in Pulilan.
+      </div>
+      <div class="benefit-capture-grid">
+        <div class="card-capture-panel">
+          <div class="card-capture-head">
+            <div>
+              <div class="card-title-row">
+                <span class="card-title-icon"><i class="fas fa-id-card-clip"></i></span>
+                <p class="card-capture-title">Senior Citizen Card</p>
+              </div>
+              <p class="card-capture-copy">Capture the card or enter the ID number manually.</p>
+            </div>
+            <div class="card-capture-actions">
+              <button type="button" class="btn-soft-blue" onclick="openCardCamera('senior')"><i class="fas fa-camera"></i> Camera</button>
+              <button type="button" class="btn-soft-neutral" onclick="document.getElementById('seniorFile').click()"><i class="fas fa-image"></i> Upload</button>
+              <button type="button" class="btn-soft-neutral" id="seniorCaptureBtn" onclick="captureCardPhoto('senior')" style="display:none;"><i class="fas fa-circle-dot"></i> Capture</button>
+              <button type="button" class="btn-soft-neutral" id="seniorClearBtn" onclick="clearCardPhoto('senior')" style="display:none;"><i class="fas fa-trash"></i> Remove</button>
+            </div>
+          </div>
+          <input type="file" id="seniorFile" accept="image/*" capture="environment" onchange="loadCardImage(event,'senior')" hidden>
+          <input type="hidden" id="seniorCardImage">
+          <canvas id="seniorCanvas" style="display:none;"></canvas>
+          <div class="card-preview-wrap">
+            <span class="card-preview-empty" id="seniorEmpty">No card photo yet.</span>
+            <video id="seniorVideo" autoplay playsinline style="display:none;"></video>
+            <img id="seniorPreview" alt="Senior Citizen card preview" style="display:none;">
+          </div>
+          <div class="ocr-status" id="seniorOcrStatus"><i class="fas fa-wand-magic-sparkles"></i> Photo Verification is ready.</div>
+        </div>
+
+        <div class="card-capture-panel">
+          <div class="card-capture-head">
+            <div>
+              <div class="card-title-row">
+                <span class="card-title-icon"><i class="fas fa-universal-access"></i></span>
+                <p class="card-capture-title">PWD Card</p>
+              </div>
+              <p class="card-capture-copy">Capture the card or enter the ID number manually.</p>
+            </div>
+            <div class="card-capture-actions">
+              <button type="button" class="btn-soft-blue" onclick="openCardCamera('pwd')"><i class="fas fa-camera"></i> Camera</button>
+              <button type="button" class="btn-soft-neutral" onclick="document.getElementById('pwdFile').click()"><i class="fas fa-image"></i> Upload</button>
+              <button type="button" class="btn-soft-neutral" id="pwdCaptureBtn" onclick="captureCardPhoto('pwd')" style="display:none;"><i class="fas fa-circle-dot"></i> Capture</button>
+              <button type="button" class="btn-soft-neutral" id="pwdClearBtn" onclick="clearCardPhoto('pwd')" style="display:none;"><i class="fas fa-trash"></i> Remove</button>
+            </div>
+          </div>
+          <input type="file" id="pwdFile" accept="image/*" capture="environment" onchange="loadCardImage(event,'pwd')" hidden>
+          <input type="hidden" id="pwdCardImage">
+          <canvas id="pwdCanvas" style="display:none;"></canvas>
+          <div class="card-preview-wrap">
+            <span class="card-preview-empty" id="pwdEmpty">No card photo yet.</span>
+            <video id="pwdVideo" autoplay playsinline style="display:none;"></video>
+            <img id="pwdPreview" alt="PWD card preview" style="display:none;">
+          </div>
+          <div class="ocr-status" id="pwdOcrStatus"><i class="fas fa-wand-magic-sparkles"></i> Photo Verification is ready.</div>
+        </div>
+
+        <div class="card-capture-panel">
+          <div class="card-capture-head">
+            <div>
+              <div class="card-title-row">
+                <span class="card-title-icon"><i class="fas fa-hand-holding-heart"></i></span>
+                <p class="card-capture-title">4Ps or DSWD Proof</p>
+              </div>
+              <p class="card-capture-copy">Capture supporting proof or enter the household ID manually.</p>
+            </div>
+            <div class="card-capture-actions">
+              <button type="button" class="btn-soft-blue" onclick="openCardCamera('fourPs')"><i class="fas fa-camera"></i> Camera</button>
+              <button type="button" class="btn-soft-neutral" onclick="document.getElementById('fourPsFile').click()"><i class="fas fa-image"></i> Upload</button>
+              <button type="button" class="btn-soft-neutral" id="fourPsCaptureBtn" onclick="captureCardPhoto('fourPs')" style="display:none;"><i class="fas fa-circle-dot"></i> Capture</button>
+              <button type="button" class="btn-soft-neutral" id="fourPsClearBtn" onclick="clearCardPhoto('fourPs')" style="display:none;"><i class="fas fa-trash"></i> Remove</button>
+            </div>
+          </div>
+          <input type="file" id="fourPsFile" accept="image/*" capture="environment" onchange="loadCardImage(event,'fourPs')" hidden>
+          <input type="hidden" id="fourPsCardImage">
+          <canvas id="fourPsCanvas" style="display:none;"></canvas>
+          <div class="card-preview-wrap">
+            <span class="card-preview-empty" id="fourPsEmpty">No card photo yet.</span>
+            <video id="fourPsVideo" autoplay playsinline style="display:none;"></video>
+            <img id="fourPsPreview" alt="4Ps proof preview" style="display:none;">
+          </div>
+          <div class="ocr-status" id="fourPsOcrStatus"><i class="fas fa-wand-magic-sparkles"></i> Photo Verification is ready.</div>
+        </div>
+
+        <div class="card-capture-panel">
+          <div class="card-capture-head">
+            <div>
+              <div class="card-title-row">
+                <span class="card-title-icon"><i class="fas fa-user-shield"></i></span>
+                <p class="card-capture-title">Solo Parent ID</p>
+              </div>
+              <p class="card-capture-copy">Capture the card if available.</p>
+            </div>
+            <div class="card-capture-actions">
+              <button type="button" class="btn-soft-blue" onclick="openCardCamera('soloParent')"><i class="fas fa-camera"></i> Camera</button>
+              <button type="button" class="btn-soft-neutral" onclick="document.getElementById('soloParentFile').click()"><i class="fas fa-image"></i> Upload</button>
+              <button type="button" class="btn-soft-neutral" id="soloParentCaptureBtn" onclick="captureCardPhoto('soloParent')" style="display:none;"><i class="fas fa-circle-dot"></i> Capture</button>
+              <button type="button" class="btn-soft-neutral" id="soloParentClearBtn" onclick="clearCardPhoto('soloParent')" style="display:none;"><i class="fas fa-trash"></i> Remove</button>
+            </div>
+          </div>
+          <input type="file" id="soloParentFile" accept="image/*" capture="environment" onchange="loadCardImage(event,'soloParent')" hidden>
+          <input type="hidden" id="soloParentCardImage">
+          <canvas id="soloParentCanvas" style="display:none;"></canvas>
+          <div class="card-preview-wrap">
+            <span class="card-preview-empty" id="soloParentEmpty">No card photo yet.</span>
+            <video id="soloParentVideo" autoplay playsinline style="display:none;"></video>
+            <img id="soloParentPreview" alt="Solo Parent ID preview" style="display:none;">
+          </div>
+          <div class="ocr-status" id="soloParentOcrStatus"><i class="fas fa-wand-magic-sparkles"></i> Photo Verification is ready.</div>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <div class="tr-label">
+          <strong>Senior Citizen (60 years old and above)</strong>
+          <span>Entitled to free medicines and priority service</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="isSenior" onchange="updateHeader()">
+          <span class="t-slider"></span>
+        </label>
+      </div>
+      <div class="form-group" style="margin:12px 0 20px;max-width:340px;">
+        <label>Senior Citizen ID Number</label>
+        <input type="text" id="scId" placeholder="Senior Citizen ID number (if available)">
+      </div>
+      <div class="toggle-row">
+        <div class="tr-label">
+          <strong>Person with Disability (PWD)</strong>
+          <span>Entitled to 20% discount and priority service</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="isPwd">
+          <span class="t-slider"></span>
+        </label>
+      </div>
+      <div class="form-grid" style="margin:12px 0 20px;">
+        <div class="form-group">
+          <label>Type of Disability</label>
+          <select id="pwdType">
+            <option value="">Select</option>
+            <option>Physical</option><option>Visual</option>
+            <option>Hearing</option><option>Mental / Psychosocial</option>
+            <option>Intellectual</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>PWD ID Number</label>
+          <input type="text" id="pwdId" placeholder="PWD ID number (if available)">
+        </div>
+      </div>
+      <div class="toggle-row">
+        <div class="tr-label">
+          <strong>4Ps Member (Government Cash Assistance Program)</strong>
+          <span>DSWD conditional cash transfer program beneficiary</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggle4ps" onchange="updateHeader()">
+          <span class="t-slider"></span>
+        </label>
+      </div>
+      <div class="form-group" style="margin:12px 0 20px;max-width:340px;">
+        <label>4Ps Household ID Number</label>
+        <input type="text" id="fourPsNum" placeholder="Household ID number">
+      </div>
+      <div class="toggle-row">
+        <div class="tr-label">
+          <strong>NHTS-PR Beneficiary (Indigent / Poor Household)</strong>
+          <span>National Household Targeting System - entitled to free health services</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleNhts">
+          <span class="t-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="tr-label">
+          <strong>Medical Assistance Beneficiary</strong>
+          <span>DOH Medical Assistance Program - financial assistance for hospital bills</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleMalasakit">
+          <span class="t-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div class="tr-label">
+          <strong>Solo Parent (RA 8972)</strong>
+          <span>Registered solo parent in Pulilan, Bulacan</span>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="toggleSoloParent">
+          <span class="t-slider"></span>
+        </label>
+      </div>
+      <div class="form-group" style="margin:12px 0 0;max-width:340px;">
+        <label>Solo Parent ID Number</label>
+        <input type="text" id="soloParentId" placeholder="Solo Parent ID number (if available)">
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card" id="sec-emergency" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-phone"></i></div>
+        <div><h6>Emergency Contact</h6><p>Person to contact in case of emergency</p></div>
+      </div>
+      <button class="btn-save" onclick="save('emergency')"><i class="fas fa-floppy-disk"></i> Save</button>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Contact Person Full Name</label>
+          <input type="text" id="ecName" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label>Relationship</label>
+          <select id="ecRelationship">
+            <option value="">Select</option>
+            <option>Spouse</option><option>Parent</option>
+            <option>Sibling</option><option>Child</option>
+            <option>Relative</option><option>Friend</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" id="ecMobile" placeholder="09XX XXX XXXX">
+        </div>
+        <div class="form-group">
+          <label>Alternate Number</label>
+          <input type="tel" id="ecAlt" placeholder="Optional">
+        </div>
+        <div class="form-group span2">
+          <label>Address</label>
+          <input type="text" id="ecAddress" placeholder="Full address">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- security check -->
+  <div class="section-card" id="sec-account" style="display:none;">
+    <div class="section-head">
+      <div class="section-head-left">
+        <div class="hicon"><i class="fas fa-lock"></i></div>
+        <div><h6>Account & Security</h6><p>Update your login credentials</p></div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="form-grid">
+        <div class="form-group span2">
+          <label>Email Address <span style="font-size:13px;color:#9ca3af;font-weight:400;">(used for login)</span></label>
+          <input type="email" id="accountEmail" placeholder="your@email.com">
+        </div>
+        <div class="form-group span2" style="border-top:1px solid #f3f4f6;padding-top:20px;margin-top:4px;">
+          <label style="font-size:15px;font-weight:700;color:#374151;">Change Password</label>
+        </div>
+        <div class="form-group">
+          <label>Current Password</label>
+          <input type="password" id="currentPass" placeholder="Current password">
+        </div>
+        <div class="form-group"></div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" id="newPass" placeholder="New password">
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input type="password" id="confirmPass" placeholder="Confirm new password">
+        </div>
+      </div>
+      <div style="margin-top:22px;">
+        <button class="btn-save" onclick="save('account')"><i class="fas fa-floppy-disk"></i> Update Password</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered profile-feedback-dialog">
+    <div class="modal-content profile-feedback-card" data-type="success">
+      <button type="button" class="profile-feedback-close" data-bs-dismiss="modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      <div class="profile-feedback-icon"><i class="fas fa-check" data-profile-modal-icon></i></div>
+      <h5 data-profile-modal-title>Changes saved</h5>
+      <p data-profile-modal-message>Your changes have been saved successfully.</p>
+      <button type="button" class="profile-feedback-button" data-bs-dismiss="modal">Done</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+
+<script src="js/patient_common.js?v=20260724-loginloopfix"></script>
+<script src="js/patient_profile.js?v=20260728-no-empty-save-modal-v2"></script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+<script src="js/patient-text-size.js?v=20260728-floating-left-v1"></script>
+</body>
+</html>

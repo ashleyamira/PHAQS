@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/theme-clean.css">
+
+  <link rel="stylesheet" href="css/patient_register.css?v=20260724-termsfix">
+<link rel="stylesheet" href="css/auth-unified.css">
+<link rel="stylesheet" href="css/patient_navbar_final.css?v=20260721-dashboard-shell">
+
+<style>
+.navbar-notif-btn{position:relative!important}
+.navbar-notif-btn.has-unread{
+  border-color:#fecaca!important;
+  background:#fff1f2!important;
+  color:#dc2626!important;
+}
+.navbar-notif-btn.has-unread i{color:#dc2626!important}
+.notif-count{
+  position:absolute!important;
+  top:4px!important;
+  right:3px!important;
+  min-width:18px!important;
+  height:18px!important;
+  padding:0 5px!important;
+  display:none;
+  align-items:center!important;
+  justify-content:center!important;
+  border:2px solid #fff!important;
+  border-radius:999px!important;
+  background:#dc2626!important;
+  color:#fff!important;
+  font-size:9px!important;
+  font-weight:800!important;
+}
+</style>
+
+<style>
+.enable-browser-notifications-btn{
+  width:100%;min-height:42px;padding:10px 14px;display:flex;align-items:center;
+  justify-content:flex-start;gap:9px;border:0;border-top:1px solid #e5eaf2;
+  background:#f8fafc;color:#1e40af;font-size:11px;font-weight:700;cursor:pointer
+}
+.enable-browser-notifications-btn:hover{background:#eff6ff}
+</style>
+
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+<link rel="stylesheet" href="css/profile-photo-system.css?v=20260728-white-avatar-fix">
+<link rel="stylesheet" href="css/actual-critical-fix-20260724.css?v=20260724-e">
+<link rel="stylesheet" href="css/final-auth-booking-fix-20260724.css?v=20260724-f">
+
+<style id="patientAuthMobileNoCutoffFinal">
+
+@media (max-width: 900px) {
+  html, body {
+    overflow-x: hidden !important;
+  }
+
+  body.patient-login-page .forgot-page,
+  body.patient-login-page .login-page,
+  body.patient-login-page .auth-page,
+  body.patient-register-page .register-page,
+  body.patient-register-page .auth-page {
+    display: block !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .left-panel,
+  body.patient-register-page .left-panel,
+  body.patient-login-page .login-left,
+  body.patient-register-page .register-left,
+  body.patient-login-page .auth-left,
+  body.patient-register-page .auth-left {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    padding: 26px 22px 30px !important;
+    overflow: visible !important;
+    background-size: cover !important;
+    background-position: 60% center !important;
+    background-repeat: no-repeat !important;
+    box-sizing: border-box !important;
+  }
+
+  body.patient-login-page .brand,
+  body.patient-register-page .brand,
+  body.patient-login-page .auth-brand,
+  body.patient-register-page .auth-brand {
+    position: relative !important;
+    z-index: 2 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin: 0 0 28px !important;
+  }
+
+  body.patient-login-page .brand img,
+  body.patient-register-page .brand img,
+  body.patient-login-page .auth-brand img,
+  body.patient-register-page .auth-brand img,
+  body.patient-login-page .brand-logo,
+  body.patient-register-page .brand-logo,
+  body.patient-login-page .brand-logo img,
+  body.patient-register-page .brand-logo img {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    max-width: 48px !important;
+    max-height: 48px !important;
+    object-fit: contain !important;
+    border-radius: 50% !important;
+  }
+
+  body.patient-login-page .hero-copy,
+  body.patient-register-page .hero-copy,
+  body.patient-login-page .left-content,
+  body.patient-register-page .left-content {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: left !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .hero-copy h2,
+  body.patient-register-page .hero-copy h2,
+  body.patient-login-page .left-content h2,
+  body.patient-register-page .left-content h2 {
+    margin: 0 !important;
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -1px !important;
+    white-space: normal !important;
+  }
+
+  body.patient-login-page .hero-copy h2 span,
+  body.patient-register-page .hero-copy h2 span,
+  body.patient-login-page .left-content h2 span,
+  body.patient-register-page .left-content h2 span {
+    color: #009846 !important;
+  }
+
+  body.patient-login-page .hero-copy p,
+  body.patient-register-page .hero-copy p,
+  body.patient-login-page .left-content p,
+  body.patient-register-page .left-content p {
+    margin: 20px 0 0 !important;
+    max-width: 100% !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+  }
+
+  body.patient-login-page .hero-features,
+  body.patient-register-page .hero-features,
+  body.patient-login-page .feature-list,
+  body.patient-register-page .feature-list {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 22px 0 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .hero-feature,
+  body.patient-register-page .hero-feature,
+  body.patient-login-page .feature-item,
+  body.patient-register-page .feature-item {
+    min-height: 56px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page .right-panel,
+  body.patient-register-page .right-panel,
+  body.patient-login-page .login-right,
+  body.patient-register-page .register-right,
+  body.patient-login-page .auth-right,
+  body.patient-register-page .auth-right {
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 28px 16px 48px !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+  }
+
+  body.patient-login-page .login-card,
+  body.patient-register-page .register-card,
+  body.patient-login-page .auth-card,
+  body.patient-register-page .auth-card {
+    width: min(100%, 470px) !important;
+    max-width: 470px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    overflow: visible !important;
+  }
+
+  body.patient-login-page footer,
+  body.patient-register-page footer {
+    position: static !important;
+  }
+}
+
+@media (max-width: 520px) {
+  body.patient-login-page .left-panel,
+  body.patient-register-page .left-panel,
+  body.patient-login-page .login-left,
+  body.patient-register-page .register-left,
+  body.patient-login-page .auth-left,
+  body.patient-register-page .auth-left {
+    padding: 22px 18px 28px !important;
+    background-position: 64% center !important;
+  }
+
+  body.patient-login-page .hero-copy h2,
+  body.patient-register-page .hero-copy h2,
+  body.patient-login-page .left-content h2,
+  body.patient-register-page .left-content h2 {
+    font-size: 28px !important;
+  }
+}
+</style>
+
+<style id="patientFinalMobilePolish">
+
+@media (max-width: 768px) {
+  .patient-mobile-quick-actions,
+  .mobile-quick-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .patient-mobile-quick-actions a,
+  .patient-mobile-quick-actions button,
+  .mobile-quick-actions a,
+  .mobile-quick-actions button {
+    min-height: 72px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: center !important;
+    white-space: normal !important;
+  }
+
+  .mobile-empty-state {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 28px 18px !important;
+    border: 1px dashed #cbd5e1 !important;
+    border-radius: 12px !important;
+    background: #f8fafc !important;
+  }
+
+  .mobile-empty-state i {
+    font-size: 34px !important;
+    color: #0b3d91 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .mobile-status-chip {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    min-height: 32px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+  }
+
+  .mobile-status-chip.confirmed,
+  .mobile-status-chip.completed {
+    color: #166534 !important;
+    background: #dcfce7 !important;
+  }
+
+  .mobile-status-chip.pending {
+    color: #92400e !important;
+    background: #fef3c7 !important;
+  }
+
+  .mobile-status-chip.cancelled,
+  .mobile-status-chip.declined {
+    color: #991b1b !important;
+    background: #fee2e2 !important;
+  }
+
+  .mobile-status-chip.announcement,
+  .mobile-status-chip.info {
+    color: #1e3a8a !important;
+    background: #dbeafe !important;
+  }
+
+  .mobile-success-panel {
+    text-align: center !important;
+    padding: 22px 16px !important;
+  }
+
+  .mobile-success-panel .success-icon {
+    width: 64px !important;
+    height: 64px !important;
+    margin: 0 auto 12px !important;
+    border-radius: 50% !important;
+    display: grid !important;
+    place-items: center !important;
+    background: #dcfce7 !important;
+    color: #166534 !important;
+    font-size: 28px !important;
+  }
+
+  .mobile-success-actions {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 16px !important;
+  }
+
+  .mobile-skeleton {
+    position: relative !important;
+    overflow: hidden !important;
+    background: #e8edf3 !important;
+    border-radius: 8px !important;
+  }
+
+  .mobile-skeleton::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    transform: translateX(-100%) !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent) !important;
+    animation: patientSkeleton 1.2s infinite !important;
+  }
+
+  @keyframes patientSkeleton {
+    100% { transform: translateX(100%); }
+  }
+}
+</style>
+
+</head>
+
+<body class="register-auth-page patient-register-page">
+<div class="register-page">
+
+<section class="left-panel">
+<div class="left-content">
+
+<div class="brand">
+<img src="images/mhc-logo.png" alt="Pulilan Health Center Logo" onerror="this.style.display='none'">
+<div>
+<h1>PULILAN HEALTH CENTER</h1>
+<p>Appointment & Queue<br>Management System</p>
+</div>
+</div>
+
+<div class="hero-copy">
+<h2>Better Healthcare,<span>Easier Access.</span></h2>
+<div class="blue-line"></div>
+<p>Login to your account to manage your appointments, view your queue number, and access your health records.</p>
+</div>
+
+<div class="login-benefits">
+<div class="benefit">
+<div class="benefit-icon"><i class="fa-regular fa-calendar-check"></i></div>
+<div><strong>Easy Appointment</strong><span>Book appointments online anytime.</span></div>
+</div>
+
+<div class="benefit">
+<div class="benefit-icon"><i class="fa-solid fa-users-line"></i></div>
+<div><strong>Real-time Queue</strong><span>Monitor your queue status in real-time.</span></div>
+</div>
+
+<div class="benefit">
+<div class="benefit-icon"><i class="fa-regular fa-building"></i></div>
+<div><strong>Multiple Health Centers</strong><span>Access services from multiple health centers.</span></div>
+</div>
+
+<div class="benefit">
+<div class="benefit-icon"><i class="fa-solid fa-shield-halved"></i></div>
+<div><strong>Secure & Private</strong><span>Your data is protected and kept confidential.</span></div>
+</div>
+</div>
+
+<div class="left-footer">© 2026 Pulilan Health Center. All rights reserved.</div>
+
+</div>
+</section>
+
+<section class="right-panel">
+<div class="register-card">
+
+<div class="register-top">
+<img class="auth-card-logo" src="images/mhc-logo.png" alt="Pulilan Health Center logo">
+<h3>Patient Registration</h3>
+<div class="auth-title-line" aria-hidden="true"></div>
+<p>Create your patient account to book appointments<br>and monitor your queue status.</p>
+</div>
+
+<div class="success-notice" id="successNotice">
+<i class="fas fa-circle-check"></i>
+<span id="successText">Registration successful! Redirecting to login...</span>
+</div>
+
+<form id="registerForm">
+
+<div class="form-row">
+<div class="form-group">
+<label class="form-label">First Name</label>
+<div class="input-wrap">
+<i class="fa-regular fa-user left"></i>
+<input type="text" id="firstName" class="form-control" placeholder="Enter first name" required>
+</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Last Name</label>
+<div class="input-wrap">
+<i class="fa-regular fa-user left"></i>
+<input type="text" id="lastName" class="form-control" placeholder="Enter last name" required>
+</div>
+</div>
+</div>
+
+<div class="form-row">
+<div class="form-group">
+<label class="form-label">Email Address</label>
+<div class="input-wrap">
+<i class="fa-regular fa-envelope left"></i>
+<input type="email" id="email" class="form-control" placeholder="Email address" required>
+</div>
+<div id="emailError" class="error"></div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Mobile Number</label>
+<div class="input-wrap">
+<i class="fa-solid fa-phone left"></i>
+<input type="tel" id="mobile" class="form-control" placeholder="Mobile number" inputmode="numeric" required>
+</div>
+</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Barangay / Address</label>
+<div class="input-wrap">
+<i class="fa-solid fa-location-dot left"></i>
+<input type="text" id="address" class="form-control" placeholder="Complete address" required>
+</div>
+</div>
+
+<div class="form-row">
+<div class="form-group">
+<label class="form-label">Password</label>
+<div class="input-wrap">
+<i class="fa-solid fa-lock left"></i>
+<input type="password" id="password" class="form-control" placeholder="Password" minlength="8" required>
+<i class="fa-regular fa-eye-slash eye" id="togglePassword"></i>
+</div>
+<div id="strengthText" class="password-note">Password must be at least 8 characters long.</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Confirm Password</label>
+<div class="input-wrap">
+<i class="fa-solid fa-lock left"></i>
+<input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" minlength="8" required>
+<i class="fa-regular fa-eye-slash eye" id="toggleConfirm"></i>
+</div>
+<div id="matchError" class="error"></div>
+</div>
+</div>
+
+<div class="terms">
+<input type="checkbox" id="termsCheck" required>
+<label for="termsCheck">
+I agree to the
+<a href="#" id="openTermsLink">Terms and Conditions</a>
+and
+<a href="#" id="openPrivacyLink">Privacy Policy</a>
+</label>
+</div>
+
+<div class="terms-note" id="termsNote">
+Please read and accept the Terms and Conditions and Privacy Policy.
+</div>
+
+<button class="btn-register" id="regBtn" type="submit">
+<i class="fa-regular fa-user"></i> Create Account
+</button>
+
+</form>
+
+<div class="login-link">
+Already have an account? <a href="login.html">Login here</a>
+</div>
+
+</div>
+</section>
+
+</div>
+
+<footer class="auth-footer">
+  <div class="auth-footer-brand">
+    <img src="images/pulilan-seal.png" alt="Pulilan municipal seal">
+    <div><strong>PHAQS — Pulilan Health Appointment and Queueing System</strong><span>Secure patient registration</span></div>
+  </div>
+  <div class="auth-footer-item"><i class="fa-solid fa-location-dot"></i><span>Pulilan, Bulacan, Philippines</span></div>
+  <div class="auth-footer-item"><i class="fa-solid fa-house-medical"></i><span>RHU I–IV patient services</span></div>
+  <div class="auth-footer-item"><i class="fa-regular fa-circle-question"></i><span>Branch support is available after sign-in</span></div>
+</footer>
+
+<div class="modal fade" id="termsModal" tabindex="-1" data-bs-backdrop="true" data-bs-keyboard="true">
+<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-content">
+
+<div class="modal-header">
+<h5 class="modal-title fw-bold">Terms and Conditions & Privacy Policy</h5>
+<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body terms-modal-body" id="termsModalBody">
+
+<h6>1. Acceptance of Terms</h6>
+<p>
+By creating an account and using the Pulilan Health Center Appointment & Queue Management System,
+you agree to follow the rules, policies, and guidelines of the system. This system is intended to help patients
+book appointments, monitor queue status, and access basic health center services in a more organized way.
+</p>
+
+<h6>2. User Account Responsibility</h6>
+<p>
+Users must provide correct and updated information during registration. You are responsible for keeping your
+account details safe, including your email address and password. Sharing your login credentials with other people
+is not allowed.
+</p>
+
+<h6>3. Accurate Patient Information</h6>
+<p>
+All information entered in the system must be true and accurate. This includes your name, email address,
+appointment details, and other information required by the health center. Providing false information may affect
+your appointment or account access.
+</p>
+
+<h6>4. Appointment Booking</h6>
+<p>
+Appointments must only be booked for valid health center concerns. Users should choose the correct health center,
+service, date, and time based on their needs. Fake bookings, duplicate appointments, and misuse of the queue
+system are not allowed.
+</p>
+
+<h6>5. Queue Number and Schedule</h6>
+<p>
+The queue number given by the system is used for appointment organization. Patients are still expected to follow
+health center instructions and arrive on time. The health center may adjust schedules depending on emergencies,
+staff availability, or other operational needs.
+</p>
+
+<h6>6. Proper Use of the System</h6>
+<p>
+Users must not use the system for harmful, illegal, or abusive activities. The following actions are prohibited:
+</p>
+<ul>
+<li>Creating fake accounts or fake appointments.</li>
+<li>Attempting to access another patient’s account.</li>
+<li>Submitting false or misleading information.</li>
+<li>Trying to damage, hack, or disrupt the system.</li>
+<li>Using offensive or inappropriate information in any system form.</li>
+</ul>
+
+<h6>7. Account Suspension</h6>
+<p>
+The health center or system administrator may suspend or restrict an account if the user violates these terms,
+misuses the system, or provides false information.
+</p>
+
+<h6>8. System Availability</h6>
+<p>
+The system may not always be available due to maintenance, updates, internet issues, power interruptions,
+or technical problems. The system administrators will try to keep the service available, but uninterrupted access
+is not guaranteed.
+</p>
+
+<h6>9. Limitation of Service</h6>
+<p>
+This system is for appointment and queue management only. It does not replace medical consultation, diagnosis,
+treatment, or emergency response. For urgent medical concerns, patients should directly contact the health center
+or seek immediate medical assistance.
+</p>
+
+<h6>10. Information We Collect</h6>
+<p>
+The system may collect basic personal information such as your name, email address, appointment details,
+queue information, account registration information, and other details needed for health center services.
+</p>
+
+<h6>11. Purpose of Collection</h6>
+<p>
+Your information is used for account creation, appointment booking, queue management, patient verification,
+health center service coordination, and system record keeping.
+</p>
+
+<h6>12. Data Protection</h6>
+<p>
+Patient information is treated as confidential. The system is designed to help protect patient records from
+unauthorized access, misuse, or unnecessary disclosure.
+</p>
+
+<h6>13. Data Sharing</h6>
+<p>
+Your personal information will not be shared with unauthorized third parties. Information may only be accessed
+by authorized health center staff or system administrators for official health center purposes.
+</p>
+
+<h6>14. User Consent</h6>
+<p>
+By registering and using the system, you agree that your information may be collected and used for appointment
+and queue management purposes.
+</p>
+
+<h6>15. Changes to Terms and Privacy Policy</h6>
+<p>
+The Pulilan Health Center may update these Terms and Conditions and Privacy Policy when needed. Continued use
+of the system after changes means that you accept the updated terms and policy.
+</p>
+
+<h6>16. User Agreement</h6>
+<p>
+By registering and using this system, you confirm that you understand and agree to these Terms and Conditions
+and Privacy Policy. You also agree to use the system responsibly and respectfully.
+</p>
+
+<div class="modal-agreement-box">
+<div class="form-check">
+<input class="form-check-input" type="checkbox" id="agreeTermsCheckbox" disabled>
+<label class="form-check-label fw-semibold" for="agreeTermsCheckbox">
+I have read and understood the Terms and Conditions and Privacy Policy.
+</label>
+</div>
+<p id="scrollTermsNotice">
+Please scroll to the bottom before agreeing.
+</p>
+</div>
+
+</div>
+<div class="terms-modal-footer">
+  <button type="button" class="terms-back-btn" data-bs-dismiss="modal"><i class="fa-solid fa-arrow-left"></i> Back</button>
+  <small>Check the agreement above to continue. The window will close automatically.</small>
+</div>
+
+</div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+
+<script src="js/patient_common.js?v=20260724-loginloopfix"></script>
+<script src="js/patient_register.js?v=20260724-termsfix"></script>
+<script src="js/patient-logout-confirmation.js?v=20260723"></script>
+<script src="js/profile-photo-system.js?v=20260728-white-avatar-fix"></script>
+<script src="js/actual-critical-fix-20260724.js?v=20260724-e"></script>
+
+<script src="js/final-auth-flow-fix-20260724.js?v=20260724-f"></script>
+
+<script id="patientFinalMobilePolishScript">
+document.addEventListener("DOMContentLoaded", function () {
+  const isMobile = () => window.matchMedia("(max-width: 768px)").matches;
+
+  function normalizeStatus(text) {
+    const value = String(text || "").trim().toLowerCase();
+    if (value.includes("confirm")) return "confirmed";
+    if (value.includes("complete")) return "completed";
+    if (value.includes("pending")) return "pending";
+    if (value.includes("cancel")) return "cancelled";
+    if (value.includes("declin")) return "declined";
+    if (value.includes("announce")) return "announcement";
+    return "info";
+  }
+
+  if (isMobile()) {
+    document.querySelectorAll(".status-badge, .badge-status, [data-status]").forEach(function (el) {
+      const status = el.dataset.status || el.textContent;
+      el.classList.add("mobile-status-chip", normalizeStatus(status));
+    });
+  }
+
+  document.querySelectorAll("[data-empty-container]").forEach(function (container) {
+    const selector = container.dataset.emptyItem || ".appointment-card, .notification-item, .record-item, tr";
+    const items = Array.from(container.querySelectorAll(selector)).filter(function (item) {
+      return !item.closest("thead") && item.style.display !== "none";
+    });
+
+    if (!items.length && !container.querySelector(".mobile-empty-state")) {
+      const title = container.dataset.emptyTitle || "No records found";
+      const message = container.dataset.emptyMessage || "There is nothing to display yet.";
+      const actionHref = container.dataset.emptyHref || "";
+      const actionText = container.dataset.emptyAction || "";
+
+      const empty = document.createElement("div");
+      empty.className = "mobile-empty-state";
+      empty.innerHTML =
+        '<i class="fas fa-calendar-check" aria-hidden="true"></i>' +
+        '<h3>' + title + '</h3>' +
+        '<p>' + message + '</p>' +
+        (actionHref && actionText
+          ? '<a class="btn btn-primary" href="' + actionHref + '">' + actionText + '</a>'
+          : "");
+      container.appendChild(empty);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
