@@ -1,0 +1,73 @@
+
+:root{--admin-sidebar:#10366f;--admin-sidebar-deep:#0c2d61;--admin-sidebar-active:#16458a;--admin-sidebar-text:#f8fbff;--admin-sidebar-muted:#b9cbea}
+
+html body .sidebar{
+  width:240px!important;
+  flex:0 0 240px!important;
+  background:linear-gradient(180deg,var(--admin-sidebar) 0%,var(--admin-sidebar-deep) 100%)!important;
+  border-right:0!important;
+  color:var(--admin-sidebar-text)!important;
+  box-shadow:4px 0 18px rgba(10,42,91,.08)!important;
+}
+html body .sidebar-section-label{
+  padding:18px 20px 7px!important;
+  color:var(--admin-sidebar-muted)!important;
+  font-size:10px!important;
+  font-weight:800!important;
+  letter-spacing:.1em!important;
+}
+html body .sidebar-item{
+  width:auto!important;
+  min-height:46px!important;
+  margin:2px 10px!important;
+  padding:9px 11px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  color:var(--admin-sidebar-text)!important;
+  font-size:13.5px!important;
+  font-weight:700!important;
+  gap:11px!important;
+}
+html body .sidebar-item:hover{
+  background:rgba(255,255,255,.09)!important;
+  color:#fff!important;
+}
+html body .sidebar-item.active{
+  background:var(--admin-sidebar-active)!important;
+  color:#fff!important;
+  box-shadow:0 5px 14px rgba(3,22,55,.18)!important;
+}
+html body .sidebar-item .s-icon{
+  width:34px!important;
+  height:34px!important;
+  flex:0 0 34px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  border-radius:8px!important;
+  background:rgba(255,255,255,.12)!important;
+  color:#dbeafe!important;
+  font-size:14px!important;
+}
+html body .sidebar-item.active .s-icon,
+html body .sidebar-item:hover .s-icon{
+  background:rgba(255,255,255,.18)!important;
+  color:#fff!important;
+}
+html body .sidebar>.sidebar-item:last-child{margin-top:auto!important;margin-bottom:14px!important}
+
+html body .mobile-sidebar{
+  background:var(--admin-sidebar-deep)!important;
+  border-top:0!important;
+}
+html body .mobile-sidebar .sidebar-section-label{color:var(--admin-sidebar-muted)!important}
+html body .mob-sidebar-item{color:#f8fbff!important}
+html body .mob-sidebar-item:hover,
+html body .mob-sidebar-item.active{background:var(--admin-sidebar-active)!important;color:#fff!important}
+html body .mob-sidebar-item .mob-s-icon{background:rgba(255,255,255,.12)!important;color:#dbeafe!important}
+html body .mob-sidebar-item:hover .mob-s-icon,
+html body .mob-sidebar-item.active .mob-s-icon{background:rgba(255,255,255,.18)!important;color:#fff!important}
+
+@media(max-width:900px){html body .sidebar{display:none!important}}
+.admin-chat-button{position:fixed;right:26px;bottom:26px;z-index:1250;width:54px;height:54px;border:0;border-radius:50%;background:#10366f;color:#fff;font-size:19px;box-shadow:0 10px 25px rgba(16,54,111,.3)}.admin-chat-panel{position:fixed;right:26px;bottom:92px;z-index:1300;width:min(720px,calc(100vw - 30px));height:520px;display:none;background:#fff;border:1px solid #dbe4f0;border-radius:16px;box-shadow:0 24px 60px rgba(15,23,42,.24);overflow:hidden}.admin-chat-panel.show{display:grid;grid-template-columns:250px 1fr}.admin-chat-threads{overflow-y:auto;border-right:1px solid #e5e7eb;background:#f8fafc;padding:9px}.admin-chat-thread{position:relative;width:100%;padding:11px;border:0;border-radius:9px;background:transparent;text-align:left}.admin-chat-thread:hover,.admin-chat-thread.active{background:#e8f0ff}.admin-chat-thread strong,.admin-chat-thread span{display:block}.admin-chat-thread strong{color:#102448;font-size:12px}.admin-chat-thread span{margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#64748b;font-size:10px}.admin-chat-thread b{position:absolute;right:8px;top:8px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#dc2626;color:#fff;font-size:9px;text-align:center;line-height:18px}.admin-chat-conversation{display:flex;min-width:0;flex-direction:column}.admin-chat-conversation .help-chat-messages{min-height:0}@media(max-width:620px){.admin-chat-panel.show{grid-template-columns:130px 1fr}.admin-chat-panel{right:15px;bottom:84px;height:70vh}.admin-chat-thread{padding:8px}}

@@ -1,0 +1,122 @@
+/* session check */
+body.staff-dashboard .main-content{
+  padding:28px 30px 54px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+}
+body.staff-dashboard .page-header{margin-bottom:12px!important;}
+body.staff-dashboard .notice-box{margin:10px 0 16px!important;}
+body.staff-dashboard .stats-grid{
+  gap:14px!important;
+  margin-bottom:14px!important;
+}
+body.staff-dashboard .stats-grid .stat-card{
+  min-height:104px!important;
+  padding:18px!important;
+}
+body.staff-dashboard .quick-actions{
+  gap:14px!important;
+  margin:0 0 22px!important;
+}
+body.staff-dashboard .quick-actions .qa-card{
+  min-height:76px!important;
+  padding:14px 18px!important;
+  justify-content:center!important;
+  gap:10px!important;
+}
+body.staff-dashboard .quick-actions .qa-icon{
+  width:36px!important;
+  height:36px!important;
+  flex:0 0 36px!important;
+}
+body.staff-dashboard .analytics-overview{
+  grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr) minmax(300px,1fr)!important;
+  gap:16px!important;
+  margin:0 0 18px!important;
+  align-items:stretch!important;
+  overflow:visible!important;
+}
+body.staff-dashboard .analytics-card,
+body.staff-dashboard .compact-calendar-card{
+  height:270px!important;
+  min-height:270px!important;
+  padding:16px 17px!important;
+  overflow:hidden!important;
+}
+body.staff-dashboard .analytics-canvas-wrap{
+  height:202px!important;
+  min-height:202px!important;
+  overflow:hidden!important;
+}
+body.staff-dashboard .analytics-donut-wrap{height:164px!important;min-height:164px!important;}
+body.staff-dashboard .analytics-card canvas{
+  width:100%!important;
+  max-width:100%!important;
+  max-height:194px!important;
+}
+body.staff-dashboard .compact-calendar-grid .calendar-day{
+  min-height:26px!important;
+  height:26px!important;
+}
+body.staff-dashboard .operations-grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:16px!important;
+  margin:0 0 18px!important;
+  align-items:stretch!important;
+}
+body.staff-dashboard .operations-grid>.section-card{
+  height:292px!important;
+  min-height:292px!important;
+  max-height:292px!important;
+  overflow:hidden!important;
+}
+body.staff-dashboard .operations-grid>.section-card .section-body{
+  height:calc(100% - 55px)!important;
+  min-height:0!important;
+  overflow:auto!important;
+}
+body.staff-dashboard .staff-rhu-summary{
+  min-height:auto!important;
+  height:auto!important;
+  max-height:none!important;
+  margin-bottom:18px!important;
+}
+body.staff-dashboard .staff-rhu-summary .section-body,
+body.staff-dashboard .staff-rhu-summary .card-body{
+  height:auto!important;
+  min-height:0!important;
+  padding:16px!important;
+  overflow:visible!important;
+}
+body.staff-dashboard .staff-rhu-summary .rhu-grid{grid-template-columns:1fr!important;}
+body.staff-dashboard .staff-rhu-summary .rhu-item{
+  min-height:78px!important;
+  padding:14px 16px!important;
+  border-left:4px solid #0b3d91!important;
+}
+body.staff-dashboard .staff-rhu-summary .rhu-item-stats{
+  display:flex!important;
+  gap:22px!important;
+  margin-top:8px!important;
+}
+body.staff-dashboard .staff-patient-table{font-size:12.5px!important;}
+body.staff-dashboard .staff-patient-table th,
+body.staff-dashboard .staff-patient-table td{padding-top:11px!important;padding-bottom:11px!important;}
+body.staff-dashboard .section-card:last-child{margin-bottom:0!important;}
+
+@media(max-width:1200px){
+  body.staff-dashboard .analytics-overview{grid-template-columns:1fr 1fr!important;}
+  body.staff-dashboard .compact-calendar-card{grid-column:1/-1!important;height:292px!important;min-height:292px!important;}
+}
+@media(max-width:900px){
+  body.staff-dashboard .main-content{padding:20px 18px 42px!important;}
+  body.staff-dashboard .analytics-overview,
+  body.staff-dashboard .operations-grid{grid-template-columns:1fr!important;}
+  body.staff-dashboard .analytics-card,
+  body.staff-dashboard .compact-calendar-card,
+  body.staff-dashboard .operations-grid>.section-card{
+    height:auto!important;
+    min-height:270px!important;
+    max-height:none!important;
+  }
+}

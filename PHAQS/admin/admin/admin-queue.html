@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queue Management | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: white; border-bottom: 3px solid #1e40af;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.nav-container {
+  width: 100%; padding: 14px 32px;
+  display: flex; align-items: center; position: relative;
+}
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small  { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info { text-align: right; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; }
+.admin-avatar {
+  width: 36px; height: 36px; background: #1e40af; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.btn-logout {
+  background: white; color: #dc2626; border: 1.5px solid #fecaca;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-logout:hover { background: #fef2f2; }
+
+.hamburger-btn {
+  display: none; background: none; border: none;
+  font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px;
+}
+.mobile-sidebar {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  background: white; border-top: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px;
+}
+.mobile-sidebar.show { display: flex; }
+.mob-section-label {
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px;
+}
+.mob-sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px; text-decoration: none;
+  font-size: 13.5px; font-weight: 500; color: #374151; transition: 0.15s;
+  border: none; background: none; font-family: 'Inter', sans-serif;
+  cursor: pointer; width: 100%; text-align: left;
+}
+.mob-sidebar-item:hover  { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon {
+  width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #6b7280; flex-shrink: 0;
+}
+.mob-sidebar-item.active .mob-s-icon,
+.mob-sidebar-item:hover  .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+
+.layout { display: flex; height: calc(100vh - 67px); }
+
+.sidebar {
+  width: 240px; background: white; border-right: 1px solid #e5e7eb;
+  display: flex; flex-direction: column;
+  position: sticky; top: 67px;
+  height: calc(100vh - 67px); overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-section-label {
+  padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700;
+  color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 20px; font-size: 14px; font-weight: 500;
+  color: #374151; cursor: pointer; border: none; background: none;
+  width: 100%; text-align: left; font-family: 'Inter', sans-serif;
+  transition: 0.15s; text-decoration: none; border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon {
+  width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #6b7280; flex-shrink: 0;
+}
+.sidebar-item.active .s-icon,
+.sidebar-item:hover  .s-icon { background: #dbeafe; color: #1e40af; }
+
+.main-content { flex: 1; padding: 28px 32px; overflow-y: auto; min-width: 0; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 3px; color: #0f172a; }
+.page-header p  { color: #6b7280; margin: 0; font-size: 14px; }
+.header-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.live-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #dcfce7; color: #15803d;
+  font-size: 12px; font-weight: 600; padding: 5px 13px; border-radius: 20px;
+}
+.live-dot { width: 7px; height: 7px; background: #16a34a; border-radius: 50%; animation: blink 1.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.3;} }
+
+.time-chip {
+  font-size: 13px; color: #0f172a; font-weight: 700;
+  display: flex; align-items: center; gap: 6px;
+  background: #eff6ff; border: 1.5px solid #1e40af;
+  padding: 6px 14px; border-radius: 20px;
+}
+
+.btn-header {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: 0.2s;
+}
+.btn-tv    { background: #111827; color: white; }
+.btn-tv:hover { background: #374151; }
+.btn-scan{background:#1e40af;color:#fff;text-decoration:none}.btn-scan:hover{background:#17378f;color:#fff}
+.btn-print { background: white; color: #374151; border: 1.5px solid #e5e7eb; }
+.btn-print:hover { background: #f3f4f6; }
+.btn-reset { background: #dc2626; color: white; border: 1.5px solid #991b1b; font-weight: 700; }
+.btn-reset:hover { background: #991b1b; }
+
+.staff-notice {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: #a16207; margin-bottom: 20px;
+}
+
+.branch-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  background: white; padding: 7px; border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  margin-bottom: 20px; overflow-x: auto;
+}
+.branch-tab {
+  flex: 1; padding: 10px 14px; border-radius: 8px;
+  font-size: 13.5px; font-weight: 500; color: #6b7280;
+  cursor: pointer; border: none; background: none;
+  text-align: center; font-family: 'Inter', sans-serif; transition: 0.18s;
+  white-space: nowrap;
+}
+.branch-tab:hover:not(:disabled) { background: #f1f5f9; color: #1e40af; }
+.branch-tab.active {
+  background: #1e40af; color: white; font-weight: 600;
+  box-shadow: 0 2px 8px rgba(30,64,175,0.25);
+}
+.branch-tab:disabled { opacity: 0.35; cursor: not-allowed; }
+.branch-tabs.full-access .branch-tab:not(.active) { opacity: 1; color: #e5edff; background: rgba(30,64,175,0.20); border: 1px solid rgba(96,165,250,0.35); }
+.branch-tabs.full-access .branch-tab:hover { background: rgba(37,99,235,0.35); color: #fff; }
+
+body.staff-queue .branch-tabs{display:none!important;}
+.staff-branch-chip{
+  display:none;
+  align-items:center;
+  gap:8px;
+  width:max-content;
+  max-width:100%;
+  margin:0 0 16px 0;
+  padding:8px 12px;
+  border:1px solid #bfd3f2;
+  border-radius:8px;
+  background:#eef5ff;
+  color:#173f7a;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.2;
+}
+.staff-branch-chip i{font-size:12px;color:#2457b8;}
+body.staff-queue .staff-branch-chip{display:inline-flex;}
+@media(max-width:700px){
+  .staff-branch-chip{width:100%;}
+}
+
+body.staff-queue .staff-branch-chip{
+  display:inline-flex!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:min(100%,260px)!important;
+  margin:0 0 16px 0!important;
+  padding:8px 13px!important;
+  border-radius:7px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  box-shadow:none!important;
+}
+body.staff-queue .staff-branch-chip span{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+body.staff-queue .branch-tabs{display:none!important;}
+@media(max-width:700px){
+  body.staff-queue .staff-branch-chip{width:auto!important;max-width:100%!important;}
+}
+
+.stats-row {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 14px; margin-bottom: 20px;
+}
+.stat-box {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03); padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px; transition: 0.2s;
+}
+.stat-box:hover { border-color: #bfdbfe; box-shadow: 0 4px 14px rgba(30,64,175,0.08); }
+.stat-icon {
+  width: 44px; height: 44px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.si-blue   { background: #dbeafe; color: #1e40af; }
+.si-amber  { background: #fef9c3; color: #a16207; }
+.si-green  { background: #dcfce7; color: #15803d; }
+.si-purple { background: #ede9fe; color: #7c3aed; }
+.stat-label { font-size: 11.5px; color: #9ca3af; margin: 0 0 3px; font-weight: 500; }
+.stat-value { font-size: 24px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1; }
+
+.main-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; align-items: start; }
+
+.card {
+  background: white; border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden; margin-bottom: 16px;
+}
+.card:last-child { margin-bottom: 0; }
+.card-head {
+  padding: 15px 20px 12px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-head-left { display: flex; align-items: center; gap: 9px; }
+.card-head-left h6 { font-weight: 600; font-size: 14.5px; color: #111827; margin: 0; }
+.hicon {
+  width: 32px; height: 32px; border-radius: 8px; background: #dbeafe;
+  display: flex; align-items: center; justify-content: center;
+  color: #1e40af; font-size: 13px; flex-shrink: 0;
+}
+.card-body { padding: 18px 20px; }
+
+.now-serving-block { text-align: center; padding: 10px 0 16px; }
+.ns-label {
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+}
+.ns-number {
+  font-size: 72px; font-weight: 700; color: #1e40af;
+  line-height: 1; letter-spacing: -3px; margin-bottom: 8px;
+}
+.ns-number.is-priority { color: #d97706; }
+.ns-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #f1f5f9; color: #374151;
+  font-size: 13px; font-weight: 500;
+  padding: 5px 14px; border-radius: 20px; margin-bottom: 5px;
+  border: 1px solid #e5e7eb;
+}
+.ns-pill.ns-pill-emergency {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  border-color: #dc2626 !important;
+}
+.ns-type { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+.ns-type.priority-type { color: #d97706; font-weight: 600; }
+
+.progress-section { margin-top: 14px; }
+.progress-meta {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: #9ca3af; margin-bottom: 6px; font-weight: 500;
+}
+.progress-track { background: #f1f5f9; border-radius: 99px; height: 8px; overflow: hidden; }
+.progress-fill {
+  background: linear-gradient(90deg,#1e40af,#3b82f6);
+  height: 100%; border-radius: 99px; transition: width 0.7s;
+}
+
+.btn-call-next {
+  width: 100%; background: #1e40af; color: white; border: none;
+  padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 700;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 16px;
+}
+.btn-call-next:hover { background: #1d4ed8; }
+
+.btn-hold {
+  width: 100%; background: white; color: #a16207;
+  border: 1.5px solid #fde68a; padding: 10px; border-radius: 10px;
+  font-size: 13.5px; font-weight: 600; font-family: 'Inter', sans-serif;
+  cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 7px; margin-top: 8px;
+}
+.btn-hold:hover { background: #fffbeb; }
+
+.next-patient-box { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+.npb-num {
+  width: 46px; height: 46px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.npb-num.regular  { background: #dbeafe; color: #1e40af; }
+.npb-num.priority { background: #fef9c3; color: #a16207; }
+.npb-name { font-weight: 600; font-size: 14px; color: #111827; margin-bottom: 2px; }
+.npb-svc  { font-size: 12.5px; color: #6b7280; }
+.npb-type { font-size: 11.5px; color: #a16207; font-weight: 600; margin-top: 2px; }
+
+.queue-wrap { overflow-x: auto; }
+.queue-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 600px; }
+.queue-table th {
+  text-align: left; padding: 10px 16px;
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  border-bottom: 1px solid #f1f5f9; background: #fafafa;
+}
+.queue-table td {
+  padding: 11px 16px; border-bottom: 1px solid #f9fafb;
+  color: #374151; vertical-align: middle;
+}
+.queue-table tr:last-child td { border-bottom: none; }
+.queue-table tr:hover td { background: #f9fafb; }
+.queue-table tr.row-serving td  { background: #eff6ff; }
+.queue-table tr.row-priority td { background: #fffbeb; }
+.queue-table tr.row-serving:hover td  { background: #dbeafe; }
+.queue-table tr.row-priority:hover td { background: #fef3c7; }
+.tbl-section-priority { background: #fffbeb !important; border-bottom: 1px solid #fde68a !important; }
+.tbl-section-regular  { background: #f8fafc !important; border-bottom: 1px solid #f1f5f9 !important; }
+.tbl-section-label-cell { padding: 8px 16px !important; font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+}
+.b-serving  { background: #dbeafe; color: #1e40af; }
+.b-waiting  { background: #f3f4f6; color: #6b7280; }
+.b-priority { background: #fef9c3; color: #a16207; }
+.b-emergency { background: #fee2e2; color: #dc2626; }
+.b-noshow    { background: #f3f4f6; color: #9ca3af; }
+.queue-table tr.row-emergency td { background: #fff1f2; }
+.queue-table tr.row-emergency:hover td { background: #fecaca; }
+.queue-table tr.row-priority td { background: #fffbeb; }
+.queue-table tr.row-priority:hover td { background: #fef3c7; }
+.tbl-section-emergency { background: #fee2e2 !important; border-bottom: 2px solid #dc2626 !important; }
+.tbl-section-priority { background: #fef9c7 !important; border-bottom: 2px solid #f59e0b !important; }
+.ns-number.is-emergency { color: #dc2626; }
+.tv-number.tv-emergency { color: #f87171; }
+.tv-emergency-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(220,38,38,0.15); border: 1.5px solid rgba(220,38,38,0.4);
+  color: #f87171; font-size: 15px; font-weight: 700;
+  padding: 8px 20px; border-radius: 30px; margin-bottom: 40px;
+}
+
+.btn-sm {
+  padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: 0.15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.bs-blue  { background: #dbeafe; color: #1e40af; }
+.bs-blue:hover  { background: #bfdbfe; }
+.bs-green { background: #dcfce7; color: #15803d; }
+.bs-green:hover { background: #bbf7d0; }
+.bs-red   { background: #fee2e2; color: #dc2626; }
+.bs-red:hover   { background: #fecaca; }
+
+.add-form {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 14px 20px; background: #f8fafc; border-top: 1px solid #f1f5f9;
+  align-items: center;
+}
+.add-form input,
+.add-form select {
+  flex: 1; min-width: 130px; padding: 9px 12px;
+  border: 1.5px solid #e5e7eb; border-radius: 8px;
+  font-size: 13.5px; font-family: 'Inter', sans-serif;
+  color: #111827; background: white; outline: none; transition: 0.18s;
+}
+.add-form input:focus,
+.add-form select:focus { border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,0.08); }
+.btn-add {
+  background: #1e40af; color: white; border: none;
+  padding: 9px 18px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.btn-add:hover { background: #1d4ed8; }
+
+.tv-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9999;
+  background: #0f172a; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.tv-overlay.show { display: flex; }
+.tv-header { display: flex; align-items: center; gap: 16px; margin-bottom: 40px; }
+.tv-header img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.tv-header-text h1 { font-size: 22px; font-weight: 700; color: white; margin: 0 0 3px; }
+.tv-header-text p  { font-size: 14px; color: rgba(255,255,255,0.5); margin: 0; }
+.tv-branch { font-size: 16px; font-weight: 600; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+.tv-now-label { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px; }
+.tv-number { font-size: 180px; font-weight: 700; line-height: 1; letter-spacing: -8px; margin-bottom: 20px; transition: all 0.4s; }
+.tv-number.tv-regular  { color: #60a5fa; }
+.tv-number.tv-priority { color: #fbbf24; }
+.tv-service { font-size: 22px; color: rgba(255,255,255,0.7); font-weight: 500; margin-bottom: 12px; }
+.tv-priority-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(251,191,36,0.15); border: 1.5px solid rgba(251,191,36,0.4);
+  color: #fbbf24; font-size: 15px; font-weight: 700;
+  padding: 8px 20px; border-radius: 30px; margin-bottom: 40px;
+}
+.tv-divider { width: 120px; height: 3px; background: rgba(255,255,255,0.1); border-radius: 99px; margin-bottom: 40px; }
+.tv-next-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+.tv-next-num { font-size: 36px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: -1px; }
+.tv-next-svc { font-size: 14px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+.tv-time { position: absolute; bottom: 30px; right: 40px; font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.3); }
+.tv-close {
+  position: absolute; top: 24px; right: 28px;
+  background: rgba(255,255,255,0.1); border: none; color: white;
+  width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+  font-size: 16px; display: flex; align-items: center; justify-content: center; transition: 0.2s;
+}
+.tv-close:hover { background: rgba(255,255,255,0.2); }
+
+.simple-modal .modal-content {
+  border-radius: 12px; border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12); font-family: 'Inter', sans-serif;
+}
+.simple-modal .modal-header { padding: 18px 22px 14px; border-bottom: 1px solid #f1f5f9; }
+.simple-modal .modal-title { font-size: 16px; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 9px; }
+.mti { width: 24px; height: 24px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.mti-blue    { background: none; color: #1e40af; }
+.mti-warning { background: none; color: #dc2626; }
+.mti-red     { background: none; color: #dc2626; }
+.simple-modal .modal-body   { padding: 18px 22px; font-size: 14.5px; color: #374151; line-height: 1.6; }
+.simple-modal .modal-footer { padding: 14px 22px 18px; border-top: 1px solid #f1f5f9; gap: 10px; justify-content: flex-end; }
+.btn-dark-blue {
+  background: #1e40af; color: white; border: none;
+  padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-dark-blue:hover { background: #1d4ed8; }
+.btn-red {
+  background: #dc2626; color: white; border: none;
+  padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-red:hover { background: #b91c1c; }
+.btn-outline-cancel {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 10px 18px; border-radius: 8px; font-weight: 500; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+}
+.btn-outline-cancel:hover { background: #f3f4f6; }
+
+@media print {
+  .navbar, .sidebar, .branch-tabs, .stats-row,
+  .main-grid > div:first-child, .add-form,
+  .btn-call-next, .btn-hold, .tv-overlay,
+  .staff-notice, .hamburger-btn, .mobile-sidebar { display: none !important; }
+  .layout { display: block !important; }
+  .main-grid { display: block !important; }
+  .main-content { padding: 0 !important; }
+  .card { box-shadow: none !important; border: 1px solid #e5e7eb !important; }
+  .queue-table td, .queue-table th { font-size: 12px !important; padding: 8px 10px !important; }
+  .print-header { display: flex !important; align-items: center; gap: 14px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #1e40af; }
+  .print-header img { width: 50px; height: 50px; border-radius: 50%; }
+  .print-header h3 { font-size: 18px; font-weight: 700; margin: 0 0 2px; }
+  .print-header p  { font-size: 12px; color: #6b7280; margin: 0; }
+  .print-operations-summary { display: grid !important; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 0 0 14px; }
+  .print-operations-summary div { border: 1px solid #dbe4ef; border-radius: 7px; padding: 8px 10px; }
+  .print-operations-summary span { display: block; color: #64748b; font-size: 10px; text-transform: uppercase; }
+  .print-operations-summary strong { display: block; color: #0f172a; font-size: 14px; margin-top: 2px; }
+}
+.print-header { display: none; }
+.print-operations-summary { display: none; }
+
+@media (max-width: 900px) {
+  .sidebar       { display: none; }
+  .hamburger-btn { display: block; }
+  .main-content  { padding: 24px; }
+  html, body     { overflow: auto; }
+  .layout        { height: auto; }
+  .main-grid     { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .nav-container  { padding: 12px 20px; }
+  .admin-info     { display: none; }
+  .main-content   { padding: 16px; }
+  .stats-row      { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .header-actions { gap: 6px; }
+  .time-chip      { display: none; }
+  .page-header h2 { font-size: 22px; }
+  .ns-number      { font-size: 56px; }
+  .branch-tab     { font-size: 12px; padding: 8px 10px; }
+  .add-form       { flex-direction: column; }
+  .add-form input,
+  .add-form select { min-width: unset; flex: unset; width: 100%; }
+  .btn-add        { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .stats-row      { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-box       { padding: 12px 10px; gap: 8px; }
+  .stat-value     { font-size: 20px; }
+  .stat-icon      { width: 36px; height: 36px; font-size: 15px; }
+  .branch-tab     { font-size: 11px; padding: 7px 6px; }
+  .btn-header span { display: none; }
+  .btn-logout span { display: none; }
+  .ns-number      { font-size: 48px; }
+}
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+<link rel="stylesheet" href="staff-exact-patients-shell.css?v=20260722-final">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+<script>try{if(sessionStorage.getItem('phc-admin-shell-role')==='staff')document.body.classList.add('rhu-staff-session')}catch(e){}</script>
+
+<div class="tv-overlay" id="tvOverlay">
+  <button class="tv-close" onclick="closeTv()"><i class="fas fa-times"></i></button>
+  <div class="tv-header">
+    <img src="images/mhc-logo.png">
+    <div class="tv-header-text">
+      <h1>Pulilan Health Center</h1>
+      <p>Municipal Health Center, Bulacan</p>
+    </div>
+  </div>
+  <div class="tv-branch" id="tvBranch">-</div>
+  <div class="tv-now-label">Now Serving</div>
+  <div class="tv-number tv-regular" id="tvNumber">-</div>
+  <div class="tv-service" id="tvService">-</div>
+  <div class="tv-priority-tag" id="tvPriorityTag" style="display:none;">
+    <i class="fas fa-star"></i> Priority Lane
+  </div>
+  <div class="tv-emergency-tag" id="tvEmergencyTag" style="display:none;">
+    <i class="fas fa-triangle-exclamation"></i> EMERGENCY
+  </div>
+  <div class="tv-divider"></div>
+  <div class="tv-next-label">Next in Line</div>
+  <div class="tv-next-num" id="tvNextNum">-</div>
+  <div class="tv-next-svc" id="tvNextSvc">-</div>
+  <div class="tv-time" id="tvTime">00:00:00</div>
+</div>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png">
+      <div>
+        <strong>Pulilan Health Center</strong>
+        <small>PHAQS · Admin Panel</small>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout>
+        <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+      </button>
+      <button class="hamburger-btn" onclick="toggleAdminMenu()" id="adminHamburger">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+
+<div class="mobile-sidebar" id="mobileSidebar">
+  <div class="mob-section-label">Main</div>
+  <a class="mob-sidebar-item" href="admin-dashboard.html">
+    <div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard
+  </a>
+  <a class="mob-sidebar-item" href="admin-appointments.html">
+    <div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+  </a>
+  <a class="mob-sidebar-item active" href="admin-queue.html">
+    <div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+  </a>
+  <a class="mob-sidebar-item" href="admin-patients.html">
+    <div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients
+  </a>
+  <a class="mob-sidebar-item" href="admin-reports.html">
+    <div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+  </a>
+  <div class="mob-divider"></div>
+  <div class="mob-section-label">System</div>
+  <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+  <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout>
+    <div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+  </button>
+</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html">
+      <div class="s-icon"><i class="fas fa-house"></i></div> Dashboard
+    </a>
+    <a class="sidebar-item" href="admin-appointments.html">
+      <div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+    </a>
+    <a class="sidebar-item active" href="admin-queue.html">
+      <div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+    </a>
+    <a class="sidebar-item" href="admin-patients.html">
+      <div class="s-icon"><i class="fas fa-users"></i></div> Patients
+    </a>
+    <a class="sidebar-item" href="admin-reports.html">
+      <div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+    </a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" onclick="doLogout()" href="#" data-hc-logout>
+      <div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+    </a>
+  </div>
+
+  <div class="main-content">
+
+    <div class="print-header">
+      <img src="images/mhc-logo.png">
+      <div>
+        <h3>Pulilan Health Center - Daily Operations Sheet</h3>
+        <p id="printMeta">-</p>
+      </div>
+    </div>
+    <div class="print-operations-summary" id="printOperationsSummary"></div>
+
+    <div class="page-header">
+      <div>
+        <h2>Queue Management</h2>
+        <p id="pageDesc">Monitor and manage patient queues per RHU branch</p>
+      </div>
+      <div class="header-actions">
+        <div class="live-chip"><div class="live-dot"></div> Live</div>
+        <div class="time-chip"><i class="fas fa-clock"></i><span id="currentTime">-</span></div>
+        <a class="btn-header btn-scan" href="admin-qr-scanner.html" title="Verify patient QR arrival"><i class="fas fa-qrcode"></i> <span>Scan Arrival</span></a>
+        <button class="btn-header btn-reset" type="button" onclick="prepareEmergencyWalkin()" title="Record an emergency without a prior appointment">
+          <i class="fas fa-kit-medical"></i> <span>Add Emergency Walk-in</span>
+        </button>
+        <button class="btn-header btn-tv" onclick="openTv()" title="Open the read-only queue display in a separate window">
+          <i class="fas fa-display"></i> <span>Open TV Display</span>
+        </button>
+        <button class="btn-header btn-print" onclick="printQueue()">
+          <i class="fas fa-print"></i> <span>Print Daily Sheet</span>
+        </button>
+        <button class="btn-header btn-reset" onclick="confirmReset()">
+          <i class="fas fa-rotate-left"></i> <span>Reset Queue</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="staff-notice" id="staffNotice" style="display:none;">
+      <i class="fas fa-circle-info"></i>
+      <span id="staffNoticeText"></span>
+    </div>
+
+    <div class="staff-branch-chip" id="staffBranchChip">
+      <i class="fas fa-hospital"></i>
+      <span id="staffBranchChipText">Assigned RHU</span>
+    </div>
+
+    <div class="branch-tabs">
+      <button class="branch-tab active" onclick="selectBranch(0,this)" id="tab0">
+        <i class="fas fa-hospital" style="margin-right:5px;font-size:12px;"></i>RHU I - Poblacion
+      </button>
+      <button class="branch-tab" onclick="selectBranch(1,this)" id="tab1">
+        <i class="fas fa-hospital" style="margin-right:5px;font-size:12px;"></i>RHU II - Cutcot
+      </button>
+      <button class="branch-tab" onclick="selectBranch(2,this)" id="tab2">
+        <i class="fas fa-hospital" style="margin-right:5px;font-size:12px;"></i>RHU III - Tinejero
+      </button>
+      <button class="branch-tab" onclick="selectBranch(3,this)" id="tab3">
+        <i class="fas fa-hospital" style="margin-right:5px;font-size:12px;"></i>RHU IV - Tibag
+      </button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon si-blue"><i class="fas fa-users"></i></div>
+        <div><p class="stat-label">In Queue</p><p class="stat-value" id="statInQueue">-</p></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-amber"><i class="fas fa-star"></i></div>
+        <div><p class="stat-label">Priority Lane</p><p class="stat-value" id="statPriority">-</p></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div>
+        <div><p class="stat-label">Served Today</p><p class="stat-value" id="statServed">-</p></div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-purple"><i class="fas fa-hourglass-half"></i></div>
+        <div><p class="stat-label">Avg. Wait</p><p class="stat-value" id="statWait">-</p></div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+
+      <div>
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-left">
+              <div class="hicon"><i class="fas fa-volume-high"></i></div>
+              <h6>Now Serving <span class="live-dot" style="margin-left:4px;"></span></h6>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="now-serving-block">
+              <div class="ns-label">Currently Being Served</div>
+              <div class="ns-number" id="nowNum">-</div>
+              <div class="ns-pill">
+                <i class="fas fa-stethoscope" style="color:#9ca3af;font-size:11px;"></i>
+                <span id="nowSvc">-</span>
+              </div>
+              <div class="ns-type" id="nowType"></div>
+            </div>
+            <div class="progress-section">
+              <div class="progress-meta">
+                <span>Queue Progress</span>
+                <span id="progLabel">0 / 0 served</span>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" id="progFill" style="width:0%"></div>
+              </div>
+            </div>
+            <button class="btn-call-next" onclick="callNext()">
+              <i class="fas fa-forward-step"></i> Call Next Patient
+            </button>
+            <button class="btn-hold" onclick="holdCurrent()">
+              <i class="fas fa-pause"></i> Put Current on Hold
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <div class="card-head-left">
+              <div class="hicon" style="background:#fef9c3;color:#a16207;">
+                <i class="fas fa-clock"></i>
+              </div>
+              <h6>Next in Line</h6>
+            </div>
+          </div>
+          <div class="card-body" id="nextBody">
+            <p style="color:#9ca3af;font-size:13.5px;margin:0;text-align:center;">No patients waiting</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <div class="card-head">
+          <div class="card-head-left">
+            <div class="hicon"><i class="fas fa-list-ol"></i></div>
+            <h6>Queue List</h6>
+          </div>
+          <span style="font-size:12px;color:#9ca3af;" id="queueMeta"></span>
+        </div>
+        <div class="queue-wrap" id="queueWrap"></div>
+        <div class="add-form">
+          <input type="text" id="addName" placeholder="Patient name">
+          <select id="addSvc">
+            <option value="">Select service</option>
+            <option>General Consultation</option>
+            <option>Vaccination</option>
+            <option>Prenatal Care</option>
+            <option>Child Immunization</option>
+            <option>Family Planning</option>
+          </select>
+          <select id="addType">
+            <option value="regular">Regular Queue</option>
+            <option value="priority">Priority (PWD/Senior)</option>
+            <option value="emergency">Emergency — Immediate Assessment</option>
+          </select>
+          <input type="text" id="addPhone" placeholder="Contact number (optional)">
+          <input type="text" id="addReason" placeholder="Priority or emergency reason" hidden>
+          <button class="btn-add" onclick="addToQueue()">
+            <i class="fas fa-plus"></i> Add to Queue
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade simple-modal" id="nextModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title"><div class="mti mti-blue"><i class="fas fa-forward-step"></i></div>Call Next Patient</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body" id="nextModalBody">-</div>
+  <div class="modal-footer">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn-dark-blue" id="nextModalBtn"><i class="fas fa-forward-step"></i> Call Now</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade simple-modal" id="holdModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title"><div class="mti mti-warning"><i class="fas fa-pause"></i></div>Put on Hold</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">The current patient will be moved to the end of the queue. Continue?</div>
+  <div class="modal-footer">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn-dark-blue" id="holdModalBtn"><i class="fas fa-pause"></i> Confirm Hold</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade simple-modal" id="resetModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title"><div class="mti mti-red"><i class="fas fa-rotate-left"></i></div>Reset Queue</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">
+    This will clear the entire queue for <strong id="resetBranchName"></strong> and reset the counter to zero. This cannot be undone.<br><br><strong>Are you sure?</strong>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn-red" id="resetModalBtn"><i class="fas fa-rotate-left"></i> Yes, Reset Queue</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade simple-modal" id="queueAlertModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header" style="background:#dc2626;border-radius:0;">
+    <h5 class="modal-title" style="color:white;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-circle-exclamation" style="color:white;font-size:16px;"></i> Notice
+    </h5>
+  </div>
+  <div class="modal-body" id="queueAlertMsg" style="padding:18px 22px;font-size:14px;color:#374151;"></div>
+  <div class="modal-footer" style="padding:12px 22px;border-top:1px solid #f1f5f9;justify-content:flex-end;">
+    <button class="btn-dark-blue" data-bs-dismiss="modal">OK</button>
+  </div>
+</div></div></div>
+
+<div class="modal fade simple-modal" id="queueConfirmModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header" style="background:#dc2626;border-radius:0;">
+    <h5 class="modal-title" style="color:white;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-triangle-exclamation" style="color:white;font-size:16px;"></i> Confirm
+    </h5>
+  </div>
+  <div class="modal-body" id="queueConfirmMsg" style="padding:18px 22px;font-size:14px;color:#374151;"></div>
+  <div class="modal-footer" style="padding:12px 22px;border-top:1px solid #f1f5f9;justify-content:flex-end;gap:10px;">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn-dark-blue" id="queueConfirmOk">Remove</button>
+  </div>
+</div></div></div>
+
+<script src="../shared-data.js"></script>
+<script src="admin-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+function toggleAdminMenu() {
+  const menu = document.getElementById("mobileSidebar");
+  const icon = document.getElementById("adminHamburgerIcon");
+  menu.classList.toggle("show");
+  icon.className = menu.classList.contains("show") ? "fas fa-times" : "fas fa-bars";
+}
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("mobileSidebar");
+  const btn  = document.getElementById("adminHamburger");
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+    document.getElementById("adminHamburgerIcon").className = "fas fa-bars";
+  }
+});
+
+/* session check */
+const session = {loggedIn:true,name:'Administrator',role:'System Administrator',branch:'All Branches',email:''};
+
+function isFullAdmin(session) {
+  const role = String(session.role || "").toLowerCase();
+  const branch = String(session.branch || "").toLowerCase();
+  return role.includes("admin") || role.includes("system administrator") || role.includes("super") || branch.includes("all branch") || branch.includes("all rhu");
+}
+
+let isSuperAdmin = false;
+let userBranch = '';
+
+async function initializeQueueAccess() {
+  const response = await fetch('../backend/api.php?action=admin_me',{credentials:'include'});
+  const result = await response.json();
+  if(!result.ok){ location.href='admin-login.html'; return; }
+  Object.assign(session,result.admin);
+  isSuperAdmin = isFullAdmin(session);
+  userBranch = session.branch === "All RHU Branches" ? "All Branches" : (session.branch || "");
+  document.getElementById("adminName").innerText = session.name || "Administrator";
+  document.getElementById("adminRole").innerText = session.role || "Admin";
+  document.getElementById("adminAvatar").innerText = (session.name || "A").charAt(0).toUpperCase();
+  await loadBranchesFromDatabase();
+}
+
+function doLogout() {
+  confirmAdminLogout();
+}
+
+function tick() {
+  const now = new Date();
+  const p   = n => n.toString().padStart(2,"0");
+  const t   = p(now.getHours()) + ":" + p(now.getMinutes()) + ":" + p(now.getSeconds());
+  document.getElementById("currentTime").innerText = t;
+  document.getElementById("tvTime").innerText = t;
+}
+setInterval(tick, 1000); tick();
+
+/* database setup */
+let branches = [];
+let sel = 0;
+
+async function loadBranchesFromDatabase() {
+  const res = await hcApi('queue_data');
+  const data = res.queueData || {};
+  branches = Object.values(data);
+  if (!isSuperAdmin) {
+    const branchIdx = branches.findIndex(b => b.name === userBranch);
+    sel = branchIdx >= 0 ? branchIdx : 0;
+  }
+  renderBranchAccess();
+  render();
+}
+
+function renderBranchAccess() {
+  if (!isSuperAdmin) {
+    document.body.classList.add('staff-queue');
+    document.querySelectorAll('.branch-tab').forEach((tab,i)=>{tab.style.display=i===sel?'inline-flex':'none';});
+    const chipText = document.getElementById('staffBranchChipText');
+    if (chipText) chipText.textContent = userBranch;
+    const resetButton=[...document.querySelectorAll('button')].find(btn=>(btn.textContent||'').includes('Reset Queue'));
+    if(resetButton) resetButton.remove();
+    document.getElementById("staffNotice").style.display = "flex";
+    document.getElementById("staffNoticeText").innerHTML = `You are managing the queue for <strong>${userBranch}</strong> only.`;
+    document.getElementById("pageDesc").innerText = "Managing queue for " + userBranch + " only";
+    const panelLabel = document.querySelector('.logo-area small');
+    if (panelLabel) panelLabel.textContent = 'RHU Staff Panel';
+  } else {
+    document.getElementById("staffNotice").style.display = "flex";
+    document.getElementById("staffNoticeText").innerHTML = `You are managing the queue for <strong>all RHU branches</strong>. Select any branch tab below.`;
+    document.getElementById("pageDesc").innerText = "Managing queue for all RHU branches";
+    document.querySelector(".branch-tabs")?.classList.add("full-access");
+  }
+  document.querySelectorAll(".branch-tab").forEach((tab, i) => {
+    const b = branches[i];
+    if (b) tab.textContent = b.name.split(' - ')[0];
+    tab.disabled = !isSuperAdmin && i !== sel;
+    tab.classList.toggle("active", i === sel);
+  });
+}
+
+setInterval(loadBranchesFromDatabase, 15000);
+
+function selectBranch(i, el) {
+  if (!isSuperAdmin && i !== sel) return;
+  sel = i;
+  document.querySelectorAll(".branch-tab").forEach(t => { if (!t.disabled) t.classList.remove("active"); });
+  el.classList.add("active");
+  render();
+}
+
+function sortQueue(b) {
+  const serving = b.queue.filter(q => q.status === "serving");
+  const rest    = b.queue.filter(q => q.status !== "serving");
+  rest.sort((a,z) => {
+    const rank = {emergency:0, priority:1, regular:2};
+    return (rank[a.type] ?? 2) - (rank[z.type] ?? 2);
+  });
+  b.queue = [...serving, ...rest];
+}
+
+function calcAvgWaitDisplay(b) {
+  const times = b.waitTimes || [];
+  if (times.length === 0) return "- min";
+  const avg = Math.round(times.reduce((a,c)=>a+c,0)/times.length);
+  return avg + " min";
+}
+
+function render() {
+  const b        = branches[sel];
+  sortQueue(b);
+  const serving  = b.queue.find(q => q.status === "serving");
+  const waiting  = b.queue.filter(q => q.status === "waiting");
+  const emergency= waiting.filter(q => q.type === "emergency");
+  const priority = waiting.filter(q => q.type === "priority");
+  const regular  = waiting.filter(q => q.type === "regular");
+
+  const activeQueue = Array.isArray(b.queue) ? b.queue : [];
+  document.getElementById("statInQueue").innerText = activeQueue.length;
+  document.getElementById("statPriority").innerText =
+    activeQueue.filter(item => item.type === "priority" || item.type === "emergency").length;
+  document.getElementById("statServed").innerText   = b.served || 0;
+  document.getElementById("statWait").innerText     = calcAvgWaitDisplay(b);
+
+  const numEl  = document.getElementById("nowNum");
+  const svcEl  = document.getElementById("nowSvc");
+  const typeEl = document.getElementById("nowType");
+
+  if (serving) {
+    numEl.textContent = serving.num;
+    if (serving.type === "emergency") {
+      numEl.className = "ns-number is-emergency";
+      svcEl.parentElement.className = "ns-pill ns-pill-emergency";
+      svcEl.style.color = "#dc2626";
+      typeEl.className = "ns-type priority-type";
+      typeEl.innerHTML = `<i class="fas fa-triangle-exclamation" style="font-size:11px;margin-right:4px;color:#dc2626;"></i><span style="color:#dc2626;">EMERGENCY</span>`;
+    } else if (serving.type === "priority") {
+      numEl.className = "ns-number is-priority";
+      svcEl.parentElement.className = "ns-pill";
+      svcEl.style.color = "";
+      typeEl.className = "ns-type priority-type";
+      typeEl.innerHTML = `<i class="fas fa-star" style="font-size:11px;margin-right:4px;"></i>Priority Lane - ${serving.reason}`;
+    } else {
+      numEl.className = "ns-number";
+      svcEl.parentElement.className = "ns-pill";
+      svcEl.style.color = "";
+      typeEl.className = "ns-type";
+      typeEl.textContent = "Regular Queue";
+    }
+    svcEl.textContent = serving.svc;
+  } else {
+    numEl.textContent = "-"; numEl.className = "ns-number";
+    svcEl.textContent = (Number(b.served||0)>0 ? "Today\'s queue completed" : "-"); typeEl.textContent = "";
+  }
+
+  const total = (b.served||0) + b.queue.length;
+  const pct   = total > 0 ? Math.round(((b.served||0) / total) * 100) : 0;
+  document.getElementById("progFill").style.width  = pct + "%";
+  document.getElementById("progLabel").textContent = (b.served||0) + " / " + total + " served";
+
+  const next = emergency[0] || priority[0] || regular[0];
+  updateTv(serving, next);
+
+  const nb = document.getElementById("nextBody");
+  if (next) {
+    const isEmerg = next.type === "emergency";
+    nb.innerHTML = `
+      <div class="next-patient-box">
+        <div class="npb-num ${next.type}" style="${isEmerg?'background:#fee2e2;color:#dc2626;':''}">${next.num}</div>
+        <div>
+          <div class="npb-name">${next.name}</div>
+          <div class="npb-svc">${next.svc}</div>
+          ${isEmerg?`<div class="npb-type" style="color:#dc2626;"><i class="fas fa-triangle-exclamation" style="font-size:10px;margin-right:3px;"></i>EMERGENCY</div>`:""}
+          ${next.type==="priority"?`<div class="npb-type"><i class="fas fa-star" style="font-size:10px;margin-right:3px;"></i>${next.reason}</div>`:""}
+        </div>
+      </div>`;
+  } else {
+    nb.innerHTML = `<p style="color:#9ca3af;font-size:13.5px;margin:0;text-align:center;">No patients waiting</p>`;
+  }
+
+  document.getElementById("queueMeta").textContent = b.queue.length + " in queue";
+  const eAll = b.queue.filter(q => q.type === "emergency");
+  const pAll = b.queue.filter(q => q.type === "priority");
+  const rAll = b.queue.filter(q => q.type === "regular");
+
+  let html2 = `<table class="queue-table"><thead><tr>
+    <th>Queue #</th><th>Patient</th><th>Service</th><th>Lane</th><th>Status</th><th>Action</th>
+  </tr></thead><tbody>`;
+
+  if (eAll.length > 0) {
+    html2 += `<tr class="tbl-section-emergency">
+      <td colspan="6" class="tbl-section-label-cell" style="color:#7f1d1d;background:#fee2e2;border-left:4px solid #dc2626;">
+        <i class="fas fa-triangle-exclamation" style="margin-right:6px;color:#dc2626;"></i><strong>Emergency Lane - Immediate Attention Required</strong>
+      </td></tr>`;
+    eAll.forEach(q => { html2 += buildRow(q); });
+  }
+  if (pAll.length > 0) {
+    html2 += `<tr class="tbl-section-priority">
+      <td colspan="6" class="tbl-section-label-cell" style="color:#92400e;background:#fef9c7;border-left:4px solid #f59e0b;">
+        <i class="fas fa-star" style="margin-right:6px;color:#f59e0b;"></i><strong>Priority Lane - PWD & Senior Citizens</strong>
+      </td></tr>`;
+    pAll.forEach(q => { html2 += buildRow(q); });
+  }
+  if (rAll.length > 0) {
+    html2 += `<tr class="tbl-section-regular">
+      <td colspan="6" class="tbl-section-label-cell" style="color:#6b7280;">
+        <i class="fas fa-list-ol" style="margin-right:6px;"></i>Regular Queue
+      </td></tr>`;
+    rAll.forEach(q => { html2 += buildRow(q); });
+  }
+  html2 += `</tbody></table>`;
+  document.getElementById("queueWrap").innerHTML = html2;
+}
+
+function buildRow(q) {
+  const serving   = q.status === "serving";
+  const emergency = q.type   === "emergency";
+  const priority  = q.type   === "priority";
+  const rowCls    = serving ? "row-serving" : emergency ? "row-emergency" : priority ? "row-priority" : "";
+  const numColor  = emergency ? "#dc2626" : priority ? "#a16207" : "#1e40af";
+  const svcColor  = emergency ? "#dc2626" : priority ? "#facc15" : "#6b7280";
+
+  const statusBadge = serving
+    ? `<span class="badge b-serving"><i class="fas fa-volume-high"></i> Now Serving</span>`
+    : emergency
+      ? `<span class="badge b-emergency"><i class="fas fa-triangle-exclamation"></i> Emergency</span>`
+      : priority
+        ? `<span class="badge b-priority"><i class="fas fa-star"></i> Priority</span>`
+        : `<span class="badge b-waiting">Waiting</span>`;
+
+  const actions = serving
+    ? `<button class="btn-sm bs-green" onclick="markDone('${q.num}')"><i class="fas fa-check"></i> Done</button>
+       <button class="btn-sm bs-red" style="margin-left:4px;" onclick="markNoShow('${q.num}')"><i class="fas fa-user-slash"></i> No-show</button>`
+    : `<button class="btn-sm bs-blue" onclick="callSpecific('${q.num}')"><i class="fas fa-volume-high"></i> Call</button>
+       <button class="btn-sm bs-red" style="margin-left:4px;" onclick="removeQ('${q.num}')"><i class="fas fa-times"></i></button>`;
+
+  return `<tr class="${rowCls}">
+    <td><strong style="color:${numColor};font-size:14px;">${q.num}</strong></td>
+    <td>
+      <strong>${q.name}</strong>
+      ${emergency?`<br><small style="color:#dc2626;font-size:11px;font-weight:700;"><i class="fas fa-triangle-exclamation" style="font-size:9px;"></i> Medical Emergency</small>`:""}
+      ${priority?`<br><small style="color:#a16207;font-size:11px;font-weight:700;"><i class="fas fa-star" style="font-size:9px;"></i> ${q.reason}</small>`:""}
+    </td>
+    <td class="service-cell ${emergency ? 'emergency' : priority ? 'priority' : 'regular'}" style="color:${svcColor};font-weight:${emergency?'700':'500'};">${q.svc}</td>
+    <td>${emergency
+      ? `<span class="badge b-emergency"><i class="fas fa-triangle-exclamation"></i> Emergency</span>`
+      : priority
+        ? `<span class="badge b-priority"><i class="fas fa-star"></i> Priority</span>`
+        : `<span style="color:#9ca3af;font-size:13px;">Regular</span>`}</td>
+    <td>${statusBadge}</td>
+    <td style="white-space:nowrap;">${actions}</td>
+  </tr>`;
+}
+
+async function queueAction(type, queue) {
+  const b = branches[sel];
+  if (!b) return;
+  try {
+    const res = await hcApi('queue_action', {type, center:b.name, queue:queue || ''});
+    const data = res.queueData || {};
+    branches = Object.values(data);
+    const idx = branches.findIndex(x => x.name === b.name);
+    if (idx >= 0) sel = idx;
+    renderBranchAccess();
+    render();
+    localStorage.setItem('phc_queue_updated', String(Date.now()));
+  } catch (err) {
+    showQueueAlert(err.message || 'Queue action failed.');
+  }
+}
+
+function callNext() {
+  const b = branches[sel];
+  if (b) sortQueue(b);
+  const waiting = b ? b.queue.filter(q => q.status !== 'serving') : [];
+  const nxt = waiting[0];
+  if (!nxt) { showQueueAlert("No more patients in the queue."); return; }
+  document.getElementById("nextModalBody").innerHTML = `Call <strong>${nxt.num}</strong> - ${nxt.name}<br><small style="color:#6b7280;">${nxt.svc}</small>`;
+  const modal = new bootstrap.Modal(document.getElementById("nextModal"));
+  modal.show();
+  document.getElementById("nextModalBtn").onclick = async function() { modal.hide(); auditLog("Called Next", "Called next patient in queue", "Queue"); await queueAction('call_next'); };
+}
+
+function callSpecific(num) { queueAction('call_specific', num); }
+function markDone(num) { auditLog("Marked Done", `Queue ${num} marked as done`, "Queue"); queueAction('done', num); }
+function markNoShow(num) { showQueueConfirm(`Mark ${num} as No-Show? Patient will be removed from the queue.`, function() { auditLog("No-Show", `Queue ${num} marked as no-show`, "Queue"); queueAction('no_show', num); }); }
+function holdCurrent() {
+  const modal = new bootstrap.Modal(document.getElementById("holdModal"));
+  modal.show();
+  document.getElementById("holdModalBtn").onclick = function() { modal.hide(); queueAction('hold'); };
+}
+function removeQ(num) { showQueueConfirm("Remove this patient from the queue?", function() { queueAction('remove', num); }); }
+
+async function addToQueue() {
+  const name = document.getElementById("addName").value.trim();
+  const svc  = document.getElementById("addSvc").value;
+  const type = document.getElementById("addType").value;
+  const phone = document.getElementById("addPhone").value.trim();
+  const reason = document.getElementById("addReason").value.trim();
+  if (!name || !svc) { showQueueAlert("Please enter patient name and service."); return; }
+  if ((type === "emergency" || type === "priority") && !reason) {
+    showQueueAlert(type === "emergency" ? "Emergency reason and basic details are required." : "Enter the priority reason (Senior, PWD, or pregnant).");
+    document.getElementById("addReason").focus();
+    return;
+  }
+  const b = branches[sel];
+  try {
+    const result = await hcApi('admin_create_walkin', {name, phone, service:svc, center:b.name, queueType:type, reason});
+    document.getElementById("addName").value = "";
+    document.getElementById("addSvc").value  = "";
+    document.getElementById("addType").value = "regular";
+    document.getElementById("addPhone").value = "";
+    document.getElementById("addReason").value = "";
+    document.getElementById("addReason").hidden = true;
+    auditLog("Added Walk-in", `Added ${type} patient ${name}`, "Queue");
+    await loadBranchesFromDatabase();
+    showQueueAlert(result.message || (type === "emergency" ? "Emergency cases are prioritised for immediate assessment." : "Walk-in added to the live queue."));
+  } catch (err) { showQueueAlert(err.message || 'Unable to add patient.'); }
+}
+
+function syncWalkinReason() {
+  const type=document.getElementById("addType").value;
+  const reason=document.getElementById("addReason");
+  reason.hidden=type==="regular";
+  reason.required=type!=="regular";
+  reason.placeholder=type==="emergency"?"Emergency reason / chief complaint":"Priority reason (Senior, PWD, or pregnant)";
+}
+
+function prepareEmergencyWalkin() {
+  document.getElementById("addType").value="emergency";
+  syncWalkinReason();
+  document.querySelector(".add-form")?.scrollIntoView({behavior:"smooth",block:"center"});
+  document.getElementById("addName").focus();
+  showQueueAlert("Emergency cases are prioritised for immediate assessment.");
+}
+
+document.getElementById("addType")?.addEventListener("change",syncWalkinReason);
+
+function confirmReset() {
+  const b = branches[sel];
+  document.getElementById("resetBranchName").textContent = b.name;
+  const modal = new bootstrap.Modal(document.getElementById("resetModal"));
+  modal.show();
+  document.getElementById("resetModalBtn").onclick = function() { auditLog("Reset Queue", `Queue reset for ${b.name}`, "Queue"); modal.hide(); queueAction('reset'); };
+}
+
+async function printQueue() {
+  const b   = branches[sel];
+  const now = new Date();
+  document.getElementById("printMeta").textContent =
+    b.name + " - " + now.toLocaleDateString("en-PH",{weekday:"long",year:"numeric",month:"long",day:"numeric"}) +
+    " - " + now.toLocaleTimeString("en-PH");
+  const active=b.queue||[];
+  let completed=Number(b.served||0),noShows=0,emergencies=active.filter(x=>x.type==="emergency").length,totalAppointments=active.length+completed;
+  try {
+    const report=await hcApi("admin_reports_data");
+    const today=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+    const rows=(report.appointments||[]).filter(x=>x.center===b.name&&String(x.date).slice(0,10)===today);
+    completed=rows.filter(x=>String(x.status).toLowerCase()==="done").length;
+    noShows=rows.filter(x=>String(x.status).toLowerCase()==="no show").length;
+    emergencies=rows.filter(x=>x.isEmergency||x.queueType==="emergency").length;
+    totalAppointments=rows.length;
+  } catch (_) {}
+  document.getElementById("printOperationsSummary").innerHTML=`
+    <div><span>Staff</span><strong>${session.name||"Administrator"}</strong></div>
+    <div><span>Appointments today</span><strong>${totalAppointments}</strong></div>
+    <div><span>Current queue</span><strong>${active.length}</strong></div>
+    <div><span>Completed</span><strong>${completed}</strong></div>
+    <div><span>No-shows</span><strong>${noShows}</strong></div>
+    <div><span>Emergencies</span><strong>${emergencies}</strong></div>`;
+  window.print();
+}
+
+function updateTv(serving, next) {
+  const b = branches[sel];
+  document.getElementById("tvBranch").textContent = b.name;
+  if (serving) {
+    const isE = serving.type === "emergency";
+    const isP = serving.type === "priority";
+    document.getElementById("tvNumber").textContent = serving.num;
+    document.getElementById("tvNumber").className   = "tv-number " + (isE ? "tv-emergency" : isP ? "tv-priority" : "tv-regular");
+    document.getElementById("tvService").textContent = serving.svc;
+    const ptag = document.getElementById("tvPriorityTag");
+    const etag = document.getElementById("tvEmergencyTag");
+    if (isE) {
+      etag.style.display = "inline-flex";
+      ptag.style.display = "none";
+    } else if (isP) {
+      ptag.style.display = "inline-flex";
+      ptag.innerHTML = `<i class="fas fa-star"></i> Priority Lane - ${serving.reason}`;
+      etag.style.display = "none";
+    } else {
+      ptag.style.display = "none";
+      etag.style.display = "none";
+    }
+  } else {
+    document.getElementById("tvNumber").textContent  = "-";
+    document.getElementById("tvNumber").className    = "tv-number tv-regular";
+    document.getElementById("tvService").textContent = "-";
+    document.getElementById("tvPriorityTag").style.display  = "none";
+    document.getElementById("tvEmergencyTag").style.display = "none";
+  }
+  if (next) {
+    document.getElementById("tvNextNum").textContent = next.num;
+    document.getElementById("tvNextSvc").textContent = next.svc;
+  } else {
+    document.getElementById("tvNextNum").textContent = "-";
+    document.getElementById("tvNextSvc").textContent = "-";
+  }
+}
+
+function openTv() {
+  const branch = branches[sel]?.name || userBranch || 'RHU I - Poblacion';
+  const url = '../tv-display.html?branch=' + encodeURIComponent(branch);
+  const displayWindow = window.open(url, 'phcTvDisplay', 'popup=yes,width=1366,height=768,resizable=yes');
+  if (!displayWindow) {
+    showQueueAlert('The TV Display window was blocked. Allow pop-ups for this site, then click Open TV Display again.');
+    return;
+  }
+  if (typeof auditLog === 'function') auditLog('Opened TV Display', 'Opened read-only queue display for ' + branch, 'Queue');
+  displayWindow.focus();
+}
+function closeTv() {
+  document.getElementById("tvOverlay").classList.remove("show");
+  document.exitFullscreen?.();
+}
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeTv(); });
+
+initializeQueueAccess();
+
+function showQueueAlert(msg) {
+  document.getElementById("queueAlertMsg").textContent = msg;
+  new bootstrap.Modal(document.getElementById("queueAlertModal")).show();
+}
+
+let _queueConfirmCb = null;
+function showQueueConfirm(msg, cb) {
+  document.getElementById("queueConfirmMsg").textContent = msg;
+  _queueConfirmCb = cb;
+  new bootstrap.Modal(document.getElementById("queueConfirmModal")).show();
+}
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("queueConfirmOk").addEventListener("click", function() {
+    bootstrap.Modal.getInstance(document.getElementById("queueConfirmModal")).hide();
+    if (_queueConfirmCb) { _queueConfirmCb(); _queueConfirmCb = null; }
+  });
+});
+
+function doRemoveQ(num) {
+  const b   = branches[sel];
+  const idx = b.queue.findIndex(q => q.num===num);
+  if (idx>=0) { b.queue.splice(idx,1); render(); }
+}
+
+</script>
+<script src="audit-trail.js"></script>
+<script>
+auditLog("Viewed Page", "Opened Queue page", "Queue");
+</script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="../backend/backend.js"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="staff-exact-patients-shell.js?v=20260722-final"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

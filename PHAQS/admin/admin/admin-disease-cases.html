@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Record Disease Case | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#f6f8fb;margin:0;}
+html,body{height:100%;overflow:hidden;}
+.navbar{position:sticky;top:0;z-index:1000;background:white;border-bottom:3px solid #1e40af;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-container{width:100%;padding:14px 32px;display:flex;align-items:center;position:relative;}
+.logo-area{display:flex;align-items:center;gap:12px;}
+.logo-area img{width:40px;height:40px;border-radius:50%;object-fit:cover;}
+.logo-area strong{font-size:15px;color:#111827;}
+.logo-area small{color:#6b7280;font-size:12px;display:block;}
+.nav-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.admin-info .a-name{font-size:13.5px;font-weight:600;color:#111827;display:block;}
+.admin-info .a-role{font-size:12px;color:#6b7280;display:block;text-align:right;}
+.admin-avatar{width:36px;height:36px;background:#1e40af;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
+.btn-logout{background:white;color:#dc2626;border:1.5px solid #fecaca;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:0.2s;display:flex;align-items:center;gap:6px;}
+.btn-logout:hover{background:#fef2f2;}
+.hamburger-btn{display:none;background:none;border:none;font-size:22px;color:#374151;cursor:pointer;padding:4px;margin-left:10px;}
+.mobile-sidebar{display:none;position:absolute;top:100%;left:0;right:0;background:white;border-top:1px solid #e5e7eb;box-shadow:0 8px 24px rgba(0,0,0,0.1);padding:10px 12px 16px;z-index:999;flex-direction:column;gap:4px;}
+.mobile-sidebar.show{display:flex;}
+.mob-section-label{font-size:10.5px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;padding:8px 10px 4px;}
+.mob-sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;text-decoration:none;font-size:13.5px;font-weight:500;color:#374151;transition:0.15s;border:none;background:none;font-family:'Inter',sans-serif;cursor:pointer;width:100%;text-align:left;}
+.mob-sidebar-item:hover{background:#f1f5f9;color:#1e40af;}
+.mob-sidebar-item.active{background:#eff6ff;color:#1e40af;font-weight:600;}
+.mob-s-icon{width:28px;height:28px;border-radius:7px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:12px;color:#6b7280;flex-shrink:0;}
+.mob-sidebar-item.active .mob-s-icon,.mob-sidebar-item:hover .mob-s-icon{background:#dbeafe;color:#1e40af;}
+.mob-divider{height:1px;background:#e5e7eb;margin:6px 0;}
+.layout{display:flex;height:calc(100vh - 67px);}
+.sidebar{width:240px;background:white;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;z-index:100;}
+.sidebar-section-label{padding:16px 20px 6px;font-size:10.5px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;}
+.sidebar-item{display:flex;align-items:center;gap:11px;padding:11px 20px;font-size:14px;font-weight:500;color:#374151;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;transition:0.15s;text-decoration:none;border-left:3px solid transparent;}
+.sidebar-item:hover{background:#f9fafb;color:#1e40af;}
+.sidebar-item.active{background:#eff6ff;color:#1e40af;font-weight:600;border-left-color:#1e40af;}
+.s-icon{width:30px;height:30px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6b7280;flex-shrink:0;}
+.sidebar-item.active .s-icon,.sidebar-item:hover .s-icon{background:#dbeafe;color:#1e40af;}
+.main-content{flex:1;padding:32px;overflow-y:auto;min-width:0;}
+.page-header{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.page-header h2{font-weight:700;font-size:26px;margin:0 0 4px;color:#0f172a;}
+.page-header p{color:#6b7280;margin:0;font-size:14px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:white;border-radius:13px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.03);padding:18px 20px;display:flex;align-items:center;gap:14px;}
+.stat-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.si-red{background:#fee2e2;color:#dc2626;}
+.si-amber{background:#fef3c7;color:#d97706;}
+.si-green{background:#dcfce7;color:#15803d;}
+.si-blue{background:#dbeafe;color:#1e40af;}
+.stat-label{font-size:12px;color:#6b7280;font-weight:500;}
+.stat-value{font-size:24px;font-weight:700;color:#0f172a;line-height:1.1;}
+.stat-sub{font-size:11px;color:#9ca3af;margin-top:1px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px;}
+.card{background:white;border-radius:13px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.03);padding:20px;}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.card-head h5{font-size:14px;font-weight:700;color:#111827;margin:0;display:flex;align-items:center;gap:7px;}
+.card select{border:1.5px solid #e5e7eb;border-radius:8px;padding:6px 10px;font-size:12px;font-family:'Inter',sans-serif;color:#374151;outline:none;background:#f9fafb;}
+
+.heatmap-grid{display:grid;grid-template-columns:80px repeat(12,1fr);gap:3px;margin-top:8px;}
+.hm-label{font-size:11px;font-weight:600;color:#6b7280;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;}
+.hm-month{font-size:10px;font-weight:700;color:#9ca3af;text-align:center;padding-bottom:4px;}
+.hm-cell{height:28px;border-radius:5px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;position:relative;}
+.hm-cell:hover{transform:scale(1.12);box-shadow:0 3px 10px rgba(0,0,0,0.15);z-index:10;}
+.hm-empty{background:#f3f4f6;}
+
+.alert-card{border-radius:13px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;border:1px solid;}
+.alert-red{background:#fef2f2;border-color:#fecaca;color:#991b1b;}
+.alert-amber{background:#fffbeb;border-color:#fde68a;color:#92400e;}
+.alert-blue{background:#eff6ff;border-color:#bfdbfe;color:#1e3a8a;}
+.alert-card i{margin-top:1px;flex-shrink:0;}
+.alert-card strong{display:block;font-size:14px;margin-bottom:2px;}
+.alert-card span{font-size:13px;line-height:1.5;}
+.insight-item{padding:13px 0;border-bottom:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:12px;}
+.insight-item:last-child{border-bottom:none;}
+.insight-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.insight-text{font-size:13.5px;color:#374151;line-height:1.6;}
+.insight-text strong{color:#111827;}
+.trend-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:20px;font-size:11.5px;font-weight:600;}
+.trend-up{background:#fee2e2;color:#dc2626;}
+.trend-down{background:#dcfce7;color:#15803d;}
+.trend-flat{background:#f3f4f6;color:#374151;}
+
+.hm-tooltip{position:fixed;background:#111827;color:white;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:500;z-index:100;pointer-events:none;display:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+
+.hm-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11.5px;color:#6b7280;}
+.hm-legend-box{width:16px;height:16px;border-radius:3px;}
+@media(max-width:1100px){.grid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){
+  .stats-row,.grid-2,.grid-3{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .hamburger-btn{display:block;}
+  .nav-right .admin-info,.nav-right .btn-logout{display:none;}
+  .main-content{padding:16px;}
+  .heatmap-grid{grid-template-columns:60px repeat(12,1fr);}
+}
+
+/* Final analytics chart presentation */
+.analytics-chart-card{min-height:330px;display:flex;flex-direction:column;overflow:hidden}
+.analytics-chart-card .card-head{margin-bottom:10px}
+.analytics-chart-body{position:relative;height:255px;min-height:255px;width:100%}
+.analytics-chart-body canvas{display:block!important;width:100%!important;height:100%!important;max-height:255px!important}
+.analytics-chart-empty{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;text-align:center;color:#64748b;font-size:12px;background:#fff}
+.analytics-chart-empty i{font-size:22px;color:#94a3b8}
+.analytics-chart-card.is-empty .analytics-chart-empty{display:flex}
+.analytics-chart-card.is-empty canvas{visibility:hidden}
+@media(max-width:900px){.analytics-chart-card{min-height:300px}.analytics-chart-body{height:225px;min-height:225px}.analytics-chart-body canvas{max-height:225px!important}}
+
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<style>
+.case-modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.52)}
+.case-modal.show{display:flex}.case-modal-card{width:min(100%,760px);max-height:90vh;overflow-y:auto;border-radius:14px;background:#fff;box-shadow:0 24px 60px rgba(15,23,42,.28)}
+.case-modal-head{padding:16px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0}.case-modal-head h3{margin:0;font-size:17px}.case-modal-head button{border:0;background:transparent;font-size:22px}
+.case-modal-body{padding:18px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail-item{padding:11px;border:1px solid #e2e8f0;border-radius:8px}.detail-item span{display:block;color:#64748b;font-size:9px;text-transform:uppercase;font-weight:800}.detail-item strong,.detail-item p{margin:4px 0 0;font-size:12px}.detail-full{grid-column:1/-1}
+.action-btn{border-radius:6px;padding:5px 8px;font-size:9px;font-weight:700}.view-btn{border:1px solid #bfdbfe;background:#eff6ff;color:#1e40af}.edit-btn{border:1px solid #bbf7d0;background:#f0fdf4;color:#15803d}.delete-btn{border:1px solid #fecaca;background:#fff;color:#dc2626}
+@media(max-width:650px){.detail-grid{grid-template-columns:1fr}.detail-full{grid-column:auto}}
+</style>
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+
+<style>
+.disease-form-wrap{max-width:1120px}
+.disease-breadcrumb{display:flex;align-items:center;gap:7px;margin-bottom:9px;color:#64748b;font-size:12px;font-weight:600}
+.disease-breadcrumb a{color:#1e40af;text-decoration:none}.disease-breadcrumb i{font-size:9px;color:#94a3b8}
+.disease-info{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;margin-bottom:16px;border:1px solid #bfdbfe;border-radius:8px;background:#eff6ff;color:#1e3a8a;font-size:12px;line-height:1.5}
+.disease-info i{margin-top:2px;color:#2563eb}
+.disease-form-card{padding:0;overflow:hidden}
+.disease-form-card-head{padding:17px 20px;border-bottom:1px solid #e5e7eb;background:#fff}
+.disease-form-card-head h3{margin:0 0 3px;font-size:15px;font-weight:700;color:#0f172a}.disease-form-card-head p{margin:0;color:#64748b;font-size:12px}
+.disease-form-body{padding:20px}
+.disease-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px 18px}.disease-form-full{grid-column:1/-1}
+.disease-field label{display:block;margin-bottom:6px;color:#334155;font-size:11px;font-weight:700}
+.disease-field input,.disease-field select,.disease-field textarea{width:100%;min-height:42px;padding:9px 11px;border:1px solid #cbd5e1;border-radius:7px;background:#fff;color:#0f172a;font:500 12px Inter,sans-serif;outline:none;transition:border-color .15s,box-shadow .15s}
+.disease-field textarea{min-height:105px;resize:vertical;line-height:1.5}
+.disease-field input:focus,.disease-field select:focus,.disease-field textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.11)}
+.disease-form-actions{display:flex;justify-content:flex-end;gap:9px;padding:14px 20px;border-top:1px solid #e5e7eb;background:#f8fafc}
+.disease-btn{min-height:40px;padding:9px 15px;border-radius:7px;font:700 12px Inter,sans-serif;cursor:pointer}.disease-btn-clear{border:1px solid #cbd5e1;background:#fff;color:#475569}.disease-btn-save{border:1px solid #1e40af;background:#1e40af;color:#fff}
+#result{display:none;margin:0 20px 16px;padding:10px 12px;border-radius:7px;font-size:12px}.ok{display:block!important;background:#dcfce7;color:#166534;border:1px solid #bbf7d0}.err{display:block!important;background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+@media(max-width:760px){.disease-form-grid{grid-template-columns:1fr}.disease-form-full{grid-column:auto}.disease-form-body{padding:16px}.disease-form-actions{padding:12px 16px}.disease-form-actions .disease-btn{flex:1}.disease-breadcrumb{display:none}}
+</style>
+</head>
+<body>
+
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png" alt="Logo">
+      <div><strong>Pulilan Health Center</strong><small>PHAQS · Admin Panel</small></div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info" style="text-align:right;">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout><i class="fas fa-right-from-bracket"></i> Logout</button>
+      <button class="hamburger-btn" id="adminHamburger" onclick="toggleAdminMenu()">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+      <div class="mob-section-label">Main</div>
+      <a class="mob-sidebar-item" href="admin-dashboard.html"><div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+      <a class="mob-sidebar-item" href="admin-appointments.html"><div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+      <a class="mob-sidebar-item" href="admin-queue.html"><div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+      <a class="mob-sidebar-item" href="admin-patients.html"><div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients</a>
+      <a class="mob-sidebar-item" href="admin-reports.html"><div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">Analytics</div>
+      <a class="mob-sidebar-item active" href="admin-heatmap.html"><div class="mob-s-icon"><i class="fas fa-fire-flame-curved"></i></div> Heatmap & Analytics</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">System</div>
+      <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+      <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout><div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html"><div class="s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+    <a class="sidebar-item" href="admin-appointments.html"><div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+    <a class="sidebar-item" href="admin-queue.html"><div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+    <a class="sidebar-item" href="admin-patients.html"><div class="s-icon"><i class="fas fa-users"></i></div> Patients</a>
+    <a class="sidebar-item" href="admin-reports.html"><div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item active" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Heatmap & Analytics</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" href="#" onclick="doLogout()" data-hc-logout><div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</a>
+  </div>
+
+<div class="main-content">
+<div class="disease-form-wrap">
+  <div class="disease-breadcrumb"><a href="admin-heatmap.html">Heatmap &amp; Analytics</a><i class="fas fa-chevron-right"></i><span id="breadcrumbLabel">Record Disease Case</span></div>
+  <div class="page-header">
+    <div><h2 id="pageTitle"><i class="fas fa-notes-medical" style="color:#1e40af;font-size:21px;margin-right:8px"></i>Record Disease Case</h2><p>Record a verified disease case after consultation, laboratory confirmation, or authorized surveillance review.</p></div>
+    <a href="admin-heatmap.html" class="btn-action" style="border:1px solid #cbd5e1;background:#fff;color:#1e40af;text-decoration:none;padding:9px 13px;border-radius:7px;font-size:12px;font-weight:700"><i class="fas fa-arrow-left"></i> Back to Analytics</a>
+  </div>
+  <div class="disease-info"><i class="fas fa-shield-halved"></i><div><strong>Privacy notice:</strong> Patient identities are never displayed in Heatmap &amp; Analytics. Only verified, aggregated case totals are shown.</div></div>
+  <section class="card disease-form-card">
+    <div class="disease-form-card-head"><h3>Case Information</h3><p>Fields marked with an asterisk are required.</p></div>
+    <form id="caseForm">
+      <div class="disease-form-body"><div class="disease-form-grid">
+        <div class="disease-field"><label>Patient (optional)</label><select id="patientId"><option value="0">No linked patient / anonymous aggregate case</option></select></div>
+        <div class="disease-field"><label>Appointment (optional)</label><select id="appointmentId"><option value="0">No linked appointment</option></select></div>
+        <div class="disease-field"><label>Disease Category *</label><select id="category" required><option value="">Select category</option><option>Acute Respiratory Infection</option><option>Hypertension</option><option>Diabetes</option><option>Dengue</option><option>Diarrhea</option><option>Skin Disease</option><option>Maternal Health Condition</option><option>Tuberculosis</option><option>Other</option></select></div>
+        <div class="disease-field"><label>Specific Diagnosis</label><input id="diagnosis" placeholder="Example: Dengue without warning signs"></div>
+        <div class="disease-field"><label>Barangay *</label><select id="barangay" required><option value="">Select barangay</option><option>Balatong A</option><option>Balatong B</option><option>Cutcot</option><option>Dampol 1st</option><option>Dampol 2nd - A</option><option>Dampol 2nd - B</option><option>Dulong Malabon</option><option>Inaon</option><option>Longos</option><option>Lumbac</option><option>Paltao</option><option>Penabatan</option><option>Poblacion</option><option>Santa Peregrina</option><option>Santo Cristo</option><option>Taal</option><option>Tabon</option><option>Tenejeros</option><option>Tibag</option></select></div>
+        <div class="disease-field"><label>RHU Branch *</label><select id="rhu" required><option value="">Select RHU</option><option>RHU I - Poblacion</option><option>RHU II - Cutcot</option><option>RHU III - Tinejero</option><option>RHU IV - Tibag</option></select></div>
+        <div class="disease-field"><label>Case Date *</label><input id="caseDate" type="date" required></div>
+        <div class="disease-field"><label>Symptom Onset Date</label><input id="onsetDate" type="date"></div>
+        <div class="disease-field"><label>Case Status</label><select id="caseStatus"><option>Recorded</option><option>Under Monitoring</option><option>Recovered</option><option>Referred</option></select></div>
+        <div class="disease-field"><label>Record Source *</label><select id="recordSource" required><option>RHU Consultation</option><option>Laboratory Result</option><option>Referral Record</option><option>Surveillance Report</option></select></div>
+        <div class="disease-field disease-form-full"><label>Symptoms / Clinical Notes</label><textarea id="symptoms" placeholder="Enter only relevant symptoms or clinical notes. Avoid unnecessary sensitive information."></textarea></div>
+      </div></div>
+      <div id="result"></div>
+      <div class="disease-form-actions"><button type="reset" class="disease-btn disease-btn-clear">Clear</button><button type="submit" class="disease-btn disease-btn-save"><i class="fas fa-floppy-disk"></i> <span id="saveLabel">Save Disease Case</span></button></div>
+    </form>
+  </section>
+</div>
+
+</div>
+</div>
+<script>
+let patients=[],appointments=[],editingId=0,session={};
+async function api(action,data=null,method='GET'){
+ let url='../backend/api.php?action='+encodeURIComponent(action),o={credentials:'include',cache:'no-store'};
+ if(data&&method==='GET')url+='&'+new URLSearchParams(data);
+ else if(data){o.method=method;o.headers={'Content-Type':'application/json'};o.body=JSON.stringify(data)}
+ const r=await fetch(url,o),j=await r.json();if(!r.ok||!j.ok)throw new Error(j.message||'Request failed');return j;
+}
+function setResult(message,ok){const box=document.getElementById('result');box.className=ok?'ok':'err';box.textContent=message}
+function fillAppointments(patientId){
+ const select=document.getElementById('appointmentId');
+ const current=select.value;
+ const list=appointments.filter(a=>!patientId||Number(a.patientDbId||a.patient_id)===Number(patientId));
+ select.innerHTML='<option value="0">No linked appointment</option>'+list.map(a=>`<option value="${a.id}">${a.queue||'No queue'} — ${a.service||''} — ${a.date||''}</option>`).join('');
+ if([...select.options].some(o=>o.value===current))select.value=current;
+}
+async function loadExisting(id){
+ const r=await api('disease_case_detail',{id},'GET'),c=r.case;
+ editingId=Number(c.id);
+ document.getElementById('pageTitle').innerHTML='<i class="fas fa-pen-to-square" style="color:#1e40af;font-size:21px;margin-right:8px"></i>Edit Disease Case';document.getElementById('breadcrumbLabel').textContent='Edit Disease Case';
+ document.getElementById('saveLabel').textContent='Update Disease Case';
+ document.getElementById('patientId').value=c.patient_id||0;
+ fillAppointments(c.patient_id||0);
+ document.getElementById('appointmentId').value=c.appointment_id||0;
+ document.getElementById('category').value=c.disease_category||'';
+ document.getElementById('diagnosis').value=c.diagnosis||'';
+ document.getElementById('symptoms').value=c.symptoms||'';
+ document.getElementById('barangay').value=c.barangay||'';
+ document.getElementById('rhu').value=c.rhu_branch||'';
+ document.getElementById('caseDate').value=c.case_date||'';
+ document.getElementById('onsetDate').value=c.onset_date||'';
+ document.getElementById('caseStatus').value=c.case_status||'Recorded';
+ document.getElementById('recordSource').value=c.record_source||'RHU Consultation';
+ if(!session.is_system_admin)document.getElementById('rhu').disabled=true;
+}
+async function init(){
+ const me=await api('admin_me');session=me.admin||{};
+ if(!session.id)throw new Error('Your admin or staff session has expired. Please sign in again.');
+ const data=await api('admin_data');patients=data.patients||[];appointments=data.appointments||[];
+ const sel=document.getElementById('patientId');
+ sel.innerHTML+=[...patients].sort((a,b)=>(a.name||'').localeCompare(b.name||'')).map(p=>`<option value="${p.dbId||p.id}">${p.name||p.email} — ${p.barangay||'No barangay'}</option>`).join('');
+ fillAppointments(0);
+ const now=new Date(),localToday=new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+ document.getElementById('caseDate').max=localToday;
+ document.getElementById('caseDate').value=localToday;
+ if(!session.is_system_admin && session.branch){document.getElementById('rhu').value=session.branch;document.getElementById('rhu').disabled=true}
+ sel.addEventListener('change',()=>{
+   const p=patients.find(x=>Number(x.dbId||x.id)===Number(sel.value));
+   if(p&&p.barangay&&[...document.getElementById('barangay').options].some(o=>o.value===p.barangay))document.getElementById('barangay').value=p.barangay;
+   fillAppointments(Number(sel.value||0));
+ });
+ document.getElementById('caseDate').addEventListener('change',()=>{document.getElementById('onsetDate').max=document.getElementById('caseDate').value});
+ const id=Number(new URLSearchParams(location.search).get('id')||0);
+ if(id)await loadExisting(id);
+}
+document.getElementById('caseForm').addEventListener('submit',async e=>{
+ e.preventDefault();setResult(editingId?'Updating...':'Saving...',true);
+ const payload={
+   id:editingId,
+   patient_id:Number(document.getElementById('patientId').value||0),
+   appointment_id:Number(document.getElementById('appointmentId').value||0),
+   disease_category:document.getElementById('category').value,
+   diagnosis:document.getElementById('diagnosis').value,
+   symptoms:document.getElementById('symptoms').value,
+   barangay:document.getElementById('barangay').value,
+   rhu_branch:document.getElementById('rhu').value,
+   case_date:document.getElementById('caseDate').value,
+   onset_date:document.getElementById('onsetDate').value,
+   case_status:document.getElementById('caseStatus').value,
+   record_source:document.getElementById('recordSource').value
+ };
+ try{
+  const r=await api(editingId?'disease_case_update':'disease_case_create',payload,'POST');
+  setResult(r.message||'Saved.',true);
+  if(!editingId)setTimeout(()=>location.href='admin-heatmap.html',700);
+ }catch(err){setResult(err.message,false)}
+});
+init().catch(e=>{console.error('Disease case form failed to initialize:',e);setResult(e.message||'Unable to load the disease case form.',false)});
+</script>
+
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260723-all-pages"></script>
+<script src="zero-trust.js?v=20260723"></script>
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+
+</body></html>

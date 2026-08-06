@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Management | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+html, body { height: 100%; overflow: hidden; }
+.navbar { position: sticky; top: 0; z-index: 1000; background: white; border-bottom: 3px solid #1e40af; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.nav-container { width: 100%; padding: 14px 32px; display: flex; align-items: center; position: relative; }
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; text-align: right; }
+.admin-avatar { width: 36px; height: 36px; background: #1e40af; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.btn-logout { background: white; color: #dc2626; border: 1.5px solid #fecaca; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+.btn-logout:hover { background: #fef2f2; }
+.hamburger-btn { display: none; background: none; border: none; font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px; }
+.mobile-sidebar { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-top: 1px solid #e5e7eb; box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px; }
+.mobile-sidebar.show { display: flex; }
+.mob-section-label { font-size: 10.5px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px; }
+.mob-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; text-decoration: none; font-size: 13.5px; font-weight: 500; color: #374151; transition: 0.15s; border: none; background: none; font-family: 'Inter', sans-serif; cursor: pointer; width: 100%; text-align: left; }
+.mob-sidebar-item:hover { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon { width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #6b7280; flex-shrink: 0; }
+.mob-sidebar-item.active .mob-s-icon, .mob-sidebar-item:hover .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+.layout { display: flex; height: calc(100vh - 67px); }
+.sidebar { width: 240px; background: white; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; z-index: 100; }
+.sidebar-section-label { padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; }
+.sidebar-item { display: flex; align-items: center; gap: 11px; padding: 11px 20px; font-size: 14px; font-weight: 500; color: #374151; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-family: 'Inter', sans-serif; transition: 0.15s; text-decoration: none; border-left: 3px solid transparent; }
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon { width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #6b7280; flex-shrink: 0; }
+.sidebar-item.active .s-icon, .sidebar-item:hover .s-icon { background: #dbeafe; color: #1e40af; }
+.main-content { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
+.page-header { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 4px; color: #0f172a; }
+.page-header p { color: #6b7280; margin: 0; font-size: 14px; }
+.admin-only-notice { background: #fef9c3; border: 1px solid #fde68a; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #92400e; margin-bottom: 20px; }
+.stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
+.stat-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.si-blue { background: #dbeafe; color: #1e40af; }
+.si-green { background: #dcfce7; color: #15803d; }
+.si-amber { background: #fef9c3; color: #a16207; }
+.si-red { background: #fee2e2; color: #dc2626; }
+.stat-label { font-size: 12px; color: #9ca3af; margin: 0 0 3px; font-weight: 500; }
+.stat-value { font-size: 24px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1; }
+.section-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); overflow: hidden; margin-bottom: 20px; }
+.section-head { padding: 16px 22px 14px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.section-head-left { display: flex; align-items: center; gap: 10px; }
+.section-head-left h6 { font-weight: 600; font-size: 15px; color: #111827; margin: 0; }
+.section-head-left p { font-size: 12.5px; color: #9ca3af; margin: 0; }
+.hicon { width: 32px; height: 32px; border-radius: 8px; background: #dbeafe; display: flex; align-items: center; justify-content: center; color: #1e40af; font-size: 13px; flex-shrink: 0; }
+.section-body { padding: 20px 22px; }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data-table th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #f1f5f9; background: #fafafa; }
+.data-table td { padding: 12px 14px; border-bottom: 1px solid #f9fafb; color: #374151; vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #f9fafb; }
+.badge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.badge-admin    { background: #ede9fe; color: #7c3aed; }
+.badge-rhu      { background: #dbeafe; color: #1e40af; }
+.badge-active   { background: #dcfce7; color: #15803d; }
+.badge-inactive { background: #fee2e2; color: #dc2626; }
+.badge-online   { background: #dcfce7; color: #15803d; }
+.badge-offline  { background: #f3f4f6; color: #9ca3af; }
+.user-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+.ua-admin { background: #ede9fe; color: #7c3aed; }
+.ua-rhu   { background: #dbeafe; color: #1e40af; }
+.user-info-cell { display: flex; align-items: center; gap: 10px; }
+.user-name  { font-weight: 600; color: #111827; font-size: 13.5px; }
+.user-email { font-size: 12px; color: #9ca3af; }
+.btn-primary { background: #1e40af; color: white; border: none; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-sm { padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 5px; border: 1.5px solid; }
+.btn-edit    { color: #1e40af; border-color: #bfdbfe; background: white; }
+.btn-edit:hover { background: #eff6ff; }
+.btn-disable { color: #d97706; border-color: #fde68a; background: white; }
+.btn-disable:hover { background: #fefce8; }
+.btn-enable  { color: #15803d; border-color: #bbf7d0; background: white; }
+.btn-enable:hover { background: #f0fdf4; }
+.btn-delete  { color: #dc2626; border-color: #fecaca; background: white; }
+.btn-delete:hover { background: #fef2f2; }
+.live-dot { width: 8px; height: 8px; background: #16a34a; border-radius: 50%; display: inline-block; animation: blink 1.5s infinite; margin-right: 4px; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+.session-card { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+.session-card:last-child { border-bottom: none; }
+.session-avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.session-info { flex: 1; min-width: 0; }
+.session-name { font-size: 13.5px; font-weight: 600; color: #111827; }
+.session-meta { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+.session-time { font-size: 12px; color: #6b7280; white-space: nowrap; text-align: right; }
+.simple-modal .modal-content { border-radius: 12px; border: 1px solid #e5e7eb; font-family: 'Inter', sans-serif; }
+.simple-modal .modal-header { padding: 18px 22px 14px; border-bottom: 1px solid #f1f5f9; }
+.simple-modal .modal-title { font-size: 16px; font-weight: 700; color: #111827; }
+.simple-modal .modal-body { padding: 18px 22px; }
+.simple-modal .modal-footer { padding: 14px 22px 18px; border-top: 1px solid #f1f5f9; gap: 8px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.form-group label { font-size: 13.5px; font-weight: 600; color: #374151; }
+.form-group input, .form-group select { padding: 10px 13px; border: 1.5px solid #d1d5db; border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; color: #111827; background: white; outline: none; transition: 0.18s; }
+.form-group input:focus, .form-group select:focus { border-color: #1e40af; box-shadow: 0 0 0 3px rgba(30,64,175,0.09); }
+.form-group small { font-size: 12px; color: #9ca3af; }
+.btn-modal-primary { background: #1e40af; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
+.btn-modal-primary:hover { background: #1d4ed8; }
+.btn-modal-cancel { background: white; color: #374151; border: 1.5px solid #d1d5db; padding: 9px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
+.btn-modal-cancel:hover { background: #f9fafb; }
+.btn-modal-danger { background: #dc2626; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
+.btn-modal-danger:hover { background: #b91c1c; }
+@media (max-width: 900px) {
+  .nav-container { padding: 14px 20px; }
+  .sidebar { display: none; }
+  .hamburger-btn { display: block; }
+  .main-content { padding: 20px; }
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 600px) {
+  .nav-container { padding: 12px 16px; }
+  .main-content { padding: 14px; }
+  .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .admin-info { display: none; }
+}
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png">
+      <div><strong>Pulilan Health Center</strong><small>PHAQS · Admin Panel</small></div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout><i class="fas fa-right-from-bracket"></i> Logout</button>
+      <button class="hamburger-btn" onclick="toggleAdminMenu()" id="adminHamburger">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+      <div class="mob-section-label">Main</div>
+      <a class="mob-sidebar-item" href="admin-dashboard.html"><div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+      <a class="mob-sidebar-item" href="admin-appointments.html"><div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+      <a class="mob-sidebar-item" href="admin-queue.html"><div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+      <a class="mob-sidebar-item" href="admin-patients.html"><div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients</a>
+      <a class="mob-sidebar-item" href="admin-reports.html"><div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+      <div class="mob-divider"></div>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">Analytics</div>
+      <a class="mob-sidebar-item" href="admin-heatmap.html"><div class="mob-s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">System</div>
+      <a class="mob-sidebar-item active" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+      <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout><div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html"><div class="s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+    <a class="sidebar-item" href="admin-appointments.html"><div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+    <a class="sidebar-item" href="admin-queue.html"><div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+    <a class="sidebar-item" href="admin-patients.html"><div class="s-icon"><i class="fas fa-users"></i></div> Patients</a>
+    <a class="sidebar-item" href="admin-reports.html"><div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item active" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" href="#" onclick="doLogout()" data-hc-logout><div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</a>
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h2>User Management</h2>
+        <p>Manage admin and RHU staff accounts - active sessions monitor</p>
+      </div>
+      <button class="btn-primary" onclick="openAddModal()" id="addUserBtn">
+        <i class="fas fa-user-plus"></i> Add User
+      </button>
+    </div>
+
+    <div class="admin-only-notice" id="adminOnlyNotice" style="display:none;">
+      <i class="fas fa-lock"></i>
+      <span>This page is restricted to Super Admin only. You can view your own account but cannot add, edit, or remove users.</span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon si-blue"><i class="fas fa-users"></i></div>
+        <div><p class="stat-label">Total Users</p><p class="stat-value" id="statTotal">0</p></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div>
+        <div><p class="stat-label">Active Accounts</p><p class="stat-value" id="statActive">0</p></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-amber"><i class="fas fa-wifi"></i></div>
+        <div><p class="stat-label">Online Now</p><p class="stat-value" id="statOnline">0</p></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-red"><i class="fas fa-ban"></i></div>
+        <div><p class="stat-label">Disabled</p><p class="stat-value" id="statDisabled">0</p></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="hicon"><i class="fas fa-wifi"></i></div>
+          <div>
+            <h6><span class="live-dot"></span>Active Sessions</h6>
+            <p>Users currently logged in to the system</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-body" id="activeSessions"></div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="hicon"><i class="fas fa-user-shield"></i></div>
+          <div>
+            <h6>System User Accounts</h6>
+            <p>All admin and RHU staff accounts</p>
+          </div>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Branch</th>
+                <th>Status</th>
+                <th>Last Login</th>
+                <th>Session</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade simple-modal" id="userModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="modalTitle">Add New User</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">
+    <input type="hidden" id="editUserId">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="inputName" placeholder="e.g. RHU Staff">
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" id="inputEmail" placeholder="e.g. rhu1@pulilan.gov.ph">
+    </div>
+    <div class="form-group">
+      <label>Role</label>
+      <select id="inputRole" onchange="toggleBranchField()">
+        <option value="">Select role</option>
+        <option value="Admin">Admin (Super Admin)</option>
+        <option value="RHU Staff">RHU Staff</option>
+      </select>
+    </div>
+    <div class="form-group" id="branchField">
+      <label>Assigned Branch</label>
+      <select id="inputBranch">
+        <option value="">Select branch</option>
+        <option value="RHU I - Poblacion">RHU I - Poblacion</option>
+        <option value="RHU II - Cutcot">RHU II - Cutcot</option>
+        <option value="RHU III - Tinejero">RHU III - Tinejero</option>
+        <option value="RHU IV - Tibag">RHU IV - Tibag</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="inputPassword" placeholder="Enter password">
+      <small id="passwordHint">Set a password for this user.</small>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn-modal-primary" onclick="saveUser()">Save User</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade simple-modal" id="confirmModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-sm">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="confirmTitle">Confirm</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body" id="confirmMsg">Are you sure?</div>
+  <div class="modal-footer">
+    <button class="btn-modal-cancel" data-bs-dismiss="modal">Cancel</button>
+    <button class="btn-modal-danger" id="confirmBtn">Confirm</button>
+  </div>
+</div>
+</div>
+</div>
+
+<script src="../shared-data.js"></script>
+<script src="admin-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+/* session check */
+const session = {loggedIn:true,name:'Administrator',role:'System Administrator',branch:'All Branches',email:''};
+fetch('../backend/api.php?action=admin_me',{credentials:'include'}).then(r=>r.json()).then(r=>{ if(!r.ok) location.href='admin-login.html'; else { Object.assign(session,r.admin); document.getElementById('adminName').innerText=session.name; document.getElementById('adminRole').innerText=session.role; document.getElementById('adminAvatar').innerText=(session.name||'A').charAt(0).toUpperCase(); }});
+
+document.getElementById("adminName").innerText   = session.name || "Administrator";
+document.getElementById("adminRole").innerText   = session.role || "Admin";
+document.getElementById("adminAvatar").innerText = (session.name || "A").charAt(0).toUpperCase();
+
+function isFullAdmin(session) {
+  const role = String(session.role || "").toLowerCase();
+  const branch = String(session.branch || "").toLowerCase();
+  return role.includes("admin") || role.includes("system administrator") || role.includes("super") || branch.includes("all branch") || branch.includes("all rhu");
+}
+
+const isSuperAdmin = isFullAdmin(session);
+
+if (!isSuperAdmin) {
+  document.getElementById("adminOnlyNotice").style.display = "flex";
+  document.getElementById("addUserBtn").style.display = "none";
+}
+
+function toggleAdminMenu() {
+  const menu = document.getElementById("mobileSidebar");
+  const icon = document.getElementById("adminHamburgerIcon");
+  menu.classList.toggle("show");
+  icon.className = menu.classList.contains("show") ? "fas fa-times" : "fas fa-bars";
+}
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("mobileSidebar");
+  const btn  = document.getElementById("adminHamburger");
+  if (menu && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+    document.getElementById("adminHamburgerIcon").className = "fas fa-bars";
+  }
+});
+
+function doLogout() {
+  confirmAdminLogout();
+}
+
+/* database setup */
+let systemUsers = [];
+
+async function loadUsers(){
+  const r = await hcApi('admin_system_users');
+  if(!r.ok){ alert(r.message || 'Unable to load users from database.'); return; }
+  systemUsers = (r.users || []).map(u => ({
+    id:Number(u.id), name:u.name, email:u.email, role:u.role || 'RHU Staff', branch:u.branch || 'All Branches',
+    status:String(u.account_status || 'Active').toLowerCase(), lastLogin:(u.last_login_at ? new Date(u.last_login_at.replace(' ','T')).toLocaleString('en-PH') : 'Never'), online:Boolean(Number(u.online||0)), lastActivity:(u.last_activity_at ? new Date(u.last_activity_at.replace(' ','T')).toLocaleString('en-PH') : '—')
+  }));
+  render();
+}
+function getUsers(){ return systemUsers; }
+
+function render() {
+  const users = getUsers();
+  document.getElementById("statTotal").innerText    = users.length;
+  document.getElementById("statActive").innerText   = users.filter(u => u.status === "active").length;
+  document.getElementById("statOnline").innerText   = users.filter(u => u.online).length;
+  document.getElementById("statDisabled").innerText = users.filter(u => u.status === "disabled").length;
+
+  const sessWrap = document.getElementById("activeSessions");
+  const onlineUsers=users.filter(u=>u.online); sessWrap.innerHTML = onlineUsers.length ? onlineUsers.map(u=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;"><div><strong>${u.name}</strong><div style="font-size:12px;color:#6b7280;">${u.role} · ${u.branch}</div></div><div style="font-size:12px;color:#15803d;font-weight:600;">Online · ${u.lastActivity}</div></div>`).join('') : '<p style="color:#9ca3af;font-size:13.5px;margin:0;">No active admin or staff session in the last 10 minutes.</p>';
+
+  document.getElementById("usersTableBody").innerHTML = users.map(u => {
+    const isMe    = u.email === session.email;
+    const canEdit = isSuperAdmin && !isMe;
+    return `<tr>
+      <td><div class="user-info-cell"><div class="user-avatar ${u.role === 'Admin' || u.role === 'System Administrator' ? 'ua-admin' : 'ua-rhu'}">${u.name.charAt(0)}</div><div><div class="user-name">${u.name} ${isMe ? '<span style="font-size:11px;color:#9ca3af;">(you)</span>' : ''}</div><div class="user-email">${u.email}</div></div></div></td>
+      <td><span class="badge ${u.role === 'Admin' || u.role === 'System Administrator' ? 'badge-admin' : 'badge-rhu'}">${u.role}</span></td>
+      <td style="font-size:13px;">${u.branch}</td>
+      <td><span class="badge ${u.status === 'active' ? 'badge-active' : 'badge-inactive'}">${u.status === 'active' ? 'Active' : 'Disabled'}</span></td>
+      <td style="font-size:12.5px;color:#6b7280;">${u.lastLogin}</td>
+      <td><span class="badge ${u.online?'badge-online':'badge-offline'}">${u.online?'Online':'Offline'}</span></td>
+      <td>${canEdit ? `<div style="display:flex;gap:6px;flex-wrap:wrap;"><button class="btn-sm btn-edit" onclick="openEditModal(${u.id})"><i class="fas fa-pen"></i> Edit</button><button class="btn-sm ${u.status === 'active' ? 'btn-disable' : 'btn-enable'}" onclick="confirmAction(${u.id},'status')"><i class="fas ${u.status === 'active' ? 'fa-ban' : 'fa-circle-check'}"></i> ${u.status === 'active' ? 'Disable' : 'Enable'}</button><button class="btn-sm btn-delete" aria-label="Delete ${u.name}" onclick="confirmAction(${u.id},'delete')"><i class="fas fa-trash"></i></button></div>` : '<span style="font-size:12px;color:#d1d5db;">-</span>'}</td>
+    </tr>`;
+  }).join("");
+}
+
+function openAddModal() {
+  if (!isSuperAdmin) return;
+  document.getElementById("modalTitle").innerText   = "Add New User";
+  document.getElementById("editUserId").value       = "";
+  document.getElementById("inputName").value        = "";
+  document.getElementById("inputEmail").value       = "";
+  document.getElementById("inputRole").value        = "";
+  document.getElementById("inputBranch").value      = "";
+  document.getElementById("inputPassword").value    = "";
+  document.getElementById("passwordHint").innerText = "Set a password for this user.";
+  document.getElementById("branchField").style.display = "flex";
+  new bootstrap.Modal(document.getElementById("userModal")).show();
+}
+
+function openEditModal(id) {
+  const u = getUsers().find(x => x.id === id);
+  if (!u) return;
+  document.getElementById("modalTitle").innerText   = "Edit User";
+  document.getElementById("editUserId").value       = id;
+  document.getElementById("inputName").value        = u.name;
+  document.getElementById("inputEmail").value       = u.email;
+  document.getElementById("inputRole").value        = u.role === 'System Administrator' ? 'Admin' : u.role;
+  document.getElementById("inputBranch").value      = u.branch;
+  document.getElementById("inputPassword").value    = "";
+  document.getElementById("passwordHint").innerText = "Leave blank to keep existing password.";
+  toggleBranchField();
+  new bootstrap.Modal(document.getElementById("userModal")).show();
+}
+
+function toggleBranchField() {
+  document.getElementById("branchField").style.display = document.getElementById("inputRole").value === "RHU Staff" ? "flex" : "none";
+}
+
+async function saveUser() {
+  const name   = document.getElementById("inputName").value.trim();
+  const email  = document.getElementById("inputEmail").value.trim();
+  const role   = document.getElementById("inputRole").value;
+  const branch = role === "Admin" ? "All Branches" : document.getElementById("inputBranch").value;
+  const password = document.getElementById("inputPassword").value;
+  const id = parseInt(document.getElementById("editUserId").value || '0', 10);
+  if (!name || !email || !role || (role === "RHU Staff" && !branch)) { alert("Please fill in all required fields."); return; }
+  const r = await hcApi('admin_save_system_user', {id,name,email,role,branch,password});
+  if(!r.ok){ alert(r.message || 'Failed to save database user.'); return; }
+  bootstrap.Modal.getInstance(document.getElementById("userModal")).hide();
+  await loadUsers();
+}
+
+function confirmAction(id, type) {
+  const u = getUsers().find(x => x.id === id);
+  if(!u) return;
+  const statusAction = type === 'status';
+  const nextStatus = u.status === 'active' ? 'Disabled' : 'Active';
+  document.getElementById("confirmTitle").innerText = statusAction ? `${nextStatus === 'Disabled' ? 'Disable' : 'Enable'} Account` : "Delete User";
+  document.getElementById("confirmMsg").innerText = statusAction
+    ? (nextStatus === 'Disabled' ? `Disable "${u.name}"? Existing sessions will be blocked on their next request and future sign-ins will be denied.` : `Enable "${u.name}" so this account can sign in again?`)
+    : `Permanently delete "${u.name}" from the administrator accounts? This cannot be undone.`;
+  const button=document.getElementById("confirmBtn");
+  button.className = nextStatus === 'Active' && statusAction ? 'btn-enable btn-sm' : 'btn-modal-danger';
+  button.textContent = statusAction ? (nextStatus === 'Disabled' ? 'Disable Account' : 'Enable Account') : 'Delete User';
+  document.getElementById("confirmBtn").onclick = async () => {
+    const r = statusAction
+      ? await hcApi('admin_set_system_user_status', {id,status:nextStatus})
+      : await hcApi('admin_delete_system_user', {id});
+    if(!r.ok){ window.showToast ? showToast(r.message || 'Action failed.','error') : alert(r.message || 'Action failed.'); return; }
+    bootstrap.Modal.getInstance(document.getElementById("confirmModal")).hide();
+    await loadUsers();
+  };
+  new bootstrap.Modal(document.getElementById("confirmModal")).show();
+}
+
+loadUsers();
+</script>
+<script src="audit-trail.js"></script>
+<script>
+auditLog("Viewed Page", "Opened User Management page", "User Management");
+</script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="../backend/backend.js"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

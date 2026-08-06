@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Trail | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+.navbar { position: sticky; top: 0; z-index: 1000; background: white; border-bottom: 3px solid #1e40af; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.nav-container { width: 100%; padding: 14px 32px; display: flex; align-items: center; position: relative; }
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; text-align: right; }
+.admin-avatar { width: 36px; height: 36px; background: #1e40af; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+.btn-logout { background: white; color: #dc2626; border: 1.5px solid #fecaca; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px; }
+.btn-logout:hover { background: #fef2f2; }
+.hamburger-btn { display: none; background: none; border: none; font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px; }
+.mobile-sidebar { display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border-top: 1px solid #e5e7eb; box-shadow: 0 8px 24px rgba(0,0,0,0.1); padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px; }
+.mobile-sidebar.show { display: flex; }
+.mob-section-label { font-size: 10.5px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px; }
+.mob-sidebar-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px; text-decoration: none; font-size: 13.5px; font-weight: 500; color: #374151; transition: 0.15s; border: none; background: none; font-family: 'Inter', sans-serif; cursor: pointer; width: 100%; text-align: left; }
+.mob-sidebar-item:hover { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon { width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #6b7280; flex-shrink: 0; }
+.mob-sidebar-item.active .mob-s-icon, .mob-sidebar-item:hover .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+
+.layout { display: flex; height: calc(100vh - 67px); }
+.sidebar { width: 240px; background: white; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; overflow-y: auto; flex-shrink: 0; z-index: 100; }
+.sidebar-section-label { padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; }
+.sidebar-item { display: flex; align-items: center; gap: 11px; padding: 11px 20px; font-size: 14px; font-weight: 500; color: #374151; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-family: 'Inter', sans-serif; transition: 0.15s; text-decoration: none; border-left: 3px solid transparent; }
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon { width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #6b7280; flex-shrink: 0; }
+.sidebar-item.active .s-icon, .sidebar-item:hover .s-icon { background: #dbeafe; color: #1e40af; }
+.main-content { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
+
+.page-header { margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 4px; color: #0f172a; }
+.page-header p { color: #6b7280; margin: 0; font-size: 14px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
+.stat-icon { width: 44px; height: 44px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
+.si-blue { background: #dbeafe; color: #1e40af; }
+.si-green { background: #dcfce7; color: #15803d; }
+.si-yellow { background: #fef9c3; color: #a16207; }
+.si-red { background: #fee2e2; color: #dc2626; }
+.stat-label { font-size: 12px; color: #6b7280; font-weight: 500; }
+.stat-value { font-size: 24px; font-weight: 700; color: #0f172a; line-height: 1.1; }
+
+.filter-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; padding: 16px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filter-card input, .filter-card select { border: 1.5px solid #e5e7eb; border-radius: 8px; padding: 8px 12px; font-size: 13px; font-family: 'Inter', sans-serif; color: #374151; background: #f9fafb; outline: none; transition: 0.15s; }
+.filter-card input:focus, .filter-card select:focus { border-color: #1e40af; background: white; }
+.filter-card input { flex: 1; min-width: 180px; }
+.filter-label { font-size: 12px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; }
+.btn-clear { background: #f3f4f6; border: 1.5px solid #e5e7eb; color: #374151; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.15s; white-space: nowrap; }
+.btn-clear:hover { background: #e5e7eb; }
+.btn-export { background: #1e40af; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn-export:hover { background: #1d3a9e; }
+.btn-danger-sm { background: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.15s; white-space: nowrap; }
+.btn-danger-sm:hover { background: #fee2e2; }
+
+.admin-only-notice { background: #fef9c3; border: 1px solid #fde68a; border-radius: 10px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #92400e; margin-bottom: 20px; }
+
+.table-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); overflow: hidden; }
+.table-card-header { padding: 16px 20px; border-bottom: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.table-card-header h5 { font-size: 15px; font-weight: 700; color: #111827; margin: 0; display: flex; align-items: center; gap: 8px; }
+.count-badge { background: #eff6ff; color: #1e40af; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th { background: #f8fafc; color: #6b7280; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+tbody td { padding: 11px 14px; border-bottom: 1px solid #f3f4f6; color: #374151; vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f9fafb; }
+.ts-cell { color: #6b7280; font-size: 12px; white-space: nowrap; }
+.user-cell { font-weight: 600; color: #111827; }
+.sub-text { font-size: 11.5px; color: #9ca3af; font-weight: 400; }
+.action-cell { font-weight: 500; color: #0f172a; }
+.details-cell { color: #6b7280; font-size: 13px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.badge-action { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.ba-login    { background: #dcfce7; color: #15803d; }
+.ba-logout   { background: #f3f4f6; color: #374151; }
+.ba-confirm  { background: #dbeafe; color: #1e40af; }
+.ba-cancel   { background: #fee2e2; color: #dc2626; }
+.ba-add      { background: #ede9fe; color: #6d28d9; }
+.ba-edit     { background: #fef9c3; color: #a16207; }
+.ba-delete   { background: #fee2e2; color: #dc2626; }
+.ba-disable  { background: #fff7ed; color: #c2410c; }
+.ba-view     { background: #f0fdf4; color: #166534; }
+.ba-export   { background: #f0f9ff; color: #0369a1; }
+.ba-queue    { background: #fdf4ff; color: #7e22ce; }
+.ba-other    { background: #f3f4f6; color: #374151; }
+
+/* role check */
+.badge-admin { background: #ede9fe; color: #6d28d9; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+.badge-rhu   { background: #dbeafe; color: #1e40af; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; }
+
+.empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
+.empty-state i { font-size: 40px; margin-bottom: 12px; display: block; }
+.empty-state p { font-size: 14px; margin: 0; }
+
+.pagination-row { padding: 14px 20px; border-top: 1px solid #f3f4f6; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.page-info { font-size: 13px; color: #6b7280; }
+.page-btns { display: flex; gap: 6px; }
+.page-btn { border: 1.5px solid #e5e7eb; background: white; color: #374151; padding: 6px 12px; border-radius: 7px; font-size: 13px; font-weight: 500; font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.15s; }
+.page-btn:hover:not(:disabled) { background: #eff6ff; border-color: #1e40af; color: #1e40af; }
+.page-btn:disabled { opacity: 0.4; cursor: default; }
+.page-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: white; border-radius: 16px; padding: 28px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.modal-box h5 { font-weight: 700; font-size: 17px; color: #0f172a; margin: 0 0 8px; }
+.modal-box p { font-size: 14px; color: #6b7280; margin: 0 0 20px; }
+.modal-btns { display: flex; gap: 10px; justify-content: flex-end; }
+.btn-modal-cancel { background: white; border: 1.5px solid #e5e7eb; color: #374151; padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
+.btn-modal-confirm { background: #dc2626; color: white; border: none; padding: 9px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Inter', sans-serif; cursor: pointer; }
+.btn-modal-confirm:hover { background: #b91c1c; }
+
+@media (max-width: 900px) {
+  .stats-row { grid-template-columns: repeat(2,1fr); }
+  .sidebar { display: none; }
+  .hamburger-btn { display: block; }
+  .nav-right .admin-info, .nav-right .btn-logout { display: none; }
+  .main-content { padding: 16px; }
+  .filter-card { flex-direction: column; align-items: stretch; }
+  .filter-card input, .filter-card select { width: 100%; }
+}
+@media (max-width: 520px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+}
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png" alt="Logo">
+      <div>
+        <strong>Pulilan Health Center</strong>
+        <small>PHAQS · Admin Panel</small>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info" style="text-align:right;">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout>
+        <i class="fas fa-right-from-bracket"></i> Logout
+      </button>
+      <button class="hamburger-btn" id="adminHamburger" onclick="toggleAdminMenu()">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+
+    <div class="mobile-sidebar" id="mobileSidebar">
+      <div class="mob-section-label">Main</div>
+      <a class="mob-sidebar-item" href="admin-dashboard.html"><div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+      <a class="mob-sidebar-item" href="admin-appointments.html"><div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+      <a class="mob-sidebar-item" href="admin-queue.html"><div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+      <a class="mob-sidebar-item" href="admin-patients.html"><div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients</a>
+      <a class="mob-sidebar-item" href="admin-reports.html"><div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+      <div class="mob-divider"></div>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">Analytics</div>
+      <a class="mob-sidebar-item" href="admin-heatmap.html"><div class="mob-s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">System</div>
+      <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item active" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout><div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html"><div class="s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+    <a class="sidebar-item" href="admin-appointments.html"><div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+    <a class="sidebar-item" href="admin-queue.html"><div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+    <a class="sidebar-item" href="admin-patients.html"><div class="s-icon"><i class="fas fa-users"></i></div> Patients</a>
+    <a class="sidebar-item" href="admin-reports.html"><div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item active" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="#" onclick="doLogout()" data-hc-logout><div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</a>
+  </div>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div>
+        <h2><i class="fas fa-clipboard-list" style="color:#1e40af;font-size:22px;margin-right:8px;"></i>Audit Trail</h2>
+        <p>Complete log of all admin and staff actions in the system</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-export" onclick="exportLogs()"><i class="fas fa-download"></i> Export CSV</button>
+        <button class="btn-danger-sm" id="clearLogsBtn" onclick="showClearModal()"><i class="fas fa-trash-can"></i> Clear Logs</button>
+      </div>
+    </div>
+
+    <div class="admin-only-notice" id="adminOnlyNotice" style="display:none;">
+      <i class="fas fa-circle-info"></i>
+      <span>You are viewing audit logs for your actions only. Full log access is for System Administrators.</span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon si-blue"><i class="fas fa-list-check"></i></div>
+        <div>
+          <div class="stat-label">Total Logs</div>
+          <div class="stat-value" id="statTotal">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-green"><i class="fas fa-right-to-bracket"></i></div>
+        <div>
+          <div class="stat-label">Logins Today</div>
+          <div class="stat-value" id="statLogins">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-yellow"><i class="fas fa-pen-to-square"></i></div>
+        <div>
+          <div class="stat-label">Changes Today</div>
+          <div class="stat-value" id="statChanges">0</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-red"><i class="fas fa-circle-xmark"></i></div>
+        <div>
+          <div class="stat-label">Cancellations Today</div>
+          <div class="stat-value" id="statCancels">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-card">
+      <span class="filter-label"><i class="fas fa-filter"></i> Filter</span>
+      <input type="text" id="searchInput" placeholder="Search user, action, details..." oninput="applyFilters()">
+      <select id="filterUser" onchange="applyFilters()"><option value="">All Users</option></select>
+      <select id="filterModule" onchange="applyFilters()">
+        <option value="">All Modules</option>
+        <option value="Login">Login</option>
+        <option value="Appointments">Appointments</option>
+        <option value="Queue Management">Queue Management</option>
+        <option value="Patients">Patients</option>
+        <option value="User Management">User Management</option>
+        <option value="Reports">Reports</option>
+        <option value="Dashboard">Dashboard</option>
+        <option value="Operations">Operations</option>
+        <option value="Disease Trends">Disease Trends</option>
+        <option value="Announcements">Announcements</option>
+      </select>
+      <select id="filterAction" onchange="applyFilters()">
+        <option value="">All Actions</option>
+        <option value="Login">Login</option>
+        <option value="Logout">Logout</option>
+        <option value="Confirmed">Confirmed Appointment</option>
+        <option value="Cancelled">Cancelled Appointment</option>
+        <option value="Added">Added User</option>
+        <option value="Edited">Edited User</option>
+        <option value="Deleted">Deleted User</option>
+        <option value="Disabled">Disabled User</option>
+        <option value="Called">Called Queue</option>
+        <option value="Exported">Exported</option>
+      </select>
+      <select id="filterRole" onchange="applyFilters()">
+        <option value="">All Roles</option>
+        <option value="System Administrator">System Administrator</option>
+        <option value="RHU Staff">RHU Staff</option>
+      </select>
+      <select id="filterBranch" onchange="applyFilters()">
+        <option value="">All Branches</option>
+        <option>All Branches</option><option>RHU I - Poblacion</option><option>RHU II - Cutcot</option><option>RHU III - Tinejero</option><option>RHU IV - Tibag</option>
+      </select>
+      <input type="date" id="filterDateFrom" aria-label="Audit date from" onchange="applyFilters()">
+      <input type="date" id="filterDateTo" aria-label="Audit date to" onchange="applyFilters()">
+      <button class="btn-clear" onclick="clearFilters()"><i class="fas fa-xmark"></i> Clear</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header">
+        <h5><i class="fas fa-table-list"></i> Log Entries <span class="count-badge" id="logCount">0</span></h5>
+        <span style="font-size:12px;color:#9ca3af;" id="logRangeLabel"></span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>User</th>
+              <th>Role</th>
+              <th>Module</th>
+              <th>Action</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody">
+            <tr><td colspan="6"><div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No audit logs yet.</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-row">
+        <span class="page-info" id="pageInfo">Showing 0 entries</span>
+        <div class="page-btns">
+          <button class="page-btn" id="prevBtn" onclick="changePage(-1)" disabled><i class="fas fa-chevron-left"></i></button>
+          <span id="pageNumDisplay" style="font-size:13px;color:#374151;padding:6px 8px;font-weight:600;"></span>
+          <button class="page-btn" id="nextBtn" onclick="changePage(1)" disabled><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="clearModal">
+  <div class="modal-box">
+    <h5><i class="fas fa-triangle-exclamation" style="color:#dc2626;margin-right:6px;"></i>Clear All Logs?</h5>
+    <p>This will permanently delete all audit trail entries. This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="hideClearModal()">Cancel</button>
+      <button class="btn-modal-confirm" onclick="confirmClearLogs()"><i class="fas fa-trash-can"></i> Yes, Clear All</button>
+    </div>
+  </div>
+</div>
+
+<script src="../backend/backend.js"></script>
+<script src="audit-trail.js"></script>
+
+<script>
+/* session check */
+const session = {loggedIn:true,name:'Administrator',role:'System Administrator',branch:'All Branches',email:''};
+fetch('../backend/api.php?action=admin_me',{credentials:'include'}).then(r=>r.json()).then(r=>{ if(!r.ok) location.href='admin-login.html'; else Object.assign(session,r.admin); });
+
+document.getElementById("adminName").innerText   = session.name || "Administrator";
+document.getElementById("adminRole").innerText   = session.role || "Admin";
+document.getElementById("adminAvatar").innerText = (session.name || "A").charAt(0).toUpperCase();
+
+function isFullAdmin(session) {
+  const role = String(session.role || "").toLowerCase();
+  const branch = String(session.branch || "").toLowerCase();
+  return role.includes("admin") || role.includes("system administrator") || role.includes("super") || branch.includes("all branch") || branch.includes("all rhu");
+}
+
+const isSuperAdmin = isFullAdmin(session);
+
+if (!isSuperAdmin) {
+  document.getElementById("adminOnlyNotice").style.display = "flex";
+  document.getElementById("clearLogsBtn").style.display    = "none";
+}
+
+function toggleAdminMenu() {
+  const menu = document.getElementById("mobileSidebar");
+  const icon = document.getElementById("adminHamburgerIcon");
+  menu.classList.toggle("show");
+  icon.className = menu.classList.contains("show") ? "fas fa-times" : "fas fa-bars";
+}
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("mobileSidebar");
+  const btn  = document.getElementById("adminHamburger");
+  if (menu && !menu.contains(e.target) && btn && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+    document.getElementById("adminHamburgerIcon").className = "fas fa-bars";
+  }
+});
+
+function doLogout() {
+  confirmAdminLogout();
+}
+
+let dbLogs = [];
+function getLogs() {
+  if (isSuperAdmin) return dbLogs;
+  return dbLogs.filter(l => l.email === session.email);
+}
+async function loadLogsFromDatabase(){
+  const r = await hcApi('admin_audit_logs');
+  if (!r || !r.ok) {
+    throw new Error((r && r.message) || 'Unable to load audit logs.');
+  }
+  dbLogs = Array.isArray(r.logs) ? r.logs : [];
+  const userFilter=document.getElementById('filterUser'),selectedUser=userFilter.value;
+  userFilter.innerHTML='<option value="">All Users</option>'+[...new Set(dbLogs.map(log=>log.user).filter(Boolean))].sort().map(user=>`<option>${String(user).replace(/&/g,'&amp;').replace(/</g,'&lt;')}</option>`).join('');
+  if([...userFilter.options].some(option=>option.value===selectedUser))userFilter.value=selectedUser;
+  filtered = getLogs();
+  currentPage = 1;
+  renderStats();
+  renderTable();
+}
+
+const PAGE_SIZE = 20;
+let currentPage = 1;
+let filtered = [];
+
+function getActionBadge(action) {
+  const a = (action || "").toLowerCase();
+  let cls = "ba-other";
+  if (a.includes("login"))    cls = "ba-login";
+  else if (a.includes("logout"))   cls = "ba-logout";
+  else if (a.includes("confirm"))  cls = "ba-confirm";
+  else if (a.includes("cancel"))   cls = "ba-cancel";
+  else if (a.includes("added") || a.includes("add user"))  cls = "ba-add";
+  else if (a.includes("edit"))     cls = "ba-edit";
+  else if (a.includes("delete"))   cls = "ba-delete";
+  else if (a.includes("disable") || a.includes("enable")) cls = "ba-disable";
+  else if (a.includes("view"))     cls = "ba-view";
+  else if (a.includes("export"))   cls = "ba-export";
+  else if (a.includes("queue") || a.includes("called") || a.includes("served")) cls = "ba-queue";
+  return `<span class="badge-action ${cls}">${action}</span>`;
+}
+
+function formatTS(iso) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("en-PH", { month:"short", day:"numeric", year:"numeric" })
+      + "<br><span style='color:#9ca3af'>" 
+      + d.toLocaleTimeString("en-PH", { hour:"2-digit", minute:"2-digit", second:"2-digit" })
+      + "</span>";
+  } catch { return iso; }
+}
+
+function renderTable() {
+  const tbody = document.getElementById("logTableBody");
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page  = filtered.slice(start, start + PAGE_SIZE);
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  document.getElementById("logCount").innerText  = total;
+  document.getElementById("pageInfo").innerText  = total === 0
+    ? "No entries found"
+    : `Showing ${start + 1}-${Math.min(start + PAGE_SIZE, total)} of ${total} entries`;
+  document.getElementById("pageNumDisplay").innerText = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById("prevBtn").disabled = currentPage <= 1;
+  document.getElementById("nextBtn").disabled = currentPage >= totalPages;
+
+  if (page.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-clipboard-list"></i><p>No log entries found.</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = page.map(l => `
+    <tr>
+      <td class="ts-cell">${formatTS(l.ts)}</td>
+      <td>
+        <div class="user-cell">${l.user}</div>
+        <div class="sub-text">${l.email || ""}</div>
+      </td>
+      <td>
+        <span class="${l.role === 'Admin' ? 'badge-admin' : 'badge-rhu'}">${l.role}</span>
+        <div class="sub-text" style="margin-top:2px;">${l.branch || ""}</div>
+      </td>
+      <td style="color:#374151;font-weight:500;">${l.module || "-"}</td>
+      <td>${getActionBadge(l.action)}</td>
+      <td class="details-cell" title="${(l.details||"").replace(/"/g,"&quot;")}">${l.details || "-"}</td>
+    </tr>
+  `).join("");
+}
+
+function applyFilters() {
+  const search = document.getElementById("searchInput").value.toLowerCase().trim();
+  const module = document.getElementById("filterModule").value;
+  const action = document.getElementById("filterAction").value.toLowerCase();
+  const role   = document.getElementById("filterRole").value;
+  const user   = document.getElementById("filterUser").value;
+  const branch = document.getElementById("filterBranch").value;
+  const dateFrom = document.getElementById("filterDateFrom").value;
+  const dateTo = document.getElementById("filterDateTo").value;
+  const all    = getLogs();
+
+  filtered = all.filter(l => {
+    const matchSearch = !search ||
+      (l.user    || "").toLowerCase().includes(search) ||
+      (l.action  || "").toLowerCase().includes(search) ||
+      (l.details || "").toLowerCase().includes(search) ||
+      (l.module  || "").toLowerCase().includes(search) ||
+      (l.email   || "").toLowerCase().includes(search);
+    const matchModule = !module || (l.module || "") === module;
+    const matchAction = !action || (l.action || "").toLowerCase().includes(action);
+    const matchRole   = !role   || (l.role   || "") === role;
+    const matchUser   = !user   || (l.user   || "") === user;
+    const matchBranch = !branch || (l.branch || "") === branch;
+    const logDate=String(l.ts||'').slice(0,10);
+    const matchDate=(!dateFrom||logDate>=dateFrom)&&(!dateTo||logDate<=dateTo);
+    return matchSearch && matchModule && matchAction && matchRole && matchUser && matchBranch && matchDate;
+  });
+
+  currentPage = 1;
+  renderTable();
+}
+
+function clearFilters() {
+  document.getElementById("searchInput").value  = "";
+  document.getElementById("filterModule").value = "";
+  document.getElementById("filterAction").value = "";
+  document.getElementById("filterRole").value   = "";
+  document.getElementById("filterUser").value = "";
+  document.getElementById("filterBranch").value = "";
+  document.getElementById("filterDateFrom").value = "";
+  document.getElementById("filterDateTo").value = "";
+  applyFilters();
+}
+
+function changePage(dir) {
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  currentPage = Math.max(1, Math.min(totalPages, currentPage + dir));
+  renderTable();
+}
+
+function renderStats() {
+  const all   = getLogs();
+  const today = new Date().toDateString();
+  const todayLogs = all.filter(l => new Date(l.ts).toDateString() === today);
+
+  document.getElementById("statTotal").innerText   = all.length;
+  document.getElementById("statLogins").innerText  = todayLogs.filter(l => l.action.toLowerCase().includes("login") && !l.action.toLowerCase().includes("logout")).length;
+  document.getElementById("statChanges").innerText = todayLogs.filter(l => {
+    const a = l.action.toLowerCase();
+    return a.includes("confirm") || a.includes("edit") || a.includes("add") || a.includes("called") || a.includes("served");
+  }).length;
+  document.getElementById("statCancels").innerText = todayLogs.filter(l => l.action.toLowerCase().includes("cancel")).length;
+}
+
+function exportLogs() {
+  const data = filtered.length > 0 ? filtered : getLogs();
+  if (data.length === 0) { alert("No logs to export."); return; }
+  const headers = ["Timestamp","User","Email","Role","Branch","Module","Action","Details"];
+  const rows = data.map(l => [
+    new Date(l.ts).toLocaleString("en-PH"),
+    l.user, l.email, l.role, l.branch, l.module, l.action, l.details
+  ]);
+  const csv  = [headers, ...rows].map(r => r.map(v => `"${(v||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url  = URL.createObjectURL(blob);
+  const el   = document.createElement("a");
+  el.href = url;
+  el.download = "audit_trail_" + new Date().toISOString().split("T")[0] + ".csv";
+  el.click();
+  URL.revokeObjectURL(url);
+  auditLog("Exported Logs", `Exported ${data.length} log entries`, "Audit Trail");
+}
+
+function showClearModal() {
+  document.getElementById("clearModal").classList.add("show");
+}
+function hideClearModal() {
+  document.getElementById("clearModal").classList.remove("show");
+}
+async function confirmClearLogs() {
+  try {
+    const r = await hcApi('admin_audit_clear');
+    if (!r || !r.ok) throw new Error((r && r.message) || 'Unable to clear audit logs.');
+    hideClearModal();
+    await loadLogsFromDatabase();
+  } catch (e) {
+    console.error(e);
+    alert(e.message || 'Unable to clear audit logs.');
+  }
+}
+
+(async function initAuditTrail(){
+  try{
+    if(typeof auditLog==='function') await auditLog("Viewed Page", "Opened Audit Trail page", "Audit Trail");
+    await loadLogsFromDatabase();
+    const all=getLogs();
+    if(all.length>0){
+      const newest=new Date(all[0].ts).toLocaleDateString("en-PH",{month:"short",day:"numeric",year:"numeric"});
+      const oldest=new Date(all[all.length-1].ts).toLocaleDateString("en-PH",{month:"short",day:"numeric",year:"numeric"});
+      document.getElementById("logRangeLabel").innerText=oldest===newest?newest:`${oldest} - ${newest}`;
+    }else{
+      document.getElementById("logRangeLabel").innerText="No database logs yet";
+    }
+  }catch(e){
+    console.error(e);
+    document.getElementById("logTableBody").innerHTML='<tr><td colspan="8" style="text-align:center;color:#dc2626;padding:24px;">Unable to load audit logs. Please refresh the page or check the Audit Trail API.</td></tr>';
+  }
+})();
+</script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

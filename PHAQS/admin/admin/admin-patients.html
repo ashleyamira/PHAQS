@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patients | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: white; border-bottom: 3px solid #1e40af;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.nav-container {
+  width: 100%; padding: 14px 32px;
+  display: flex; align-items: center; position: relative;
+}
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small  { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info { text-align: right; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; }
+.admin-avatar {
+  width: 36px; height: 36px; background: #1e40af; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.btn-logout {
+  background: white; color: #dc2626; border: 1.5px solid #fecaca;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-logout:hover { background: #fef2f2; }
+
+.hamburger-btn {
+  display: none; background: none; border: none;
+  font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px;
+}
+.mobile-sidebar {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  background: white; border-top: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px;
+}
+.mobile-sidebar.show { display: flex; }
+.mob-section-label {
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px;
+}
+.mob-sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px; text-decoration: none;
+  font-size: 13.5px; font-weight: 500; color: #374151; transition: 0.15s;
+  border: none; background: none; font-family: 'Inter', sans-serif;
+  cursor: pointer; width: 100%; text-align: left;
+}
+.mob-sidebar-item:hover  { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon {
+  width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #6b7280; flex-shrink: 0;
+}
+.mob-sidebar-item.active .mob-s-icon,
+.mob-sidebar-item:hover  .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+
+.layout { display: flex; height: calc(100vh - 67px); }
+
+.sidebar {
+  width: 240px; background: white; border-right: 1px solid #e5e7eb;
+  display: flex; flex-direction: column;
+  position: sticky; top: 67px;
+  height: calc(100vh - 67px); overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-section-label {
+  padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700;
+  color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 20px; font-size: 14px; font-weight: 500;
+  color: #374151; cursor: pointer; border: none; background: none;
+  width: 100%; text-align: left; font-family: 'Inter', sans-serif;
+  transition: 0.15s; text-decoration: none; border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon {
+  width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #6b7280; flex-shrink: 0;
+}
+.sidebar-item.active .s-icon,
+.sidebar-item:hover  .s-icon { background: #dbeafe; color: #1e40af; }
+
+.main-content { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 3px; color: #0f172a; }
+.page-header p  { color: #6b7280; margin: 0; font-size: 14px; }
+
+.staff-notice {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: #a16207; margin-bottom: 20px;
+}
+
+.stats-row {
+  display: grid; grid-template-columns: repeat(5,1fr);
+  gap: 14px; margin-bottom: 24px;
+}
+.stat-box {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03); padding: 16px 18px;
+  display: flex; align-items: center; gap: 12px; transition: 0.2s;
+}
+.stat-box:hover { border-color: #bfdbfe; box-shadow: 0 4px 14px rgba(30,64,175,0.08); }
+.stat-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.si-blue   { background: #dbeafe; color: #1e40af; }
+.si-green  { background: #dcfce7; color: #15803d; }
+.si-amber  { background: #fef9c3; color: #a16207; }
+.si-purple { background: #ede9fe; color: #7c3aed; }
+.si-red    { background: #fee2e2; color: #dc2626; }
+.stat-label { font-size: 11px; color: #9ca3af; margin: 0 0 3px; font-weight: 500; }
+.stat-value { font-size: 22px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1; }
+
+.filter-bar {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  padding: 14px 18px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.filter-bar input,
+.filter-bar select {
+  padding: 9px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px;
+  font-size: 13.5px; font-family: 'Inter', sans-serif;
+  color: #111827; background: #fafafa; outline: none; transition: 0.18s;
+}
+.filter-bar input  { flex: 1; min-width: 180px; }
+.filter-bar select { min-width: 140px; }
+.filter-bar input:focus,
+.filter-bar select:focus { border-color: #1e40af; background: white; box-shadow: 0 0 0 3px rgba(30,64,175,0.08); }
+.btn-export {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 9px 16px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; margin-left: auto; white-space: nowrap;
+}
+.btn-export:hover { background: #f3f4f6; }
+
+.card {
+  background: white; border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden;
+}
+.card-head {
+  padding: 15px 22px 12px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-head-left { display: flex; align-items: center; gap: 9px; }
+.card-head-left h6 { font-weight: 600; font-size: 15px; color: #111827; margin: 0; }
+.hicon {
+  width: 32px; height: 32px; border-radius: 8px; background: #dbeafe;
+  display: flex; align-items: center; justify-content: center;
+  color: #1e40af; font-size: 13px; flex-shrink: 0;
+}
+
+.tbl-wrap { overflow-x: auto; }
+.pat-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 900px; }
+.pat-table th {
+  text-align: left; padding: 10px 16px;
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  border-bottom: 1px solid #f1f5f9; background: #fafafa;
+}
+.pat-table td {
+  padding: 12px 16px; border-bottom: 1px solid #f9fafb;
+  color: #374151; vertical-align: middle;
+}
+.pat-table tr:last-child td { border-bottom: none; }
+.pat-table tr:hover td { background: #f9fafb; }
+
+.pat-avatar,.pat-modal-avatar{overflow:hidden}
+.pat-avatar img,.pat-modal-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.pat-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #dbeafe; color: #1e40af;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px;
+}
+.b-active     { background: #dcfce7; color: #15803d; }
+.b-philhealth { background: #dbeafe; color: #1e40af; }
+.b-inactive   { background: #fee2e2; color: #dc2626; }
+.b-4ps        { background: #fef9c3; color: #a16207; }
+.b-senior     { background: #ede9fe; color: #7c3aed; }
+.b-pwd        { background: #fce7f3; color: #9d174d; }
+.b-none       { background: #f3f4f6; color: #9ca3af; }
+
+.btn-sm {
+  padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: 0.15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.bs-blue { background: #dbeafe; color: #1e40af; }
+.bs-blue:hover { background: #bfdbfe; }
+
+.pagination-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 22px; border-top: 1px solid #f1f5f9;
+  font-size: 13px; color: #6b7280; flex-wrap: wrap; gap: 8px;
+}
+.pagination-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.page-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid #e5e7eb;
+  background: white; color: #374151; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; transition: 0.15s;
+}
+.page-btn:hover { background: #f3f4f6; }
+.page-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
+
+.simple-modal .modal-content {
+  border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12); font-family: 'Inter', sans-serif;
+}
+.simple-modal .modal-header { padding: 18px 24px 14px; border-bottom: 1px solid #f1f5f9; }
+.simple-modal .modal-title { font-size: 16px; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 9px; }
+.mti { width: 24px; height: 24px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.mti-blue { background: none; color: #1e40af; }
+.simple-modal .modal-body   { padding: 20px 24px; }
+.simple-modal .modal-footer { padding: 14px 24px 20px; border-top: 1px solid #f1f5f9; gap: 10px; justify-content: flex-end; }
+.btn-dark-blue {
+  background: #1e40af; color: white; border: none;
+  padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-dark-blue:hover { background: #1d4ed8; }
+.btn-outline-cancel {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 10px 18px; border-radius: 8px; font-weight: 500; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+}
+.btn-outline-cancel:hover { background: #f3f4f6; }
+
+.pat-modal-header-card {
+  background: #1e40af; border-radius: 12px; padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.pat-modal-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 700; flex-shrink: 0;
+}
+.pat-modal-name { font-size: 17px; font-weight: 700; color: white; margin: 0 0 3px; }
+.pat-modal-id   { font-size: 12px; color: rgba(255,255,255,0.7); margin: 0; }
+
+.detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;
+  margin-bottom: 14px;
+}
+.detail-cell {
+  padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 13.5px;
+}
+.detail-cell:nth-last-child(-n+2) { border-bottom: none; }
+.detail-cell:nth-child(odd) { border-right: 1px solid #f3f4f6; }
+.detail-label { font-size: 11.5px; color: #9ca3af; margin-bottom: 3px; font-weight: 500; }
+.detail-value { font-weight: 600; color: #111827; }
+
+.section-title {
+  font-size: 11px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em; margin: 14px 0 8px;
+}
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+
+.empty-state { text-align: center; padding: 60px 24px; color: #9ca3af; }
+.empty-icon {
+  width: 64px; height: 64px; background: #f3f4f6; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; font-size: 26px; color: #d1d5db;
+}
+
+@media (max-width: 900px) {
+  .sidebar       { display: none; }
+  .hamburger-btn { display: block; }
+  .main-content  { padding: 24px; }
+  html, body     { overflow: auto; }
+  .layout        { height: auto; }
+}
+
+@media (max-width: 768px) {
+  .nav-container { padding: 12px 20px; }
+  .admin-info    { display: none; }
+  .main-content  { padding: 16px; }
+  .stats-row     { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .filter-bar    { flex-direction: column; align-items: stretch; gap: 8px; }
+  .filter-bar input,
+  .filter-bar select { min-width: unset; width: 100%; }
+  .btn-export    { margin-left: 0; width: 100%; justify-content: center; }
+  .page-header h2 { font-size: 22px; }
+  .stat-icon     { width: 36px; height: 36px; font-size: 15px; }
+  .stat-value    { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+  .stats-row     { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-box      { padding: 12px 10px; gap: 8px; }
+  .stat-value    { font-size: 18px; }
+  .detail-grid   { grid-template-columns: 1fr; }
+  .detail-cell:nth-child(odd) { border-right: none; }
+  .detail-cell:nth-last-child(-n+2) { border-bottom: 1px solid #f3f4f6; }
+  .detail-cell:last-child    { border-bottom: none; }
+  .btn-logout span { display: none; }
+}
+
+/* Keep patient action buttons consistent after archive/restore refresh */
+.patient-actions{display:inline-flex!important;align-items:center!important;gap:5px!important;flex-wrap:nowrap!important;white-space:nowrap!important;min-width:max-content}
+.patient-actions .btn-sm{display:inline-flex;align-items:center;justify-content:center;gap:5px;flex:0 0 auto;min-height:31px;margin:0!important}
+.appt-table td:last-child{min-width:230px;white-space:nowrap}
+
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+<style>
+.patient-header-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.patient-count{font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px}.patient-add-btn{min-height:40px;padding:0 15px;border:0;border-radius:8px;background:#1e40af;color:#fff;font:650 12px 'Inter',sans-serif;display:inline-flex;align-items:center;gap:7px}.patient-add-btn:hover{background:#17378f}.patient-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.bs-gray{background:#f1f5f9;color:#475569}.bs-red{background:#fff1f2;color:#be123c}.bs-green{background:#ecfdf5;color:#047857}.patient-status{display:inline-flex;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700}.patient-status.Active{background:#dcfce7;color:#166534}.patient-status.Archived{background:#e5e7eb;color:#475569}.patient-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.patient-form-full{grid-column:1/-1}.patient-form-grid label{display:block;margin-bottom:5px;color:#475569;font-size:11px;font-weight:700}.patient-form-grid input,.patient-form-grid select,.patient-form-grid textarea{width:100%;min-height:40px;padding:9px 10px;border:1.5px solid #d1d5db;border-radius:7px;background:#fff;color:#111827;font:12px 'Inter',sans-serif;outline:none}.patient-form-grid input:focus,.patient-form-grid select:focus,.patient-form-grid textarea:focus{border-color:#1e40af;box-shadow:0 0 0 3px rgba(30,64,175,.08)}.patient-form-grid textarea{min-height:78px;resize:vertical}.patient-checks{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:11px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc}.patient-checks label{display:flex;align-items:center;gap:7px;margin:0}.patient-checks input{width:16px;height:16px;min-height:0}.patient-form-note{margin-top:5px;color:#94a3b8;font-size:9.5px}.patient-record-warning{padding:10px 12px;border-left:3px solid #d97706;background:#fffbeb;color:#92400e;font-size:10.5px;line-height:1.5}
+@media(max-width:700px){.patient-form-grid{grid-template-columns:1fr}.patient-form-full{grid-column:auto}.patient-header-tools{width:100%;justify-content:space-between}}
+</style>
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+<link rel="stylesheet" href="staff-exact-patients-shell.css?v=20260722-final">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+<script>try{if(sessionStorage.getItem('phc-admin-shell-role')==='staff')document.body.classList.add('rhu-staff-session')}catch(e){}</script>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png">
+      <div>
+        <strong>Pulilan Health Center</strong>
+        <small>PHAQS · Admin Panel</small>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout>
+        <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+      </button>
+      <button class="hamburger-btn" onclick="toggleAdminMenu()" id="adminHamburger">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+
+<div class="mobile-sidebar" id="mobileSidebar">
+  <div class="mob-section-label">Main</div>
+  <a class="mob-sidebar-item" href="admin-dashboard.html">
+    <div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard
+  </a>
+  <a class="mob-sidebar-item" href="admin-appointments.html">
+    <div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+  </a>
+  <a class="mob-sidebar-item" href="admin-queue.html">
+    <div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+  </a>
+  <a class="mob-sidebar-item active" href="admin-patients.html">
+    <div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients
+  </a>
+  <a class="mob-sidebar-item" href="admin-reports.html">
+    <div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+  </a>
+  <div class="mob-divider"></div>
+  <div class="mob-section-label">System</div>
+  <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+  <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout>
+    <div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+  </button>
+</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html">
+      <div class="s-icon"><i class="fas fa-house"></i></div> Dashboard
+    </a>
+    <a class="sidebar-item" href="admin-appointments.html">
+      <div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+    </a>
+    <a class="sidebar-item" href="admin-queue.html">
+      <div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+    </a>
+    <a class="sidebar-item active" href="admin-patients.html">
+      <div class="s-icon"><i class="fas fa-users"></i></div> Patients
+    </a>
+    <a class="sidebar-item" href="admin-reports.html">
+      <div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+    </a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" onclick="doLogout()" href="#" data-hc-logout>
+      <div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+    </a>
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h2>Patients</h2>
+        <p id="pageDesc">View and manage registered patients in Pulilan Health Center</p>
+      </div>
+      <div class="patient-header-tools"><div class="patient-count"><i class="fas fa-users"></i><span id="totalPatients">0</span> patient records</div><button class="patient-add-btn" type="button" onclick="openPatientForm()"><i class="fas fa-user-plus"></i> Add Patient</button></div>
+    </div>
+
+    <div class="staff-notice" id="staffNotice" style="display:none;">
+      <i class="fas fa-circle-info"></i>
+      <span id="staffNoticeText"></span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon si-blue"><i class="fas fa-users"></i></div>
+        <div>
+          <p class="stat-label">Total Patients</p>
+          <p class="stat-value" id="sTotal">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-amber"><i class="fas fa-star"></i></div>
+        <div>
+          <p class="stat-label">Senior Citizens</p>
+          <p class="stat-value" id="sSenior">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-purple"><i class="fas fa-wheelchair"></i></div>
+        <div>
+          <p class="stat-label">PWD</p>
+          <p class="stat-value" id="sPwd">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-green"><i class="fas fa-hand-holding-heart"></i></div>
+        <div>
+          <p class="stat-label">4Ps Members</p>
+          <p class="stat-value" id="s4ps">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-red"><i class="fas fa-id-card"></i></div>
+        <div>
+          <p class="stat-label">w/ PhilHealth</p>
+          <p class="stat-value" id="sPhilhealth">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="Search name, barangay, or patient ID..." oninput="applyFilters()">
+      <select id="filterSex" onchange="applyFilters()">
+        <option value="">All Sex</option>
+        <option>Female</option>
+        <option>Male</option>
+      </select>
+      <select id="filterBarangay" onchange="applyFilters()">
+        <option value="">All Barangays</option>
+        <option>Balatong A</option><option>Balatong B</option>
+        <option>Cutcot</option><option>Dampol 1st</option>
+        <option>Dampol 2nd A</option><option>Dampol 2nd B</option>
+        <option>Dulong Malabon</option><option>Inaon</option>
+        <option>Lumbac</option><option>Paltao</option>
+        <option>Penabatan</option><option>Poblacion</option>
+        <option>Pulilen (Patubig)</option><option>Santa Peregrina</option>
+        <option>Santo Cristo</option><option>Tiaong</option>
+        <option>Tibag</option><option>Tinejero</option>
+      </select>
+      <select id="filterClassification" onchange="applyFilters()">
+        <option value="">All Classifications</option>
+        <option value="senior">Senior Citizen</option>
+        <option value="pwd">PWD</option>
+        <option value="4ps">4Ps Member</option>
+        <option value="philhealth">With PhilHealth</option>
+      </select>
+      <select id="filterStatus" onchange="applyFilters()"><option value="">All Statuses</option><option>Active</option><option>Archived</option></select>
+      <button class="btn-export" onclick="exportCSV()">
+        <i class="fas fa-download"></i> Export CSV
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div class="card-head-left">
+          <div class="hicon"><i class="fas fa-users"></i></div>
+          <h6>Patient Records</h6>
+        </div>
+        <span style="font-size:12px;color:#9ca3af;" id="tableMeta"></span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="pat-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Sex / Age</th>
+              <th>Barangay</th>
+              <th>Contact</th>
+              <th>PhilHealth</th>
+              <th>Classifications</th>
+              <th>Preferred RHU</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="patTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-wrap">
+        <span id="pageInfo">Showing 0 of 0</span>
+        <div class="pagination-btns" id="pageBtns"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade simple-modal" id="patModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-lg">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <div class="mti mti-blue"><i class="fas fa-user"></i></div>
+      Patient Record
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body" id="patModalBody"></div>
+  <div class="modal-footer">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Close</button>
+    <button class="btn-outline-cancel" id="editPatientBtn"><i class="fas fa-pen"></i> Edit Record</button>
+    <button class="btn-dark-blue" id="viewApptBtn">
+      <i class="fas fa-calendar-check"></i> View Appointments
+    </button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade simple-modal" id="patientFormModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable"><div class="modal-content">
+  <div class="modal-header"><h5 class="modal-title"><div class="mti mti-blue"><i class="fas fa-user-pen"></i></div><span id="patientFormTitle">Add Patient</span></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+  <div class="modal-body"><input type="hidden" id="formPatientId"><div class="patient-form-grid">
+    <div><label>First Name *</label><input id="formFirstName" maxlength="100"></div><div><label>Last Name *</label><input id="formLastName" maxlength="100"></div>
+    <div><label>Email *</label><input id="formEmail" type="email" maxlength="150"></div><div><label>Contact Number *</label><input id="formPhone" maxlength="30"></div>
+    <div><label>Birthdate</label><input id="formBirthdate" type="date"></div><div><label>Sex</label><select id="formGender"><option value="">Select</option><option>Female</option><option>Male</option><option>Prefer not to say</option></select></div>
+    <div><label>Barangay *</label><input id="formBarangay" maxlength="100"></div><div><label>Preferred RHU *</label><select id="formPreferredRhu"><option>RHU I - Poblacion</option><option>RHU II - Cutcot</option><option>RHU III - Tinejero</option><option>RHU IV - Tibag</option></select></div>
+    <div class="patient-form-full"><label>Address</label><textarea id="formAddress" maxlength="500"></textarea></div>
+    <div><label>PhilHealth Number</label><input id="formPhilhealth" maxlength="80"></div><div><label>Blood Type</label><select id="formBloodType"><option value="">Unknown</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
+    <div><label>Conditions</label><textarea id="formConditions" maxlength="500"></textarea></div><div><label>Medications</label><textarea id="formMedications" maxlength="500"></textarea></div>
+    <div class="patient-form-full patient-checks"><label><input type="checkbox" id="formSenior"> Senior Citizen</label><label><input type="checkbox" id="formPwd"> PWD</label><label><input type="checkbox" id="form4ps"> 4Ps Member</label></div>
+    <div class="patient-form-full"><label id="passwordLabel">Temporary Password *</label><input id="formPassword" type="password" minlength="8" autocomplete="new-password"><div class="patient-form-note" id="passwordNote">At least 8 characters. The patient can change it later.</div></div>
+    <div class="patient-form-full patient-record-warning"><strong>Record safety:</strong> Patient records are archived instead of permanently deleted so appointments and audit history remain intact.</div>
+  </div></div>
+  <div class="modal-footer"><button class="btn-outline-cancel" data-bs-dismiss="modal">Cancel</button><button class="btn-dark-blue" id="savePatientBtn" onclick="savePatientRecord()"><i class="fas fa-floppy-disk"></i> Save Patient</button></div>
+</div></div></div>
+
+<script src="../shared-data.js"></script>
+<script src="admin-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+function toggleAdminMenu() {
+  const menu = document.getElementById("mobileSidebar");
+  const icon = document.getElementById("adminHamburgerIcon");
+  menu.classList.toggle("show");
+  icon.className = menu.classList.contains("show") ? "fas fa-times" : "fas fa-bars";
+}
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("mobileSidebar");
+  const btn  = document.getElementById("adminHamburger");
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+    document.getElementById("adminHamburgerIcon").className = "fas fa-bars";
+  }
+});
+
+/* session check */
+const session = {loggedIn:true,name:'Administrator',role:'System Administrator',branch:'All Branches',email:''};
+const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+
+function isFullAdmin(session) {
+  const role = String(session.role || "").toLowerCase();
+  const branch = String(session.branch || "").toLowerCase();
+  return role.includes("admin") || role.includes("system administrator") || role.includes("super") || branch.includes("all branch") || branch.includes("all rhu");
+}
+
+let isSuperAdmin = false;
+let userBranch = '';
+
+async function initializePatientAccess() {
+  const response = await fetch('../backend/api.php?action=admin_me',{credentials:'include'});
+  const result = await response.json();
+  if(!result.ok){ location.href='admin-login.html'; return; }
+  Object.assign(session,result.admin);
+  isSuperAdmin = isFullAdmin(session);
+  userBranch = session.branch === "All RHU Branches" ? "All Branches" : (session.branch || "");
+  document.getElementById("adminName").innerText = session.name || "Administrator";
+  document.getElementById("adminRole").innerText = session.role || "Admin";
+  document.getElementById("adminAvatar").innerText = (session.name || "A").charAt(0).toUpperCase();
+  await loadPatients();
+}
+
+function doLogout() {
+  confirmAdminLogout();
+}
+
+/* database setup */
+let patients = [];
+let allAppointmentsForPatients = [];
+
+function normalizePatient(p) {
+  const name = p.name || [p.firstName, p.lastName].filter(Boolean).join(' ') || 'Patient';
+  const patientAppts = allAppointmentsForPatients.filter(a => String(a.patientDbId || '') === String(p.dbId || ''));
+  const last = patientAppts.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))[0];
+  return {id:p.id||('USR-'+String(p.dbId||'').padStart(3,'0')),dbId:p.dbId,firstName:p.firstName||'',lastName:p.lastName||'',name,email:p.email||'',sex:p.sex||p.gender||'-',gender:p.gender||p.sex||'',birthdate:p.birthdate||p.dob||'',age:hcAge(p.dob||p.birthdate),barangay:p.barangay||'-',address:p.address||p.street||'',contact:p.mobile||p.phone||'-',phone:p.mobile||p.phone||'',philhealth:(p.philhealthNum||p.philhealthNo)?'Active':'-',philhealthNum:p.philhealthNum||p.philhealthNo||'',senior:Boolean(p.isSenior),pwd:Boolean(p.isPwd),pwdType:p.pwdType||'',fourPs:Boolean(p.is4ps),preferredRhu:p.preferredRhu||p.rhu||p.center||(patientAppts[0]?(patientAppts[0].rhu||patientAppts[0].center):'-'),bloodType:p.bloodType||'',conditions:p.conditions||'',medications:p.medications||'',status:p.accountStatus||'Active',appointments:patientAppts.length,lastVisit:last?hcFormatDate(last.date):'-',profilePhoto:p.profilePhoto||p.profile_picture||''};
+}
+
+async function loadPatients() {
+  const tbody = document.getElementById('patTableBody');
+  tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><p>Loading patients from database...</p></div></td></tr>`;
+  try {
+    const res = await hcApi('admin_data');
+    allAppointmentsForPatients = res.appointments || [];
+    patients = (res.patients || []).map(normalizePatient);
+    if (!isSuperAdmin) {
+      patients = patients.filter(p => p.preferredRhu === userBranch);
+      document.getElementById('pageDesc').innerText = 'Patients registered under ' + userBranch + ' only';
+      document.getElementById('staffNotice').style.display = 'flex';
+      document.getElementById('staffNoticeText').innerHTML = `You are viewing patients for <strong>${userBranch}</strong> only.`;
+      document.getElementById('filterStatus').value='Active';document.getElementById('filterStatus').disabled=true;
+      document.getElementById('formPreferredRhu').value=userBranch;document.getElementById('formPreferredRhu').disabled=true;
+    }
+    renderStats(); applyFilters();
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i class="fas fa-triangle-exclamation"></i></div><p style="font-weight:600;color:#dc2626;margin:0 0 4px;">Database/API error</p><p style="font-size:13px;margin:0;">${esc(err.message)}</p></div></td></tr>`;
+  }
+}
+
+function renderStats() {
+  document.getElementById("sTotal").innerText      = patients.length;
+  document.getElementById("sSenior").innerText     = patients.filter(p=>p.senior).length;
+  document.getElementById("sPwd").innerText        = patients.filter(p=>p.pwd).length;
+  document.getElementById("s4ps").innerText        = patients.filter(p=>p.fourPs).length;
+  document.getElementById("sPhilhealth").innerText = patients.filter(p=>p.philhealth==="Active").length;
+  document.getElementById("totalPatients").innerText = patients.length;
+}
+
+let filtered = [...patients];
+let currentPage = 1;
+const perPage   = 10;
+
+function applyFilters() {
+  const search = document.getElementById("searchInput").value.toLowerCase();
+  const sex    = document.getElementById("filterSex").value;
+  const bgy    = document.getElementById("filterBarangay").value;
+  const cls    = document.getElementById("filterClassification").value;
+  const status = document.getElementById("filterStatus").value;
+
+  filtered = patients.filter(p => {
+    const ms = !search || p.name.toLowerCase().includes(search)
+                       || p.barangay.toLowerCase().includes(search)
+                       || p.id.toLowerCase().includes(search);
+    const mx = !sex || p.sex === sex;
+    const mb = !bgy || p.barangay === bgy;
+    const mst = !status || p.status === status;
+    const mc = !cls
+      || (cls==="senior"     && p.senior)
+      || (cls==="pwd"        && p.pwd)
+      || (cls==="4ps"        && p.fourPs)
+      || (cls==="philhealth" && p.philhealth==="Active");
+    return ms && mx && mb && mc && mst;
+  });
+
+  currentPage = 1;
+  renderTable();
+}
+
+function renderTable() {
+  const start = (currentPage - 1) * perPage;
+  const paged = filtered.slice(start, start + perPage);
+  const total = filtered.length;
+  const pages = Math.ceil(total / perPage);
+
+  document.getElementById("tableMeta").innerText = total + " patient" + (total!==1?"s":"");
+  document.getElementById("pageInfo").innerText  =
+    `Showing ${Math.min(start+1,total)}-${Math.min(start+perPage,total)} of ${total}`;
+
+  const tbody = document.getElementById("patTableBody");
+
+  if (paged.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9">
+      <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-users"></i></div>
+        <p style="font-weight:600;color:#374151;margin:0 0 4px;">No patients found</p>
+        <p style="font-size:13px;margin:0;">Try adjusting your search or filters</p>
+      </div>
+    </td></tr>`;
+  } else {
+    tbody.innerHTML = paged.map(p => {
+      const initials  = p.name.split(" ").map(n=>n[0]).slice(0,2).join("").toUpperCase();
+      const philBadge = p.philhealth === "Active"
+        ? `<span class="badge b-philhealth"><i class="fas fa-circle-check"></i> Active</span>`
+        : p.philhealth === "Inactive"
+          ? `<span class="badge b-inactive">Inactive</span>`
+          : `<span class="badge b-none">-</span>`;
+      const tags = [];
+      if (p.senior) tags.push(`<span class="badge b-senior"><i class="fas fa-star"></i> Senior</span>`);
+      if (p.pwd)    tags.push(`<span class="badge b-pwd"><i class="fas fa-wheelchair"></i> PWD</span>`);
+      if (p.fourPs) tags.push(`<span class="badge b-4ps"><i class="fas fa-hand-holding-heart"></i> 4Ps</span>`);
+      if (tags.length === 0) tags.push(`<span style="color:#9ca3af;font-size:13px;">-</span>`);
+
+      return `<tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div class="pat-avatar">${p.profilePhoto?`<img class="patient-photo-img" src="${esc(p.profilePhoto)}" alt="${esc(p.name)} profile photo">`:esc(initials)}</div>
+            <div>
+              <strong>${esc(p.name)}</strong><br>
+              <small style="color:#9ca3af;font-size:11.5px;">${esc(p.id)}</small>
+            </div>
+          </div>
+        </td>
+        <td>${esc(p.sex)}<br><small style="color:#9ca3af;">${esc(p.age)} yrs old</small></td>
+        <td>${esc(p.barangay)}</td>
+        <td style="font-size:13px;">${esc(p.contact)}</td>
+        <td>${philBadge}</td>
+        <td>${tags.join(" ")}</td>
+        <td style="font-size:13px;color:#6b7280;">${esc(p.preferredRhu)}</td>
+        <td><span class="patient-status ${esc(p.status)}">${esc(p.status)}</span></td>
+        <td>
+          <div class="patient-actions"><button class="btn-sm bs-blue" onclick="viewPatient('${esc(p.id)}')"><i class="fas fa-eye"></i> View</button>${p.status==='Active'?`<button class="btn-sm bs-gray" onclick="openPatientForm('${esc(p.id)}')"><i class="fas fa-pen"></i> Edit</button>`:''}${isSuperAdmin?(p.status==='Archived'?`<button class="btn-sm bs-green" onclick="restorePatient(${Number(p.dbId)})"><i class="fas fa-rotate-left"></i> Restore</button>`:`<button class="btn-sm bs-red" onclick="archivePatient(${Number(p.dbId)})"><i class="fas fa-box-archive"></i> Archive</button>`):''}</div>
+        </td>
+      </tr>`;
+    }).join("");
+  }
+
+  const pb = document.getElementById("pageBtns");
+  pb.innerHTML = "";
+  for (let i = 1; i <= pages; i++) {
+    const btn = document.createElement("button");
+    btn.className   = "page-btn" + (i===currentPage?" active":"");
+    btn.textContent = i;
+    btn.onclick     = () => { currentPage=i; renderTable(); };
+    pb.appendChild(btn);
+  }
+}
+
+function viewPatient(id) {
+  const p = patients.find(x => x.id === id);
+  if (!p) return;
+  hcApi('admin_log_patient_access',{patient_id:Number(p.dbId)}).catch(()=>{});
+  const initials   = p.name.split(" ").map(n=>n[0]).slice(0,2).join("").toUpperCase();
+  const isPriority = p.senior || p.pwd;
+  const tags = [];
+  if (p.senior) tags.push(`<span class="badge b-senior"><i class="fas fa-star"></i> Senior Citizen</span>`);
+  if (p.pwd)    tags.push(`<span class="badge b-pwd"><i class="fas fa-wheelchair"></i> PWD${p.pwdType?" - "+esc(p.pwdType):""}</span>`);
+  if (p.fourPs) tags.push(`<span class="badge b-4ps"><i class="fas fa-hand-holding-heart"></i> 4Ps Member</span>`);
+  if (p.philhealth==="Active") tags.push(`<span class="badge b-philhealth"><i class="fas fa-id-card"></i> PhilHealth Active</span>`);
+
+  document.getElementById("patModalBody").innerHTML = `
+    <div class="pat-modal-header-card">
+      <div class="pat-modal-avatar">${p.profilePhoto?`<img class="patient-photo-img" src="${esc(p.profilePhoto)}" alt="${esc(p.name)} profile photo">`:esc(initials)}</div>
+      <div>
+        <p class="pat-modal-name">${esc(p.name)}</p>
+        <p class="pat-modal-id">${esc(p.id)} - ${esc(p.preferredRhu)}</p>
+      </div>
+      ${isPriority?`<span class="badge b-senior" style="margin-left:auto;font-size:12px;"><i class="fas fa-star"></i> Priority Patient</span>`:""}
+    </div>
+    <div class="section-title">Personal Information</div>
+    <div class="detail-grid">
+      <div class="detail-cell"><div class="detail-label">Sex</div><div class="detail-value">${esc(p.sex)}</div></div>
+      <div class="detail-cell"><div class="detail-label">Age</div><div class="detail-value">${esc(p.age)} years old</div></div>
+      <div class="detail-cell"><div class="detail-label">Barangay</div><div class="detail-value">${esc(p.barangay)}</div></div>
+      <div class="detail-cell"><div class="detail-label">Contact</div><div class="detail-value">${esc(p.contact)}</div></div>
+    </div>
+    <div class="section-title">Health Information</div>
+    <div class="detail-grid">
+      <div class="detail-cell"><div class="detail-label">Blood Type</div><div class="detail-value">${esc(p.bloodType||"-")}</div></div>
+      <div class="detail-cell"><div class="detail-label">PhilHealth</div><div class="detail-value">${esc(p.philhealth)} ${p.philhealthNum?"("+esc(p.philhealthNum)+")":""}</div></div>
+      <div class="detail-cell"><div class="detail-label">Conditions</div><div class="detail-value">${esc(p.conditions||"None")}</div></div>
+      <div class="detail-cell"><div class="detail-label">Medications</div><div class="detail-value">${esc(p.medications||"None")}</div></div>
+    </div>
+    <div class="section-title">Classifications & Benefits</div>
+    <div class="tags-row">
+      ${tags.length > 0 ? tags.join("") : '<span style="color:#9ca3af;font-size:13.5px;">No special classifications</span>'}
+    </div>
+    <div class="section-title">Visit Summary</div>
+    <div class="detail-grid" style="margin-bottom:0;">
+      <div class="detail-cell"><div class="detail-label">Total Appointments</div><div class="detail-value">${p.appointments}</div></div>
+      <div class="detail-cell"><div class="detail-label">Last Visit</div><div class="detail-value">${p.lastVisit||"-"}</div></div>
+      <div class="detail-cell"><div class="detail-label">Preferred RHU</div><div class="detail-value">${esc(p.preferredRhu)}</div></div>
+      <div class="detail-cell"><div class="detail-label">Account Status</div><div class="detail-value"><span class="patient-status ${esc(p.status)}">${esc(p.status)}</span></div></div>
+    </div>`;
+
+  document.getElementById("viewApptBtn").onclick = function() {
+    window.location.href = "admin-appointments.html?patient=" + encodeURIComponent(p.name);
+  };
+  const editButton=document.getElementById('editPatientBtn');editButton.style.display=p.status==='Active'?'inline-flex':'none';editButton.onclick=()=>{bootstrap.Modal.getInstance(document.getElementById('patModal'))?.hide();openPatientForm(p.id)};
+
+  new bootstrap.Modal(document.getElementById("patModal")).show();
+}
+
+function openPatientForm(id=null){
+  const p=id?patients.find(item=>item.id===id):null;
+  document.getElementById('formPatientId').value=p?.dbId||'';
+  document.getElementById('patientFormTitle').textContent=p?'Edit Patient Record':'Add Patient';
+  document.getElementById('formFirstName').value=p?.firstName||'';document.getElementById('formLastName').value=p?.lastName||'';document.getElementById('formEmail').value=p?.email||'';document.getElementById('formPhone').value=p?.phone||'';document.getElementById('formBirthdate').value=p?.birthdate||'';document.getElementById('formGender').value=p?.gender||'';document.getElementById('formBarangay').value=p?.barangay==='-'?'':(p?.barangay||'');document.getElementById('formAddress').value=p?.address||'';document.getElementById('formPhilhealth').value=p?.philhealthNum||'';document.getElementById('formBloodType').value=p?.bloodType||'';document.getElementById('formConditions').value=p?.conditions||'';document.getElementById('formMedications').value=p?.medications||'';document.getElementById('formSenior').checked=Boolean(p?.senior);document.getElementById('formPwd').checked=Boolean(p?.pwd);document.getElementById('form4ps').checked=Boolean(p?.fourPs);document.getElementById('formPreferredRhu').value=isSuperAdmin?(p?.preferredRhu||'RHU I - Poblacion'):userBranch;document.getElementById('formPreferredRhu').disabled=!isSuperAdmin;document.getElementById('formPassword').value='';document.getElementById('passwordLabel').textContent=p?'New Temporary Password (optional)':'Temporary Password *';document.getElementById('passwordNote').textContent=p?'Leave blank to keep the patient’s existing password.':'At least 8 characters. The patient can change it later.';
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('patientFormModal')).show();
+}
+
+async function savePatientRecord(){
+  const button=document.getElementById('savePatientBtn');button.disabled=true;
+  const payload={id:Number(document.getElementById('formPatientId').value||0),firstName:document.getElementById('formFirstName').value.trim(),lastName:document.getElementById('formLastName').value.trim(),email:document.getElementById('formEmail').value.trim(),phone:document.getElementById('formPhone').value.trim(),birthdate:document.getElementById('formBirthdate').value,gender:document.getElementById('formGender').value,barangay:document.getElementById('formBarangay').value.trim(),address:document.getElementById('formAddress').value.trim(),philhealthNo:document.getElementById('formPhilhealth').value.trim(),bloodType:document.getElementById('formBloodType').value,conditions:document.getElementById('formConditions').value.trim(),medications:document.getElementById('formMedications').value.trim(),isSenior:document.getElementById('formSenior').checked,isPwd:document.getElementById('formPwd').checked,is4ps:document.getElementById('form4ps').checked,preferredRhu:document.getElementById('formPreferredRhu').value,password:document.getElementById('formPassword').value};
+  try{const result=await hcApi('admin_save_patient',payload);bootstrap.Modal.getInstance(document.getElementById('patientFormModal'))?.hide();await loadPatients();alert(result.message||'Patient record saved.')}catch(error){alert(error.message)}finally{button.disabled=false}
+}
+
+async function archivePatient(id){if(!await hcConfirm('Archive this patient account? The patient will not be able to sign in, but all history will be preserved.',{title:'Archive patient',confirmText:'Archive',danger:true}))return;try{const result=await hcApi('admin_archive_patient',{id});await loadPatients();alert(result.message)}catch(error){alert(error.message)}}
+async function restorePatient(id){if(!await hcConfirm('Restore this patient account?',{title:'Restore patient',confirmText:'Restore'}))return;try{const result=await hcApi('admin_restore_patient',{id});await loadPatients();alert(result.message)}catch(error){alert(error.message)}}
+
+function exportCSV() {
+  const headers = ["Patient ID","Name","Sex","Age","Barangay","Contact","PhilHealth","Senior","PWD","4Ps","Preferred RHU","Status","Blood Type","Conditions","Last Visit"];
+  const rows = filtered.map(p => [
+    p.id, p.name, p.sex, p.age, p.barangay, p.contact,
+    p.philhealth, p.senior?"Yes":"No", p.pwd?"Yes":"No",
+    p.fourPs?"Yes":"No", p.preferredRhu, p.status, p.bloodType||"-",
+    p.conditions||"None", p.lastVisit||"-"
+  ]);
+  const csv  = [headers,...rows].map(r=>r.map(v=>`"${v}"`).join(",")).join("\n");
+  const blob = new Blob([csv],{type:"text/csv"});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = "patients_" + new Date().toISOString().split("T")[0] + ".csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+initializePatientAccess();
+
+</script>
+<script src="audit-trail.js"></script>
+<script>
+auditLog("Viewed Page", "Opened Patients page", "Patients");
+</script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="../backend/backend.js"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="staff-exact-patients-shell.js?v=20260722-final"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appointments | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+
+html, body { height: 100%; overflow: hidden; }
+
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: white; border-bottom: 3px solid #1e40af;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.nav-container {
+  width: 100%; padding: 14px 32px;
+  display: flex; align-items: center; position: relative;
+}
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small  { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info { text-align: right; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; }
+.admin-avatar {
+  width: 36px; height: 36px; background: #1e40af; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.btn-logout {
+  background: white; color: #dc2626; border: 1.5px solid #fecaca;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.btn-logout:hover { background: #fef2f2; }
+
+.hamburger-btn {
+  display: none; background: none; border: none;
+  font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px;
+}
+.mobile-sidebar {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  background: white; border-top: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px;
+}
+.mobile-sidebar.show { display: flex; }
+.mob-section-label {
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px;
+}
+.mob-sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px; text-decoration: none;
+  font-size: 13.5px; font-weight: 500; color: #374151; transition: 0.15s;
+  border: none; background: none; font-family: 'Inter', sans-serif;
+  cursor: pointer; width: 100%; text-align: left;
+}
+.mob-sidebar-item:hover  { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon {
+  width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #6b7280; flex-shrink: 0;
+}
+.mob-sidebar-item.active .mob-s-icon,
+.mob-sidebar-item:hover  .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+
+.layout { display: flex; height: calc(100vh - 67px); }
+
+.sidebar {
+  width: 240px; background: white; border-right: 1px solid #e5e7eb;
+  display: flex; flex-direction: column;
+  position: sticky; top: 67px;
+  height: calc(100vh - 67px); overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-section-label {
+  padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700;
+  color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 20px; font-size: 14px; font-weight: 500;
+  color: #374151; cursor: pointer; border: none; background: none;
+  width: 100%; text-align: left; font-family: 'Inter', sans-serif;
+  transition: 0.15s; text-decoration: none; border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon {
+  width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #6b7280; flex-shrink: 0;
+}
+.sidebar-item.active .s-icon,
+.sidebar-item:hover  .s-icon { background: #dbeafe; color: #1e40af; }
+
+.main-content { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 3px; color: #0f172a; }
+.page-header p  { color: #6b7280; margin: 0; font-size: 14px; }
+
+.staff-notice {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: #a16207; margin-bottom: 20px;
+}
+
+.stats-row {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 14px; margin-bottom: 24px;
+}
+.stat-box {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03); padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px; transition: 0.2s;
+}
+.stat-box:hover { border-color: #bfdbfe; box-shadow: 0 4px 14px rgba(30,64,175,0.08); }
+.stat-icon {
+  width: 44px; height: 44px; border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.si-blue  { background: #dbeafe; color: #1e40af; }
+.si-green { background: #dcfce7; color: #15803d; }
+.si-amber { background: #fef9c3; color: #a16207; }
+.si-red   { background: #fee2e2; color: #dc2626; }
+.stat-label { font-size: 11.5px; color: #9ca3af; margin: 0 0 3px; font-weight: 500; }
+.stat-value { font-size: 24px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1; }
+
+.filter-bar {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  padding: 16px 20px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filter-bar input,
+.filter-bar select {
+  padding: 9px 13px; border: 1.5px solid #e5e7eb; border-radius: 9px;
+  font-size: 13.5px; font-family: 'Inter', sans-serif;
+  color: #111827; background: #fafafa; outline: none; transition: 0.18s;
+}
+.filter-bar input  { flex: 1; min-width: 160px; }
+.filter-bar select { min-width: 140px; }
+.filter-bar input:focus,
+.filter-bar select:focus { border-color: #1e40af; background: white; box-shadow: 0 0 0 3px rgba(30,64,175,0.08); }
+.filter-bar select:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+.btn-export {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 9px 16px; border-radius: 9px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; margin-left: auto; white-space: nowrap;
+}
+.btn-export:hover { background: #f3f4f6; }
+
+.card {
+  background: white; border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden;
+}
+.card-head {
+  padding: 16px 22px 13px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-head-left { display: flex; align-items: center; gap: 9px; }
+.card-head-left h6 { font-weight: 600; font-size: 15px; color: #111827; margin: 0; }
+.hicon {
+  width: 32px; height: 32px; border-radius: 8px; background: #dbeafe;
+  display: flex; align-items: center; justify-content: center;
+  color: #1e40af; font-size: 13px; flex-shrink: 0;
+}
+
+.tbl-wrap { overflow-x: auto; }
+.appt-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 860px; }
+.appt-table th {
+  text-align: left; padding: 11px 16px;
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  border-bottom: 1px solid #f1f5f9; background: #fafafa;
+}
+.appt-table td {
+  padding: 13px 16px; border-bottom: 1px solid #f9fafb;
+  color: #374151; vertical-align: middle;
+}
+.appt-table tr:last-child td { border-bottom: none; }
+.appt-table tr:hover td { background: #f9fafb; }
+.appt-table tr.row-priority td { background: #fffbeb; }
+.appt-table tr.row-priority:hover td { background: #fef3c7; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+}
+.b-confirmed { background: #dcfce7; color: #15803d; }
+.b-pending   { background: #fef9c3; color: #a16207; }
+.b-cancelled { background: #fee2e2; color: #dc2626; }
+.b-done      { background: #dbeafe; color: #1e40af; }
+.b-priority  { background: #fef9c3; color: #a16207; }
+
+.btn-sm {
+  padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: 0.15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.bs-blue  { background: #dbeafe; color: #1e40af; }
+.bs-blue:hover  { background: #bfdbfe; }
+.bs-green { background: #dcfce7; color: #15803d; }
+.bs-green:hover { background: #bbf7d0; }
+.bs-red   { background: #fee2e2; color: #dc2626; }
+.bs-red:hover   { background: #fecaca; }
+
+.pagination-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 22px; border-top: 1px solid #f1f5f9;
+  font-size: 13px; color: #6b7280; flex-wrap: wrap; gap: 10px;
+}
+.pagination-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.page-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid #e5e7eb;
+  background: white; color: #374151; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; transition: 0.15s;
+}
+.page-btn:hover { background: #f3f4f6; }
+.page-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
+
+.simple-modal .modal-content {
+  border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12); font-family: 'Inter', sans-serif;
+}
+.simple-modal .modal-header { padding: 18px 24px 14px; border-bottom: 1px solid #f1f5f9; }
+.simple-modal .modal-title { font-size: 16px; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 9px; }
+.mti { width: 24px; height: 24px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.mti-blue { background: none; color: #1e40af; }
+.mti-red  { background: none; color: #dc2626; }
+.simple-modal .modal-body   { padding: 20px 24px; }
+.simple-modal .modal-footer { padding: 14px 24px 20px; border-top: 1px solid #f1f5f9; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+
+.btn-dark-blue {
+  background: #1e40af; color: white; border: none;
+  padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-dark-blue:hover { background: #1d4ed8; }
+.btn-red {
+  background: #dc2626; color: white; border: none;
+  padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-red:hover { background: #b91c1c; }
+.btn-outline-cancel {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 10px 18px; border-radius: 8px; font-weight: 500; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+}
+.btn-outline-cancel:hover { background: #f3f4f6; }
+
+.detail-box { background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden; margin-bottom: 16px; }
+.detail-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 13.5px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-icon {
+  width: 30px; height: 30px; border-radius: 8px; background: #dbeafe;
+  display: flex; align-items: center; justify-content: center;
+  color: #1e40af; font-size: 12px; flex-shrink: 0;
+}
+.detail-label { font-size: 12px; color: #9ca3af; margin-bottom: 1px; }
+.detail-value { font-weight: 600; color: #111827; font-size: 13.5px; }
+
+.empty-state { text-align: center; padding: 60px 24px; color: #9ca3af; }
+.empty-icon {
+  width: 64px; height: 64px; background: #f3f4f6; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; font-size: 26px; color: #d1d5db;
+}
+
+@media (max-width: 900px) {
+  .sidebar       { display: none; }
+  .hamburger-btn { display: block; }
+  .main-content  { padding: 24px; }
+  html, body     { overflow: auto; }
+  .layout        { height: auto; }
+}
+
+@media (max-width: 768px) {
+  .nav-container  { padding: 12px 20px; }
+  .admin-info     { display: none; }
+  .main-content   { padding: 16px; }
+  .stats-row      { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .filter-bar     { flex-direction: column; align-items: stretch; gap: 10px; }
+  .filter-bar input,
+  .filter-bar select { min-width: unset; width: 100%; }
+  .btn-export     { margin-left: 0; justify-content: center; width: 100%; }
+  .page-header h2 { font-size: 22px; }
+  .simple-modal .modal-footer { flex-direction: column; align-items: stretch; }
+  .btn-dark-blue, .btn-red, .btn-outline-cancel { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 480px) {
+  .stats-row      { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-box       { padding: 14px 12px; gap: 10px; }
+  .stat-value     { font-size: 20px; }
+  .stat-icon      { width: 36px; height: 36px; font-size: 15px; }
+  .logo-area strong { font-size: 13px; }
+  .logo-area small  { font-size: 11px; }
+  .btn-logout span  { display: none; }
+}
+
+html, body,
+button, input, select, textarea, table {
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.main-content {
+  padding: 32px;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h2 {
+  font-size: 26px;
+  line-height: 1.25;
+}
+
+.page-header p {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.stats-row {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.stat-box {
+  min-height: 88px;
+  padding: 16px 18px;
+  gap: 12px;
+  border-radius: 13px;
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  font-size: 17px;
+}
+
+.stat-label {
+  font-size: 11.5px;
+}
+
+.stat-value {
+  font-size: 23px;
+  line-height: 1.15;
+}
+
+.stat-sub {
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.filter-bar {
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  gap: 10px;
+  border-radius: 13px;
+}
+
+.filter-bar input,
+.filter-bar select {
+  min-height: 39px;
+  padding: 9px 12px;
+  font-size: 13.5px;
+  border-radius: 8px;
+}
+
+.filter-bar input {
+  min-width: 190px;
+}
+
+.filter-bar select {
+  min-width: 140px;
+}
+
+.btn-export {
+  min-height: 39px;
+  padding: 9px 16px;
+  font-size: 13.5px;
+  border-radius: 8px;
+}
+
+.card {
+  border-radius: 14px;
+}
+
+.card-head {
+  padding: 15px 22px 12px;
+}
+
+.card-head-left h6 {
+  font-size: 15px;
+}
+
+.hicon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.appt-table {
+  min-width: 900px;
+  font-size: 13.5px;
+}
+
+.appt-table th {
+  padding: 10px 16px;
+  font-size: 10.5px;
+}
+
+.appt-table td {
+  padding: 12px 16px;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 9px;
+}
+
+.btn-sm {
+  min-height: 30px;
+  padding: 5px 11px;
+  font-size: 12px;
+  border-radius: 7px;
+}
+
+.pagination-wrap {
+  padding: 13px 22px;
+  gap: 8px;
+}
+
+.page-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+.simple-modal .modal-content {
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+@media (max-width: 1200px) {
+  .stats-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .main-content {
+    padding: 20px 16px;
+  }
+
+  .page-header h2 {
+    font-size: 23px;
+  }
+
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar {
+    align-items: stretch;
+  }
+
+  .filter-bar input,
+  .filter-bar select,
+  .btn-export {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+}
+
+
+/* Stable appointment action layout */
+.appt-action-cell{min-width:190px;white-space:nowrap}
+.appt-actions{display:inline-flex;align-items:center;gap:5px;flex-wrap:nowrap;white-space:nowrap}
+.appt-actions .btn-sm{margin-left:0!important;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:31px}
+@media(max-width:900px){.appt-action-cell{min-width:180px}.appt-actions{flex-wrap:nowrap}}
+
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+<link rel="stylesheet" href="staff-exact-patients-shell.css?v=20260722-final">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+<script>try{if(sessionStorage.getItem('phc-admin-shell-role')==='staff')document.body.classList.add('rhu-staff-session')}catch(e){}</script>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png">
+      <div>
+        <strong>Pulilan Health Center</strong>
+        <small>PHAQS · Admin Panel</small>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout>
+        <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+      </button>
+      <button class="hamburger-btn" onclick="toggleAdminMenu()" id="adminHamburger">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+
+<div class="mobile-sidebar" id="mobileSidebar">
+  <div class="mob-section-label">Main</div>
+  <a class="mob-sidebar-item" href="admin-dashboard.html">
+    <div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard
+  </a>
+  <a class="mob-sidebar-item active" href="admin-appointments.html">
+    <div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+  </a>
+  <a class="mob-sidebar-item" href="admin-queue.html">
+    <div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+  </a>
+  <a class="mob-sidebar-item" href="admin-patients.html">
+    <div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients
+  </a>
+  <a class="mob-sidebar-item" href="admin-reports.html">
+    <div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+  </a>
+  <div class="mob-divider"></div>
+  <div class="mob-section-label">System</div>
+  <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+  <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout>
+    <div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+  </button>
+</div>
+</nav>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html">
+      <div class="s-icon"><i class="fas fa-house"></i></div> Dashboard
+    </a>
+    <a class="sidebar-item active" href="admin-appointments.html">
+      <div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+    </a>
+    <a class="sidebar-item" href="admin-queue.html">
+      <div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+    </a>
+    <a class="sidebar-item" href="admin-patients.html">
+      <div class="s-icon"><i class="fas fa-users"></i></div> Patients
+    </a>
+    <a class="sidebar-item" href="admin-reports.html">
+      <div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+    </a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" onclick="doLogout()" href="#" data-hc-logout>
+      <div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+    </a>
+  </div>
+
+  <div class="main-content">
+
+    <div class="page-header">
+      <div>
+        <h2>Appointments</h2>
+        <p id="pageDesc">Manage all patient appointments across RHU branches</p>
+      </div>
+      <div style="font-size:13px;color:#6b7280;display:flex;align-items:center;gap:6px;">
+        <i class="fas fa-calendar"></i>
+        <span id="todayLabel"></span>
+      </div>
+    </div>
+
+    <div class="staff-notice" id="staffNotice" style="display:none;">
+      <i class="fas fa-circle-info"></i>
+      <span id="staffNoticeText"></span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-icon si-blue"><i class="fas fa-calendar-check"></i></div>
+        <div>
+          <p class="stat-label">Total Today</p>
+          <p class="stat-value" id="sTotalToday">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div>
+        <div>
+          <p class="stat-label">Confirmed Today</p>
+          <p class="stat-value" id="sConfirmed">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-amber"><i class="fas fa-clock"></i></div>
+        <div>
+          <p class="stat-label">Pending Today</p>
+          <p class="stat-value" id="sPending">0</p>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon si-red"><i class="fas fa-circle-xmark"></i></div>
+        <div>
+          <p class="stat-label">Cancelled Today</p>
+          <p class="stat-value" id="sCancelled">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="Search patient name or queue number..." oninput="applyFilters()">
+      <select id="filterDateScope" onchange="applyFilters()" aria-label="Appointment date range">
+        <option value="all">All Dates</option>
+        <option value="today">Today</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="past">Past Records</option>
+      </select>
+      <select id="filterRhu" onchange="applyFilters()">
+        <option value="">All RHU Branches</option>
+        <option>RHU I - Poblacion</option>
+        <option>RHU II - Cutcot</option>
+        <option>RHU III - Tinejero</option>
+        <option>RHU IV - Tibag</option>
+      </select>
+      <select id="filterService" onchange="applyFilters()">
+        <option value="">All Services</option>
+        <option>General Consultation</option>
+        <option>Vaccination</option>
+        <option>Prenatal Care</option>
+        <option>Child Immunization</option>
+        <option>Family Planning</option>
+      </select>
+      <select id="filterStatus" onchange="applyFilters()">
+        <option value="">All Status</option>
+        <option>Confirmed</option>
+        <option>Pending</option>
+        <option>Cancelled</option>
+        <option>Done</option>
+      </select>
+      <button class="btn-export" onclick="exportCSV()">
+        <i class="fas fa-download"></i> Export CSV
+      </button>
+    </div>
+
+    <div class="card" id="apptTableCard">
+      <div class="card-head">
+        <div class="card-head-left">
+          <div class="hicon"><i class="fas fa-calendar-check"></i></div>
+          <h6>Appointment List</h6>
+        </div>
+        <span style="font-size:12px;color:#9ca3af;" id="tableMeta"></span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="appt-table">
+          <thead>
+            <tr>
+              <th>Queue #</th>
+              <th>Patient</th>
+              <th>RHU Branch</th>
+              <th>Service</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Lane</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="apptTableBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination-wrap">
+        <span id="pageInfo">Showing 0 of 0</span>
+        <div class="pagination-btns" id="pageBtns"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="modal fade simple-modal" id="viewModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <div class="mti mti-blue"><i class="fas fa-calendar-check"></i></div>
+      Appointment Details
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body">
+    <div class="detail-box" id="viewDetailBox"></div>
+    <div id="viewPriorityNote" style="display:none;background:#fffbeb;border:1px solid #fde68a;border-radius:10px;padding:12px 16px;font-size:13.5px;color:#92400e;">
+      <i class="fas fa-star" style="color:#f59e0b;margin-right:6px;"></i>
+      <span id="viewPriorityText"></span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Close</button>
+    <button class="btn-dark-blue" id="viewConfirmBtn">
+      <i class="fas fa-circle-check"></i> Confirm
+    </button>
+    <button class="btn-red" id="viewCancelBtn">
+      <i class="fas fa-times-circle"></i> Cancel Appointment
+    </button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade simple-modal" id="cancelModal" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">
+      <div class="mti mti-red"><i class="fas fa-times-circle"></i></div>
+      Cancel Appointment
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+  </div>
+  <div class="modal-body" id="cancelModalBody">
+    <p style="margin-bottom:14px;color:#374151;">Are you sure you want to cancel this appointment?</p>
+    <label style="font-size:13.5px;font-weight:600;color:#374151;margin-bottom:6px;display:block;">Cancellation Reason <span style="color:#dc2626;">*</span></label>
+    <select id="cancelReason" style="width:100%;padding:10px 12px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:'Inter',sans-serif;color:#111827;background:white;outline:none;">
+      <option value="">Select a reason...</option>
+      <option value="Patient Request">Patient Request</option>
+      <option value="No-Show">No-Show</option>
+      <option value="Reschedule">Reschedule (will rebook)</option>
+      <option value="Doctor Unavailable">Doctor Unavailable</option>
+      <option value="RHU Closed">RHU Closed / Holiday</option>
+      <option value="Duplicate Booking">Duplicate Booking</option>
+      <option value="Other">Other</option>
+    </select>
+    <div id="cancelReasonError" style="color:#dc2626;font-size:12.5px;margin-top:6px;display:none;">Please select a reason.</div>
+    <p style="font-size:12.5px;color:#9ca3af;margin-top:12px;margin-bottom:0;">This action cannot be undone.</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn-outline-cancel" data-bs-dismiss="modal">Keep It</button>
+    <button class="btn-red" id="cancelConfirmBtn">
+      <i class="fas fa-times-circle"></i> Yes, Cancel
+    </button>
+  </div>
+</div>
+</div>
+</div>
+
+<script src="../shared-data.js"></script>
+<script src="admin-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+function toggleAdminMenu() {
+  const menu = document.getElementById("mobileSidebar");
+  const icon = document.getElementById("adminHamburgerIcon");
+  menu.classList.toggle("show");
+  icon.className = menu.classList.contains("show") ? "fas fa-times" : "fas fa-bars";
+}
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("mobileSidebar");
+  const btn  = document.getElementById("adminHamburger");
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+    document.getElementById("adminHamburgerIcon").className = "fas fa-bars";
+  }
+});
+
+/* session check */
+const session = {loggedIn:true,name:'Administrator',role:'System Administrator',branch:'All Branches',email:''};
+
+function isFullAdmin(session) {
+  const role = String(session.role || "").toLowerCase();
+  const branch = String(session.branch || "").toLowerCase();
+  return role.includes("admin") || role.includes("system administrator") || role.includes("super") || branch.includes("all branch") || branch.includes("all rhu");
+}
+
+let isSuperAdmin = false;
+let userBranch = '';
+
+async function initializeAppointmentAccess() {
+  const response = await fetch('../backend/api.php?action=admin_me',{credentials:'include'});
+  const result = await response.json();
+  if(!result.ok){ location.href='admin-login.html'; return; }
+  Object.assign(session,result.admin);
+  isSuperAdmin = isFullAdmin(session);
+  userBranch = session.branch === "All RHU Branches" ? "All Branches" : (session.branch || "");
+  document.getElementById("adminName").innerText = session.name || "Administrator";
+  document.getElementById("adminRole").innerText = session.role || "Admin";
+  document.getElementById("adminAvatar").innerText = (session.name || "A").charAt(0).toUpperCase();
+  if (!isSuperAdmin) {
+    document.getElementById("staffNotice").style.display = "flex";
+    document.getElementById("staffNoticeText").innerHTML = `You are viewing appointments for <strong>${userBranch}</strong> only.`;
+    document.getElementById("pageDesc").innerText = "Appointments for " + userBranch + " only";
+  }
+  await loadAppointments();
+  const requestedAppointment=Number(new URLSearchParams(location.search).get('appointment')||0);
+  if(requestedAppointment&&appointments.some(item=>item.id===requestedAppointment)){
+    viewAppt(requestedAppointment);
+  }
+}
+
+function doLogout() {
+  confirmAdminLogout();
+}
+
+document.getElementById("todayLabel").innerText = new Date().toLocaleDateString("en-PH",{
+  weekday:"long", year:"numeric", month:"long", day:"numeric"
+});
+
+/* database setup */
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+}
+let appointments = [];
+
+function normalizeAppointment(a) {
+  return {
+    id: Number(a.id),
+    queue: a.queue || a.queue_number || '-',
+    patient: a.patient || a.patient_name || 'Patient',
+    rhu: a.rhu || a.center || '-',
+    service: a.service || '-',
+    dateRaw: a.date || a.appointment_date || '',
+    date: hcFormatDate(a.date || a.appointment_date || ''),
+    time: a.time || a.appointment_time || '-',
+    status: a.status || 'Pending',
+    arrivalStatus: a.arrivalStatus || a.arrival_status || 'not_arrived',
+    arrivedAt: a.arrivedAt || a.arrived_at || null,
+    priority: Boolean(a.isPriority || a.priority || ['priority','emergency'].includes(a.queueType || a.queue_type)),
+    emergency: Boolean(a.isEmergency || (a.queueType || a.queue_type) === 'emergency' || String(a.queue || '').startsWith('E-')),
+    reason: a.priorityReason || a.priority_reason || '',
+    concern: a.concern || a.notes || ''
+  };
+}
+
+async function loadAppointments() {
+  const tbody = document.getElementById("apptTableBody");
+  tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><p>Loading appointments from database...</p></div></td></tr>`;
+  try {
+    const res = await hcApi('admin_data');
+    appointments = (res.appointments || []).map(normalizeAppointment);
+    if (!isSuperAdmin) {
+      appointments = appointments.filter(a => a.rhu === userBranch);
+      const rhuFilter = document.getElementById("filterRhu");
+      rhuFilter.innerHTML = `<option value="${userBranch}">${userBranch}</option>`;
+      rhuFilter.disabled = true;
+    }
+    applyFilters();
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><div class="empty-icon"><i class="fas fa-triangle-exclamation"></i></div><p style="font-weight:600;color:#dc2626;margin:0 0 4px;">Database/API error</p><p style="font-size:13px;margin:0;">${err.message}</p></div></td></tr>`;
+  }
+}
+
+let filtered = [...appointments];
+let currentPage = 1;
+const perPage   = 10;
+
+function applyFilters() {
+  const search  = document.getElementById("searchInput").value.toLowerCase();
+  const dateScope = document.getElementById("filterDateScope").value;
+  const rhu     = document.getElementById("filterRhu").value;
+  const service = document.getElementById("filterService").value;
+  const status  = document.getElementById("filterStatus").value;
+
+  filtered = appointments.filter(a => {
+    const ms = !search  || a.patient.toLowerCase().includes(search) || a.queue.toLowerCase().includes(search) || String(a.concern || '').toLowerCase().includes(search);
+    const appointmentDate = String(a.dateRaw || '').slice(0,10);
+    const today = localDateKey(new Date());
+    const md = dateScope === 'today' ? appointmentDate === today
+      : dateScope === 'upcoming' ? appointmentDate > today
+      : dateScope === 'past' ? appointmentDate < today
+      : true;
+    const mr = !rhu     || a.rhu === rhu;
+    const mv = !service || a.service === service;
+    const mt = !status  || a.status === status;
+    return ms && md && mr && mv && mt;
+  });
+
+  currentPage = 1;
+  renderTable(); renderStats();
+}
+
+function renderStats() {
+  const todayAppointments = appointments.filter(isAppointmentToday);
+  document.getElementById("sTotalToday").innerText = todayAppointments.length;
+  document.getElementById("sConfirmed").innerText  = todayAppointments.filter(a=>String(a.status).toLowerCase()==="confirmed").length;
+  document.getElementById("sPending").innerText    = todayAppointments.filter(a=>String(a.status).toLowerCase()==="pending").length;
+  document.getElementById("sCancelled").innerText  = todayAppointments.filter(a=>String(a.status).toLowerCase()==="cancelled").length;
+}
+
+function localDateKey(date) {
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+}
+
+function isAppointmentToday(a) {
+  return String(a.dateRaw || '').slice(0,10) === localDateKey(new Date());
+}
+
+function canMarkArrived(a) {
+  return a.status === 'Confirmed' && isAppointmentToday(a) && a.arrivalStatus !== 'arrived';
+}
+
+function arrivalLabel(a) {
+  if (a.arrivalStatus === 'arrived') return `<span class="badge b-done"><i class="fas fa-person-circle-check"></i> Arrived</span>`;
+  if (a.status === 'Confirmed' && !isAppointmentToday(a)) return `<span style="color:#9ca3af;font-size:11px;display:block;margin-top:4px;">Upcoming — not in queue</span>`;
+  return '';
+}
+
+function renderTable() {
+  const start = (currentPage - 1) * perPage;
+  const paged = filtered.slice(start, start + perPage);
+  const total = filtered.length;
+  const pages = Math.ceil(total / perPage);
+
+  document.getElementById("tableMeta").innerText = total + " appointment" + (total!==1?"s":"");
+  document.getElementById("pageInfo").innerText  =
+    `Showing ${Math.min(start+1,total)}-${Math.min(start+perPage,total)} of ${total}`;
+
+  const tbody = document.getElementById("apptTableBody");
+  if (paged.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9">
+      <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-calendar-xmark"></i></div>
+        <p style="font-weight:600;color:#374151;margin:0 0 4px;">No appointments found</p>
+        <p style="font-size:13px;margin:0;">Try adjusting your search or filters</p>
+      </div>
+    </td></tr>`;
+  } else {
+    tbody.innerHTML = paged.map(a => {
+      const statusBadge = {
+        Confirmed: `<span class="badge b-confirmed"><i class="fas fa-circle-check"></i> Confirmed</span>`,
+        Pending:   `<span class="badge b-pending"><i class="fas fa-clock"></i> Pending</span>`,
+        Cancelled: `<span class="badge b-cancelled"><i class="fas fa-circle-xmark"></i> Cancelled</span>`,
+        Done:      `<span class="badge b-done"><i class="fas fa-check-double"></i> Done</span>`,
+      }[a.status] || a.status;
+
+      const laneBadge = a.priority
+        ? `<span class="badge b-priority"><i class="fas fa-star"></i> Priority</span>`
+        : `<span style="color:#9ca3af;font-size:13px;">Regular</span>`;
+
+      return `<tr class="${a.priority?"row-priority":""}">
+        <td><strong style="color:${a.priority?"#a16207":"#1e40af"};">${a.queue}</strong></td>
+        <td>
+          <strong>${a.patient}</strong>
+          ${a.priority?`<br><small style="color:#a16207;font-size:11px;"><i class="fas fa-star" style="font-size:9px;"></i> ${escapeHtml(a.reason)}</small>`:""}
+          ${a.concern?`<br><small style="display:block;max-width:260px;margin-top:4px;color:#1e40af;font-size:11px;line-height:1.35;white-space:normal;word-break:break-word;"><i class="fas fa-note-sticky" style="font-size:9px;"></i> <strong>Concern:</strong> ${escapeHtml(String(a.concern).length > 90 ? String(a.concern).slice(0,90) + '…' : a.concern)}</small>`:""}
+        </td>
+        <td style="color:#6b7280;font-size:13px;">${a.rhu}</td>
+        <td>${a.service}</td>
+        <td>${a.date}</td>
+        <td>${a.time}</td>
+        <td>${laneBadge}</td>
+        <td>${statusBadge}${arrivalLabel(a)}</td>
+        <td class="appt-action-cell">
+          <div class="appt-actions">
+          <button class="btn-sm bs-blue" onclick="viewAppt(${a.id})"><i class="fas fa-eye"></i> View</button>
+          
+          ${canMarkArrived(a)?`<button class="btn-sm bs-green" title="Mark patient arrived and add to today's queue" style="margin-left:4px;" onclick="markArrived(${a.id})"><i class="fas fa-person-circle-check"></i> Arrived</button>`:""}
+          ${a.status==="Confirmed"&&!isAppointmentToday(a)?`<button class="btn-sm" disabled title="Available only on the scheduled date" style="margin-left:4px;color:#9ca3af;background:#f3f4f6;border:1px solid #e5e7eb;"><i class="fas fa-clock"></i> Future</button>`:""}
+          ${a.status!=="Cancelled"&&a.status!=="Done"?`<button class="btn-sm bs-red" onclick="openCancelModal(${a.id})"><i class="fas fa-times"></i></button>`:""}
+          </div>
+        </td>
+      </tr>`;
+    }).join("");
+  }
+
+  const pb = document.getElementById("pageBtns");
+  pb.innerHTML = "";
+  for (let i = 1; i <= pages; i++) {
+    const btn = document.createElement("button");
+    btn.className   = "page-btn" + (i===currentPage?" active":"");
+    btn.textContent = i;
+    btn.onclick     = () => { currentPage=i; renderTable(); };
+    pb.appendChild(btn);
+  }
+}
+
+function viewAppt(id) {
+  const a = appointments.find(x => x.id === id);
+  if (!a) return;
+
+  document.getElementById("viewDetailBox").innerHTML = `
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-ticket"></i></div>
+      <div><div class="detail-label">Queue Number</div><div class="detail-value" style="color:${a.priority?"#a16207":"#1e40af"};">${a.queue}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-user"></i></div>
+      <div><div class="detail-label">Patient Name</div><div class="detail-value">${a.patient}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-hospital"></i></div>
+      <div><div class="detail-label">RHU Branch</div><div class="detail-value">${a.rhu}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-stethoscope"></i></div>
+      <div><div class="detail-label">Service</div><div class="detail-value">${a.service}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-calendar"></i></div>
+      <div><div class="detail-label">Date</div><div class="detail-value">${a.date}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-clock"></i></div>
+      <div><div class="detail-label">Time</div><div class="detail-value">${a.time}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-circle-dot"></i></div>
+      <div><div class="detail-label">Status</div><div class="detail-value">${a.status}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-person-circle-check"></i></div>
+      <div><div class="detail-label">Arrival / Queue Eligibility</div><div class="detail-value">${a.arrivalStatus === 'arrived' ? 'Arrived — eligible for queue' : (isAppointmentToday(a) ? 'Not yet marked arrived' : 'Upcoming appointment — not eligible for queue')}</div></div>
+    </div>
+    <div class="detail-row">
+      <div class="detail-icon"><i class="fas fa-note-sticky"></i></div>
+      <div><div class="detail-label">Patient Concern / Notes</div><div class="detail-value" style="white-space:pre-wrap;word-break:break-word;">${a.concern ? escapeHtml(a.concern) : '<span style="color:#94a3b8;font-weight:500;">No concern or note provided</span>'}</div></div>
+    </div>`;
+
+  const pNote = document.getElementById("viewPriorityNote");
+  if (a.priority) {
+    pNote.style.display = "block";
+    document.getElementById("viewPriorityText").innerText =
+      "Priority Lane - " + a.reason + ". This patient will be served ahead of the regular queue.";
+  } else {
+    pNote.style.display = "none";
+  }
+
+  const confirmBtn = document.getElementById("viewConfirmBtn");
+  const cancelBtn  = document.getElementById("viewCancelBtn");
+  confirmBtn.style.display = "none";
+  cancelBtn.style.display  = (a.status!=="Cancelled"&&a.status!=="Done") ? "flex" : "none";
+
+  confirmBtn.onclick = function() {
+    bootstrap.Modal.getInstance(document.getElementById("viewModal")).hide();
+    updateAppointmentStatus(a.id, "Confirmed");
+  };
+  cancelBtn.onclick = function() {
+    bootstrap.Modal.getInstance(document.getElementById("viewModal")).hide();
+    openCancelModal(id);
+  };
+
+  new bootstrap.Modal(document.getElementById("viewModal")).show();
+}
+
+async function updateAppointmentStatus(id, status) {
+  const a = appointments.find(x => x.id === id);
+  if (!a) return;
+  const oldStatus = a.status;
+  a.status = status;
+  renderTable(); renderStats();
+  try {
+    await hcApi('update_appointment_status', {id, status});
+    await loadAppointments();
+  } catch (err) {
+    a.status = oldStatus;
+    renderTable(); renderStats();
+    alert('Failed to update appointment: ' + err.message);
+  }
+}
+
+async function markArrived(id) {
+  const a = appointments.find(x => x.id === id);
+  if (!a) return;
+  if (!isAppointmentToday(a)) {
+    alert('This patient cannot be added to the queue before the scheduled date.');
+    return;
+  }
+  if (a.status !== 'Confirmed') {
+    alert('Only confirmed appointments can be marked Arrived.');
+    return;
+  }
+  try {
+    const result=await hcApi('mark_appointment_arrived', {id});
+    const liveQueue=result.appointment?.queue||result.appointment?.queue_number||'live queue';
+    await loadAppointments();
+    localStorage.setItem('phc_queue_updated', String(Date.now()));
+    alert(result.message||`Patient checked in. Live queue ${liveQueue} was created.`);
+  } catch (err) {
+    alert('Failed to mark patient Arrived: ' + err.message);
+  }
+}
+
+function confirmAppt(id) {
+  updateAppointmentStatus(id, 'Confirmed');
+}
+
+function openCancelModal(id) {
+  cancelTargetId = id;
+  const a = appointments.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById("cancelReason").value = "";
+  document.getElementById("cancelReasonError").style.display = "none";
+  const modal = new bootstrap.Modal(document.getElementById("cancelModal"));
+  modal.show();
+  document.getElementById("cancelConfirmBtn").onclick = function() {
+    const reason = document.getElementById("cancelReason").value;
+    if (!reason) {
+      document.getElementById("cancelReasonError").style.display = "block";
+      return;
+    }
+    document.getElementById("cancelReasonError").style.display = "none";
+    bootstrap.Modal.getInstance(document.getElementById("cancelModal")).hide();
+    updateAppointmentStatus(a.id, "Cancelled");
+  };
+}
+
+function exportCSV() {
+  const headers = ["Queue #","Patient","RHU Branch","Service","Date","Time","Lane","Patient Concern / Notes","Status"];
+  const rows = filtered.map(a => [
+    a.queue, a.patient, a.rhu, a.service, a.date, a.time,
+    a.priority?"Priority ("+a.reason+")":"Regular", a.concern || "", a.status
+  ]);
+  const csv  = [headers,...rows].map(r=>r.map(v=>`"${v}"`).join(",")).join("\n");
+  const blob = new Blob([csv],{type:"text/csv"});
+  const url  = URL.createObjectURL(blob);
+  const el   = document.createElement("a");
+  el.href = url; el.download = "appointments_"+new Date().toISOString().split("T")[0]+".csv";
+  el.click(); URL.revokeObjectURL(url);
+  auditLog("Exported Appointments", "Exported appointments CSV", "Appointments");
+}
+
+const filterName = new URLSearchParams(location.search).get("patient");
+if (filterName) {
+  document.getElementById("searchInput").value = filterName;
+  setTimeout(() => {
+    document.getElementById("apptTableCard").scrollIntoView({ behavior:"smooth", block:"start" });
+  }, 400);
+}
+initializeAppointmentAccess();
+
+</script>
+<script src="audit-trail.js"></script>
+<script>
+auditLog("Viewed Page", "Opened Appointments page", "Appointments");
+</script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="../backend/backend.js"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="staff-exact-patients-shell.js?v=20260722-final"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heatmap & Analytics | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#f6f8fb;margin:0;}
+html,body{height:100%;overflow:hidden;}
+.navbar{position:sticky;top:0;z-index:1000;background:white;border-bottom:3px solid #1e40af;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.nav-container{width:100%;padding:14px 32px;display:flex;align-items:center;position:relative;}
+.logo-area{display:flex;align-items:center;gap:12px;}
+.logo-area img{width:40px;height:40px;border-radius:50%;object-fit:cover;}
+.logo-area strong{font-size:15px;color:#111827;}
+.logo-area small{color:#6b7280;font-size:12px;display:block;}
+.nav-right{display:flex;align-items:center;gap:16px;margin-left:auto;}
+.admin-info .a-name{font-size:13.5px;font-weight:600;color:#111827;display:block;}
+.admin-info .a-role{font-size:12px;color:#6b7280;display:block;text-align:right;}
+.admin-avatar{width:36px;height:36px;background:#1e40af;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0;}
+.btn-logout{background:white;color:#dc2626;border:1.5px solid #fecaca;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:0.2s;display:flex;align-items:center;gap:6px;}
+.btn-logout:hover{background:#fef2f2;}
+.hamburger-btn{display:none;background:none;border:none;font-size:22px;color:#374151;cursor:pointer;padding:4px;margin-left:10px;}
+.mobile-sidebar{display:none;position:absolute;top:100%;left:0;right:0;background:white;border-top:1px solid #e5e7eb;box-shadow:0 8px 24px rgba(0,0,0,0.1);padding:10px 12px 16px;z-index:999;flex-direction:column;gap:4px;}
+.mobile-sidebar.show{display:flex;}
+.mob-section-label{font-size:10.5px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;padding:8px 10px 4px;}
+.mob-sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;text-decoration:none;font-size:13.5px;font-weight:500;color:#374151;transition:0.15s;border:none;background:none;font-family:'Inter',sans-serif;cursor:pointer;width:100%;text-align:left;}
+.mob-sidebar-item:hover{background:#f1f5f9;color:#1e40af;}
+.mob-sidebar-item.active{background:#eff6ff;color:#1e40af;font-weight:600;}
+.mob-s-icon{width:28px;height:28px;border-radius:7px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:12px;color:#6b7280;flex-shrink:0;}
+.mob-sidebar-item.active .mob-s-icon,.mob-sidebar-item:hover .mob-s-icon{background:#dbeafe;color:#1e40af;}
+.mob-divider{height:1px;background:#e5e7eb;margin:6px 0;}
+.layout{display:flex;height:calc(100vh - 67px);}
+.sidebar{width:240px;background:white;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0;z-index:100;}
+.sidebar-section-label{padding:16px 20px 6px;font-size:10.5px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;}
+.sidebar-item{display:flex;align-items:center;gap:11px;padding:11px 20px;font-size:14px;font-weight:500;color:#374151;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;transition:0.15s;text-decoration:none;border-left:3px solid transparent;}
+.sidebar-item:hover{background:#f9fafb;color:#1e40af;}
+.sidebar-item.active{background:#eff6ff;color:#1e40af;font-weight:600;border-left-color:#1e40af;}
+.s-icon{width:30px;height:30px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:13px;color:#6b7280;flex-shrink:0;}
+.sidebar-item.active .s-icon,.sidebar-item:hover .s-icon{background:#dbeafe;color:#1e40af;}
+.main-content{flex:1;padding:32px;overflow-y:auto;min-width:0;}
+.page-header{margin-bottom:24px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.page-header h2{font-weight:700;font-size:26px;margin:0 0 4px;color:#0f172a;}
+.page-header p{color:#6b7280;margin:0;font-size:14px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.stat-card{background:white;border-radius:13px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.03);padding:18px 20px;display:flex;align-items:center;gap:14px;}
+.stat-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.si-red{background:#fee2e2;color:#dc2626;}
+.si-amber{background:#fef3c7;color:#d97706;}
+.si-green{background:#dcfce7;color:#15803d;}
+.si-blue{background:#dbeafe;color:#1e40af;}
+.stat-label{font-size:12px;color:#6b7280;font-weight:500;}
+.stat-value{font-size:24px;font-weight:700;color:#0f172a;line-height:1.1;}
+.stat-sub{font-size:11px;color:#9ca3af;margin-top:1px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:24px;}
+.card{background:white;border-radius:13px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.03);padding:20px;}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;}
+.card-head h5{font-size:14px;font-weight:700;color:#111827;margin:0;display:flex;align-items:center;gap:7px;}
+.card select{border:1.5px solid #e5e7eb;border-radius:8px;padding:6px 10px;font-size:12px;font-family:'Inter',sans-serif;color:#374151;outline:none;background:#f9fafb;}
+
+.heatmap-grid{display:grid;grid-template-columns:80px repeat(12,1fr);gap:3px;margin-top:8px;}
+.hm-label{font-size:11px;font-weight:600;color:#6b7280;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;}
+.hm-month{font-size:10px;font-weight:700;color:#9ca3af;text-align:center;padding-bottom:4px;}
+.hm-cell{height:28px;border-radius:5px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;position:relative;}
+.hm-cell:hover{transform:scale(1.12);box-shadow:0 3px 10px rgba(0,0,0,0.15);z-index:10;}
+.hm-empty{background:#f3f4f6;}
+
+.alert-card{border-radius:13px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;border:1px solid;}
+.alert-red{background:#fef2f2;border-color:#fecaca;color:#991b1b;}
+.alert-amber{background:#fffbeb;border-color:#fde68a;color:#92400e;}
+.alert-blue{background:#eff6ff;border-color:#bfdbfe;color:#1e3a8a;}
+.alert-card i{margin-top:1px;flex-shrink:0;}
+.alert-card strong{display:block;font-size:14px;margin-bottom:2px;}
+.alert-card span{font-size:13px;line-height:1.5;}
+.insight-item{padding:13px 0;border-bottom:1px solid #f3f4f6;display:flex;align-items:flex-start;gap:12px;}
+.insight-item:last-child{border-bottom:none;}
+.insight-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.insight-text{font-size:13.5px;color:#374151;line-height:1.6;}
+.insight-text strong{color:#111827;}
+.trend-pill{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:20px;font-size:11.5px;font-weight:600;}
+.trend-up{background:#fee2e2;color:#dc2626;}
+.trend-down{background:#dcfce7;color:#15803d;}
+.trend-flat{background:#f3f4f6;color:#374151;}
+
+.hm-tooltip{position:fixed;background:#111827;color:white;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:500;z-index:100;pointer-events:none;display:none;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.3);}
+
+.hm-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11.5px;color:#6b7280;}
+.hm-legend-box{width:16px;height:16px;border-radius:3px;}
+@media(max-width:1100px){.grid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:900px){
+  .stats-row,.grid-2,.grid-3{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .hamburger-btn{display:block;}
+  .nav-right .admin-info,.nav-right .btn-logout{display:none;}
+  .main-content{padding:16px;}
+  .heatmap-grid{grid-template-columns:60px repeat(12,1fr);}
+}
+
+/* Final analytics chart presentation */
+.analytics-chart-card{min-height:330px;display:flex;flex-direction:column;overflow:hidden}
+.analytics-chart-card .card-head{margin-bottom:10px}
+.analytics-chart-body{position:relative;height:255px;min-height:255px;width:100%}
+.analytics-chart-body canvas{display:block!important;width:100%!important;height:100%!important;max-height:255px!important}
+.analytics-chart-empty{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:8px;text-align:center;color:#64748b;font-size:12px;background:#fff}
+.analytics-chart-empty i{font-size:22px;color:#94a3b8}
+.analytics-chart-card.is-empty .analytics-chart-empty{display:flex}
+.analytics-chart-card.is-empty canvas{visibility:hidden}
+@media(max-width:900px){.analytics-chart-card{min-height:300px}.analytics-chart-body{height:225px;min-height:225px}.analytics-chart-body canvas{max-height:225px!important}}
+
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<style>
+.case-modal{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.52)}
+.case-modal.show{display:flex}.case-modal-card{width:min(100%,760px);max-height:90vh;overflow-y:auto;border-radius:14px;background:#fff;box-shadow:0 24px 60px rgba(15,23,42,.28)}
+.case-modal-head{padding:16px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0}.case-modal-head h3{margin:0;font-size:17px}.case-modal-head button{border:0;background:transparent;font-size:22px}
+.case-modal-body{padding:18px}.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.detail-item{padding:11px;border:1px solid #e2e8f0;border-radius:8px}.detail-item span{display:block;color:#64748b;font-size:9px;text-transform:uppercase;font-weight:800}.detail-item strong,.detail-item p{margin:4px 0 0;font-size:12px}.detail-full{grid-column:1/-1}
+.action-btn{border-radius:6px;padding:5px 8px;font-size:9px;font-weight:700}.view-btn{border:1px solid #bfdbfe;background:#eff6ff;color:#1e40af}.edit-btn{border:1px solid #bbf7d0;background:#f0fdf4;color:#15803d}.delete-btn{border:1px solid #fecaca;background:#fff;color:#dc2626}
+@media(max-width:650px){.detail-grid{grid-template-columns:1fr}.detail-full{grid-column:auto}}
+</style>
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png" alt="Logo">
+      <div><strong>Pulilan Health Center</strong><small>PHAQS · Admin Panel</small></div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info" style="text-align:right;">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout><i class="fas fa-right-from-bracket"></i> Logout</button>
+      <button class="hamburger-btn" id="adminHamburger" onclick="toggleAdminMenu()">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+      <div class="mob-section-label">Main</div>
+      <a class="mob-sidebar-item" href="admin-dashboard.html"><div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+      <a class="mob-sidebar-item" href="admin-appointments.html"><div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+      <a class="mob-sidebar-item" href="admin-queue.html"><div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+      <a class="mob-sidebar-item" href="admin-patients.html"><div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients</a>
+      <a class="mob-sidebar-item" href="admin-reports.html"><div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">Analytics</div>
+      <a class="mob-sidebar-item active" href="admin-heatmap.html"><div class="mob-s-icon"><i class="fas fa-fire-flame-curved"></i></div> Heatmap & Analytics</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">System</div>
+      <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+      <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout><div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html"><div class="s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+    <a class="sidebar-item" href="admin-appointments.html"><div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+    <a class="sidebar-item" href="admin-queue.html"><div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+    <a class="sidebar-item" href="admin-patients.html"><div class="s-icon"><i class="fas fa-users"></i></div> Patients</a>
+    <a class="sidebar-item" href="admin-reports.html"><div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item active" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Heatmap & Analytics</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" href="#" onclick="doLogout()" data-hc-logout><div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</a>
+  </div>
+
+<div class="main-content">
+  <div class="page-header">
+    <div>
+      <h2><i class="fas fa-chart-area" style="color:#1e40af;font-size:22px;margin-right:8px;"></i>Heatmap & Analytics</h2>
+      <p>Privacy-safe analytics using verified barangay totals only. Patient names are never included in heatmap data.</p>
+    </div>
+    <a href="admin-disease-cases.html" class="btn-action" style="background:#1e40af;color:white;text-decoration:none;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:700;">
+      <i class="fas fa-plus"></i> Record Disease Case
+    </a>
+  </div>
+
+  <div class="card" style="margin-bottom:18px;">
+    <div class="filter-grid">
+      <label>Year<select id="yearFilter"></select></label>
+      <label>Month<select id="monthFilter"><option value="0">All Months</option></select></label>
+      <label>Disease<select id="diseaseFilter"><option value="all">All Diseases</option></select></label>
+      <label>Barangay<select id="barangayFilter"><option value="all">All Barangays</option></select></label>
+      <label>RHU Branch<select id="rhuFilter"><option value="all">All RHU Branches</option></select></label>
+      <label>Age Group<select id="ageFilter">
+        <option value="all">All Age Groups</option><option>0-5</option><option>6-12</option>
+        <option>13-17</option><option>18-35</option><option>36-59</option><option>60+</option><option>Unknown</option>
+      </select></label>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-icon si-blue"><i class="fas fa-notes-medical"></i></div><div><div class="stat-label">Verified Cases</div><div class="stat-value" id="totalCases">0</div><div class="stat-sub">matching selected filters</div></div></div>
+    <div class="stat-card"><div class="stat-icon si-red"><i class="fas fa-triangle-exclamation"></i></div><div><div class="stat-label">High Case Volume Alerts</div><div class="stat-value" id="alertCount">0</div><div class="stat-sub">≥5 cases and ≥50% increase</div></div></div>
+    <div class="stat-card"><div class="stat-icon si-green"><i class="fas fa-virus"></i></div><div><div class="stat-label">Top Disease</div><div class="stat-value small-stat" id="topDisease">—</div><div class="stat-sub" id="topDiseaseSub">No data</div></div></div>
+    <div class="stat-card"><div class="stat-icon si-amber"><i class="fas fa-location-dot"></i></div><div><div class="stat-label">Top Barangay</div><div class="stat-value small-stat" id="topBarangay">—</div><div class="stat-sub" id="topBarangaySub">No data</div></div></div>
+  </div>
+
+  <div id="alertsContainer"></div>
+
+  <section class="card early-warning-card" aria-labelledby="earlyWarningTitle">
+    <div class="early-warning-head">
+      <div><h5 id="earlyWarningTitle"><i class="fas fa-shield-virus"></i> Barangay Disease Early-Warning</h5><p id="earlyWarningRule">Verified cases from the latest 7 days are compared with the average of the previous four weeks. Counts are aggregated and never show patient names.</p></div>
+      <span id="earlyWarningUpdated">Updating…</span>
+    </div>
+    <div class="warning-summary" id="earlyWarningSummary"></div>
+    <div class="warning-explanation">
+      <div class="normal"><strong>Normal</strong><span>Within the expected recent count.</span></div>
+      <div class="watch"><strong>Watch</strong><span>Count increased above the recent baseline.</span></div>
+      <div class="high"><strong>High alert</strong><span>Count significantly exceeded the recent baseline.</span></div>
+    </div>
+    <div class="barangay-risk-grid" id="barangayRiskGrid"></div>
+  </section>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-head"><h5><i class="fas fa-table-cells-large" style="color:#1e40af;"></i> Barangay Monthly Case Heatmap</h5><span style="font-size:11px;color:#64748b;">Click a cell for details</span></div>
+    <div class="heatmap-scroll"><div id="diseaseHeatmap"></div></div>
+    <div class="legend-row">
+      <span><i style="background:#f1f5f9"></i>0</span><span><i style="background:#dbeafe"></i>Low</span>
+      <span><i style="background:#93c5fd"></i>Moderate</span><span><i style="background:#2563eb"></i>High</span>
+      <span><i style="background:#b91c1c"></i>Alert threshold met</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card analytics-chart-card" id="monthlyTrendChartCard"><div class="card-head"><h5><i class="fas fa-chart-line" style="color:#1e40af;"></i> Monthly Disease Trend</h5></div><div class="analytics-chart-body"><canvas id="monthlyTrendChart"></canvas><div class="analytics-chart-empty"><i class="fas fa-chart-line"></i><span>No monthly case data for the selected filters.</span></div></div></div>
+    <div class="card analytics-chart-card" id="diseaseChartCard"><div class="card-head"><h5><i class="fas fa-chart-bar" style="color:#15803d;"></i> Cases by Disease</h5></div><div class="analytics-chart-body"><canvas id="diseaseChart"></canvas><div class="analytics-chart-empty"><i class="fas fa-chart-bar"></i><span>No disease category data for the selected filters.</span></div></div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card analytics-chart-card" id="rhuChartCard"><div class="card-head"><h5><i class="fas fa-hospital" style="color:#1e40af;"></i> Cases by RHU</h5></div><div class="analytics-chart-body"><canvas id="rhuChart"></canvas><div class="analytics-chart-empty"><i class="fas fa-hospital"></i><span>No RHU case data for the selected filters.</span></div></div></div>
+    <div class="card analytics-chart-card" id="ageChartCard"><div class="card-head"><h5><i class="fas fa-users" style="color:#d97706;"></i> Age Group Distribution</h5></div><div class="analytics-chart-body"><canvas id="ageChart"></canvas><div class="analytics-chart-empty"><i class="fas fa-users"></i><span>No age-group data for the selected filters.</span></div></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <div class="card-head"><h5><i class="fas fa-list" style="color:#1e40af;"></i> Case Records</h5><button class="btn-action" onclick="exportDiseaseCSV()" style="border:1px solid #dbe4ef;background:white;padding:7px 11px;border-radius:7px;font-size:11px;"><i class="fas fa-file-csv"></i> Export CSV</button></div>
+    <div class="table-responsive">
+      <table class="table align-middle"><thead><tr><th>Date</th><th>Disease</th><th>Diagnosis</th><th>Barangay</th><th>RHU</th><th>Age Group</th><th>Status</th><th>Action</th></tr></thead><tbody id="caseTableBody"></tbody></table>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="hm-tooltip" id="hmTooltip"></div>
+
+<div class="case-modal" id="caseDetailModal" onclick="if(event.target===this)closeCaseModal()">
+  <div class="case-modal-card">
+    <div class="case-modal-head"><h3>Disease Case Details</h3><button type="button" onclick="closeCaseModal()">&times;</button></div>
+    <div class="case-modal-body" id="caseDetailBody"></div>
+  </div>
+</div>
+
+<style>
+.filter-grid{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px}
+.filter-grid label{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase}
+.filter-grid select{width:100%;margin-top:5px}
+.small-stat{font-size:15px!important;line-height:1.25!important}
+.heatmap-scroll{overflow-x:auto;padding-bottom:6px}
+.disease-hm-grid{display:grid;gap:4px;min-width:930px}
+.disease-hm-label{font-size:10px;font-weight:700;color:#475569;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;text-align:right}
+.disease-hm-month{font-size:9px;color:#94a3b8;text-align:center;font-weight:700}
+.disease-hm-cell{height:32px;border:0;border-radius:6px;color:#fff;font-size:9px;font-weight:800;cursor:pointer}
+.disease-hm-cell.zero{color:#94a3b8}
+.legend-row{display:flex;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:10px;color:#64748b;font-size:9px}
+.legend-row span{display:flex;align-items:center;gap:4px}.legend-row i{width:10px;height:10px;border-radius:3px}
+.alert-volume{padding:13px 15px;border:1px solid #fecaca;border-left:4px solid #dc2626;border-radius:9px;background:#fef2f2;color:#7f1d1d;margin-bottom:10px;font-size:12px}
+.empty-alert{padding:12px 14px;border:1px solid #bfdbfe;border-radius:9px;background:#eff6ff;color:#1e3a8a;margin-bottom:16px;font-size:12px}
+.early-warning-card{margin-bottom:20px;border-top:4px solid #1e40af}
+.early-warning-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:16px}
+.early-warning-head h5{margin:0 0 5px;color:#0f172a;font-size:15px;font-weight:800}.early-warning-head h5 i{margin-right:8px;color:#1e40af}
+.early-warning-head p{max-width:760px;margin:0;color:#64748b;font-size:11px;line-height:1.5}.early-warning-head>span{color:#64748b;font-size:9px;white-space:nowrap}
+.warning-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.warning-count{padding:12px 14px;border:1px solid #dbe4ef;border-left:4px solid #64748b;border-radius:8px;background:#fff}.warning-count strong{display:block;color:#0f172a;font-size:22px}.warning-count span{color:#64748b;font-size:10px;font-weight:700;text-transform:uppercase}.warning-count.high{border-left-color:#dc2626}.warning-count.watch{border-left-color:#d97706}.warning-count.normal{border-left-color:#15803d}
+.warning-explanation{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0 0 14px}.warning-explanation div{border:1px solid #dbe4ef;border-radius:8px;padding:10px 12px;background:#f8fafc}.warning-explanation strong,.warning-explanation span{display:block}.warning-explanation strong{font-size:11px;text-transform:uppercase;margin-bottom:3px}.warning-explanation span{font-size:10px;color:#64748b;line-height:1.4}.warning-explanation .normal strong{color:#15803d}.warning-explanation .watch strong{color:#a16207}.warning-explanation .high strong{color:#b91c1c}
+.barangay-risk-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.barangay-risk{padding:12px;border:1px solid #dbe4ef;border-left:5px solid #15803d;border-radius:8px;background:#f8fafc}.barangay-risk.watch{border-left-color:#d97706;background:#fffbeb}.barangay-risk.high{border-left-color:#dc2626;background:#fef2f2}.barangay-risk h6{margin:0 0 5px;color:#0f172a;font-size:12px}.barangay-risk p{margin:0;color:#64748b;font-size:10px}.barangay-risk b{text-transform:uppercase}.barangay-risk.high b{color:#b91c1c}.barangay-risk.watch b{color:#a16207}.barangay-risk.normal b{color:#15803d}
+@media(max-width:1200px){.filter-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:1000px){.barangay-risk-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.filter-grid{grid-template-columns:1fr 1fr}.stats-row,.grid-2,.warning-summary,.warning-explanation,.barangay-risk-grid{grid-template-columns:1fr!important}.early-warning-head{flex-direction:column;gap:6px}}
+</style>
+
+<script src="../backend/backend.js"></script>
+<script src="audit-trail.js"></script>
+<script>
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const RHUS=["RHU I - Poblacion","RHU II - Cutcot","RHU III - Tinejero","RHU IV - Tibag"];
+let currentCases=[],allCategories=[],allBarangays=[],earlyWarningData={alerts:[],barangay_risk:[]};
+let charts={};
+
+let session={};
+async function loadSession(){
+  const me=await diseaseApi('admin_me');
+  session=me.admin||{};
+  const name=document.getElementById('adminName');
+  const role=document.getElementById('adminRole');
+  const avatar=document.getElementById('adminAvatar');
+  if(name)name.textContent=session.name||'Administrator';
+  if(role)role.textContent=session.role||'Admin';
+  if(avatar)avatar.textContent=(session.name||'A').charAt(0).toUpperCase();
+
+  if(!session.is_system_admin){
+    document.body.classList.add('staff-local-disease-view');
+    const rhu=document.getElementById('rhuFilter');
+    if(rhu){rhu.value=session.branch;rhu.disabled=true}
+    const heading=document.querySelector('.page-header h2');
+    const description=document.querySelector('.page-header p');
+    if(heading)heading.innerHTML='<i class="fas fa-chart-area" style="color:#1e40af;font-size:22px;margin-right:8px;"></i>Disease Cases & Local Trends';
+    if(description)description.textContent='Verified disease cases, barangay trends, and early warnings for '+(session.branch||'your assigned RHU')+' only.';
+    const rhuCard=document.getElementById('rhuChartCard');if(rhuCard)rhuCard.style.display='none';
+    const ageCard=document.getElementById('ageChartCard');if(ageCard)ageCard.style.gridColumn='1 / -1';
+  }
+}
+function toggleAdminMenu(){
+  const menu=document.getElementById('mobileSidebar');
+  const icon=document.getElementById('adminHamburgerIcon');
+  if(!menu)return;
+  menu.classList.toggle('show');
+  if(icon)icon.className=menu.classList.contains('show')?'fas fa-times':'fas fa-bars';
+}
+async function doLogout(){
+  if(!await hcConfirm('Log out of the administrator portal?',{title:'Confirm logout',confirmText:'Log out',danger:true}))return;
+  try{await diseaseApi('admin_logout',{},'POST')}catch(_){}
+  location.href='admin-login.html';
+}
+
+async function diseaseApi(action, data=null, method='GET'){
+  let url='../backend/api.php?action='+encodeURIComponent(action);
+  const options={credentials:'include',cache:'no-store'};
+  if(method==='GET' && data){
+    url+='&'+new URLSearchParams(data).toString();
+  }else if(data){
+    options.method=method; options.headers={'Content-Type':'application/json'}; options.body=JSON.stringify(data);
+  }
+  const response=await fetch(url,options);
+  const result=await response.json();
+  if(!response.ok||!result.ok) throw new Error(result.message||'Request failed.');
+  return result;
+}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function countBy(items,key){const out={};items.forEach(x=>{const k=x[key]||'Unknown';out[k]=(out[k]||0)+1});return out;}
+function topEntry(obj){return Object.entries(obj).sort((a,b)=>b[1]-a[1])[0]||['—',0];}
+function selected(id){return document.getElementById(id).value;}
+function cellColor(value, alert){
+  if(alert) return '#b91c1c';
+  if(value===0) return '#f1f5f9';
+  if(value<=2) return '#dbeafe';
+  if(value<=4) return '#93c5fd';
+  return '#2563eb';
+}
+
+function comparisonCases(){
+  const year=Number(selected('yearFilter'));
+  const disease=selected('diseaseFilter');
+  const barangay=selected('barangayFilter');
+  const age=selected('ageFilter');
+  const rhu=selected('rhuFilter');
+  return (window.__allYearCases||[]).filter(c=>{
+    return (disease==='all'||c.disease_category===disease) &&
+      (barangay==='all'||c.barangay===barangay) &&
+      (age==='all'||c.age_group===age) &&
+      (rhu==='all'||c.rhu_branch===rhu) &&
+      [year,year-1].includes(new Date(c.case_date+'T00:00:00').getFullYear());
+  });
+}
+function alertFor(barangay,month){
+  const year=Number(selected('yearFilter'));
+  const base=comparisonCases();
+  const current=base.filter(c=>{
+    const d=new Date(c.case_date+'T00:00:00');
+    return c.barangay===barangay&&d.getFullYear()===year&&d.getMonth()===month;
+  }).length;
+
+  const previousMonth=month===0?11:month-1;
+  const previousYear=month===0?year-1:year;
+  const previous=base.filter(c=>{
+    const d=new Date(c.case_date+'T00:00:00');
+    return c.barangay===barangay&&d.getFullYear()===previousYear&&d.getMonth()===previousMonth;
+  }).length;
+
+  const increase=previous===0?(current>=5?100:0):((current-previous)/previous)*100;
+  return {cur:current,prev:previous,increase,isAlert:current>=5&&increase>=50};
+}
+
+async function loadData(){
+  const filters={year:selected('yearFilter'),month:selected('monthFilter'),category:selected('diseaseFilter'),barangay:selected('barangayFilter'),rhu:selected('rhuFilter'),age_group:selected('ageFilter')};
+  const [r,warning]=await Promise.all([diseaseApi('disease_cases_data',filters),diseaseApi('disease_early_warning')]);
+  earlyWarningData=warning||{alerts:[],barangay_risk:[]};
+  currentCases=r.cases||[]; allCategories=r.categories||[]; allBarangays=r.barangays||[];
+
+  const all=await diseaseApi('disease_cases_data',{year:selected('yearFilter'),month:0,category:'all',barangay:'all',rhu:selected('rhuFilter'),age_group:'all'});
+  const prev=await diseaseApi('disease_cases_data',{year:Number(selected('yearFilter'))-1,month:0,category:'all',barangay:'all',rhu:selected('rhuFilter'),age_group:'all'});
+  window.__allYearCases=[...(all.cases||[]),...(prev.cases||[])];
+  populateDynamicFilters();
+  renderAll();
+}
+function populateDynamicFilters(){
+  const d=document.getElementById('diseaseFilter'),b=document.getElementById('barangayFilter');
+  const dv=d.value,bv=b.value;
+  d.innerHTML='<option value="all">All Diseases</option>'+allCategories.map(x=>`<option>${escapeHtml(x)}</option>`).join('');
+  b.innerHTML='<option value="all">All Barangays</option>'+allBarangays.map(x=>`<option>${escapeHtml(x)}</option>`).join('');
+  if([...d.options].some(o=>o.value===dv)) d.value=dv;
+  if([...b.options].some(o=>o.value===bv)) b.value=bv;
+}
+function renderAll(){renderStats();renderAlerts();renderEarlyWarning();renderHeatmap();renderCharts();renderTable();}
+function renderEarlyWarning(){
+  const alerts=Array.isArray(earlyWarningData.alerts)?earlyWarningData.alerts:[];
+  const risks=Array.isArray(earlyWarningData.barangay_risk)?earlyWarningData.barangay_risk:[];
+  const high=alerts.filter(x=>x.level==='high').length,watch=alerts.filter(x=>x.level==='watch').length,normal=risks.filter(x=>x.level==='normal').length;
+  document.getElementById('earlyWarningSummary').innerHTML=`<div class="warning-count high"><strong>${high}</strong><span>High warnings</span></div><div class="warning-count watch"><strong>${watch}</strong><span>Watch warnings</span></div><div class="warning-count normal"><strong>${normal}</strong><span>Barangays normal</span></div>`;
+  document.getElementById('barangayRiskGrid').innerHTML=risks.length?risks.map(x=>`<article class="barangay-risk ${escapeHtml(x.level)}"><h6>${escapeHtml(x.barangay)}</h6><p><b>${escapeHtml(x.level)}</b> • ${Number(x.current_cases||0)} case(s) this week</p><p>${Number(x.high_alerts||0)} high • ${Number(x.watch_alerts||0)} watch signals</p></article>`).join(''):'<div class="empty-alert" style="margin:0">No case data is available for the five-week comparison window.</div>';
+  document.getElementById('earlyWarningRule').textContent=earlyWarningData.rule||'Verified cases from the current 7 days are compared with the weekly average of the previous 4 weeks.';
+  const stamp=new Date(earlyWarningData.generated_at||Date.now()),range=earlyWarningData.date_range||{};document.getElementById('earlyWarningUpdated').textContent=`${range.current_from||''}${range.current_to?' to '+range.current_to:''} • Updated ${stamp.toLocaleString('en-PH')}`;
+}
+function renderStats(){
+  document.getElementById('totalCases').textContent=currentCases.length;
+  const [td,tdn]=topEntry(countBy(currentCases,'disease_category'));
+  const [tb,tbn]=topEntry(countBy(currentCases,'barangay'));
+  document.getElementById('topDisease').textContent=td;document.getElementById('topDiseaseSub').textContent=tdn?tdn+' case(s)':'No data';
+  document.getElementById('topBarangay').textContent=tb;document.getElementById('topBarangaySub').textContent=tbn?tbn+' case(s)':'No data';
+}
+
+function getFilteredYearCases(){
+  const year=Number(selected('yearFilter'));
+  const month=Number(selected('monthFilter'));
+  return comparisonCases().filter(c=>{
+    const d=new Date(c.case_date+'T00:00:00');
+    return d.getFullYear()===year && (month===0||d.getMonth()===month-1);
+  });
+}
+function getAlerts(){
+  const month=Number(selected('monthFilter'));
+  const cases=comparisonCases().filter(c=>new Date(c.case_date+'T00:00:00').getFullYear()===Number(selected('yearFilter')));
+  const bars=[...new Set(cases.map(c=>c.barangay))];
+  const months=month>0?[month-1]:MONTHS.map((_,i)=>i);
+  const alerts=[];
+  bars.forEach(bar=>months.forEach(m=>{const a=alertFor(bar,m);if(a.isAlert)alerts.push({barangay:bar,month:m,...a})}));
+  return alerts;
+}
+function renderAlerts(){
+  const alerts=getAlerts();
+  document.getElementById('alertCount').textContent=alerts.length;
+  document.getElementById('alertsContainer').innerHTML=alerts.length
+    ?alerts.slice(0,8).map(a=>`<div class="alert-volume"><strong>High Case Volume Alert:</strong> ${escapeHtml(a.barangay)} in ${MONTHS[a.month]} — ${a.cur} cases versus ${a.prev} in the previous month (${Math.round(a.increase)}% increase).</div>`).join('')
+    :'<div class="empty-alert"><i class="fas fa-circle-check"></i> No high case-volume alert met the selected filters and alert rule.</div>';
+}
+function renderHeatmap(){
+  const month=Number(selected('monthFilter'));
+  const year=Number(selected('yearFilter'));
+  const selectedBarangay=selected('barangayFilter');
+  const cases=comparisonCases().filter(c=>new Date(c.case_date+'T00:00:00').getFullYear()===year);
+  const bars=selectedBarangay!=='all'?[selectedBarangay]:[...new Set(cases.map(c=>c.barangay))];
+  const months=month>0?[month-1]:MONTHS.map((_,i)=>i);
+  const cols=`150px repeat(${months.length},minmax(65px,1fr))`;
+  let html=`<div class="disease-hm-grid" style="grid-template-columns:${cols}"><div></div>${months.map(i=>`<div class="disease-hm-month">${MONTHS[i]}</div>`).join('')}`;
+  bars.forEach(bar=>{
+    html+=`<div class="disease-hm-label">${escapeHtml(bar)}</div>`;
+    months.forEach(mi=>{
+      const a=alertFor(bar,mi);
+      html+=`<button class="disease-hm-cell ${a.cur===0?'zero':''}" style="background:${cellColor(a.cur,a.isAlert)}" title="${escapeHtml(bar)} | ${MONTHS[mi]}: ${a.cur} cases" onclick="showCell('${escapeHtml(bar).replace(/'/g,"\\'")}',${mi})">${a.cur}</button>`;
+    });
+  });
+  html+='</div>';
+  document.getElementById('diseaseHeatmap').innerHTML=html||'<div class="text-muted">No barangay data.</div>';
+}
+function showCell(bar,month){
+  const a=alertFor(bar,month);
+  const disease=selected('diseaseFilter')==='all'?'All diseases':selected('diseaseFilter');
+  const age=selected('ageFilter')==='all'?'All age groups':selected('ageFilter');
+  const rhu=selected('rhuFilter')==='all'?'All RHU branches':selected('rhuFilter');
+  document.getElementById('caseDetailBody').innerHTML=`
+    <div class="detail-grid">
+      <div class="detail-item"><span>Disease filter</span><strong>${escapeHtml(disease)}</strong></div>
+      <div class="detail-item"><span>Barangay</span><strong>${escapeHtml(bar)}</strong></div>
+      <div class="detail-item"><span>Date range</span><strong>${MONTHS[month]} ${escapeHtml(selected('yearFilter'))}</strong></div>
+      <div class="detail-item"><span>RHU filter</span><strong>${escapeHtml(rhu)}</strong></div>
+      <div class="detail-item"><span>Age group</span><strong>${escapeHtml(age)}</strong></div>
+      <div class="detail-item"><span>Verified cases</span><strong>${a.cur}</strong></div>
+      <div class="detail-item"><span>Previous month</span><strong>${a.prev}</strong></div>
+      <div class="detail-item"><span>Early-warning result</span><strong>${a.isAlert?'High alert':'Within threshold'}</strong></div>
+      <div class="detail-item detail-full"><span>Privacy</span><p>Barangay totals only. No patient name is included in this heatmap result.</p></div>
+    </div>`;
+  document.getElementById('caseDetailModal').classList.add('show');
+}
+
+function makeChart(id,type,labels,data,label){
+  if(charts[id])charts[id].destroy();
+  const el=document.getElementById(id),card=document.getElementById(id+'Card');
+  if(!el||typeof Chart==='undefined')return;
+  const total=(data||[]).reduce((sum,value)=>sum+Number(value||0),0);
+  if(card)card.classList.toggle('is-empty',total===0);
+  if(total===0)return;
+  const isLine=type==='line',isDoughnut=type==='doughnut',isHorizontal=type==='bar';
+  const colors=['#1e40af','#2563eb','#0f766e','#15803d','#d97706','#b45309','#7c3aed','#be123c'];
+  const dataset={
+    label,
+    data,
+    borderWidth:isLine?3:1,
+    borderColor:isLine?'#2563eb':colors,
+    backgroundColor:isLine?'rgba(37,99,235,.12)':colors.map(c=>c+'CC'),
+    pointBackgroundColor:'#fff',
+    pointBorderColor:'#2563eb',
+    pointBorderWidth:2,
+    pointRadius:isLine?3:0,
+    pointHoverRadius:isLine?5:0,
+    borderRadius:isDoughnut?0:7,
+    maxBarThickness:42,
+    tension:.32,
+    fill:isLine,
+    hoverOffset:isDoughnut?5:0
+  };
+  charts[id]=new Chart(el,{
+    type,
+    data:{labels,datasets:[dataset]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      animation:{duration:450},
+      indexAxis:isHorizontal?'y':'x',
+      layout:{padding:isDoughnut?8:{top:4,right:8,bottom:0,left:0}},
+      plugins:{
+        legend:{display:isDoughnut,position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:8,boxHeight:8,padding:14,font:{family:'Inter',size:11}}},
+        tooltip:{backgroundColor:'#0f172a',titleFont:{family:'Inter',size:12,weight:'600'},bodyFont:{family:'Inter',size:11},padding:10,cornerRadius:7,displayColors:true},
+        title:{display:false}
+      },
+      cutout:isDoughnut?'68%':undefined,
+      scales:isDoughnut?{}:{
+        x:isHorizontal?{beginAtZero:true,ticks:{precision:0,stepSize:1,color:'#64748b',font:{family:'Inter',size:10}},grid:{color:'#eef2f7'},border:{display:false}}:{grid:{display:false},ticks:{color:'#64748b',font:{family:'Inter',size:10}},border:{display:false}},
+        y:isHorizontal?{grid:{display:false},ticks:{color:'#334155',font:{family:'Inter',size:10,weight:'600'},autoSkip:false},border:{display:false}}:{beginAtZero:true,ticks:{precision:0,stepSize:1,color:'#64748b',font:{family:'Inter',size:10}},grid:{color:'#eef2f7'},border:{display:false}}
+      }
+    }
+  });
+}
+function renderCharts(){
+  const monthly=Array(12).fill(0);currentCases.forEach(c=>monthly[new Date(c.case_date+'T00:00:00').getMonth()]++);
+  makeChart('monthlyTrendChart','line',MONTHS,monthly,'Verified cases');
+  const ds=countBy(currentCases,'disease_category');makeChart('diseaseChart','bar',Object.keys(ds),Object.values(ds),'Cases');
+  const rs=countBy(currentCases,'rhu_branch');makeChart('rhuChart','bar',Object.keys(rs),Object.values(rs),'Cases');
+  const ag=countBy(currentCases,'age_group');makeChart('ageChart','doughnut',Object.keys(ag),Object.values(ag),'Cases');
+}
+
+function renderTable(){
+  const body=document.getElementById('caseTableBody');
+  body.innerHTML=currentCases.length?currentCases.slice(0,200).map(c=>`<tr>
+    <td>${escapeHtml(c.case_date)}</td>
+    <td><strong>${escapeHtml(c.disease_category)}</strong></td>
+    <td>${escapeHtml(c.diagnosis||'—')}</td>
+    <td>${escapeHtml(c.barangay)}</td>
+    <td>${escapeHtml(c.rhu_branch)}</td>
+    <td>${escapeHtml(c.age_group)}</td>
+    <td>${escapeHtml(c.case_status)}</td>
+    <td style="white-space:nowrap">
+      <button class="action-btn view-btn" onclick="viewDiseaseCase(${Number(c.id)})">View</button>
+      <button class="action-btn edit-btn" onclick="location.href='admin-heatmap.html?id=${Number(c.id)}'">Edit</button>
+      <button class="action-btn delete-btn" onclick="deleteDiseaseCase(${Number(c.id)})">Delete</button>
+    </td>
+  </tr>`).join(''):'<tr><td colspan="8" class="text-center text-muted py-4">No disease cases match the selected filters.</td></tr>';
+}
+async function viewDiseaseCase(id){
+  try{
+    const r=await diseaseApi('disease_case_detail',{id},'GET');
+    const c=r.case||{};
+    document.getElementById('caseDetailBody').innerHTML=`
+      <div class="detail-grid">
+        <div class="detail-item"><span>Disease</span><strong>${escapeHtml(c.disease_category)}</strong></div>
+        <div class="detail-item"><span>Status</span><strong>${escapeHtml(c.case_status)}</strong></div>
+        <div class="detail-item"><span>Diagnosis</span><strong>${escapeHtml(c.diagnosis||'—')}</strong></div>
+        <div class="detail-item"><span>Barangay</span><strong>${escapeHtml(c.barangay)}</strong></div>
+        <div class="detail-item"><span>RHU Branch</span><strong>${escapeHtml(c.rhu_branch)}</strong></div>
+        <div class="detail-item"><span>Age Group</span><strong>${escapeHtml(c.age_group)}</strong></div>
+        <div class="detail-item"><span>Case Date</span><strong>${escapeHtml(c.case_date)}</strong></div>
+        <div class="detail-item"><span>Onset Date</span><strong>${escapeHtml(c.onset_date||'—')}</strong></div>
+        <div class="detail-item"><span>Verification</span><strong>${escapeHtml(c.verification_status||'Verified')}</strong></div>
+        <div class="detail-item"><span>Record Source</span><strong>${escapeHtml(c.record_source||'RHU Consultation')}</strong></div>
+        <div class="detail-item detail-full"><span>Symptoms / Notes</span><p>${escapeHtml(c.symptoms||'—')}</p></div>
+        <div class="detail-item"><span>Recorded By</span><strong>${escapeHtml(c.recorded_by_name||'Unknown')}</strong></div>
+        <div class="detail-item"><span>Staff Timestamp</span><strong>${escapeHtml(c.verified_at||c.created_at||'—')}</strong></div>
+      </div>`;
+    document.getElementById('caseDetailModal').classList.add('show');
+  }catch(e){alert(e.message)}
+}
+function closeCaseModal(){document.getElementById('caseDetailModal').classList.remove('show')}
+async function deleteDiseaseCase(id){
+  if(!await hcConfirm('Delete this disease case record?',{title:'Delete disease case',confirmText:'Delete',danger:true}))return;
+  try{await diseaseApi('disease_case_delete',{id},'POST');await loadData()}catch(e){alert(e.message)}
+}
+
+function exportDiseaseCSV(){
+  const rows=[['Case Date','Disease Category','Diagnosis','Barangay','RHU Branch','Age Group','Status'],...currentCases.map(c=>[c.case_date,c.disease_category,c.diagnosis||'',c.barangay,c.rhu_branch,c.age_group,c.case_status])];
+  const csv=rows.map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\\n');
+  const blob=new Blob(['\\uFEFF',csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Disease_Cases_${selected('yearFilter')}.csv`;a.click();URL.revokeObjectURL(a.href);
+}
+async function init(){
+  const y=document.getElementById('yearFilter'),m=document.getElementById('monthFilter'),r=document.getElementById('rhuFilter');
+  const now=new Date().getFullYear();for(let yr=now;yr>=now-5;yr--)y.innerHTML+=`<option>${yr}</option>`;
+  MONTHS.forEach((x,i)=>m.innerHTML+=`<option value="${i+1}">${x}</option>`);
+  RHUS.forEach(x=>r.innerHTML+=`<option>${x}</option>`);
+  await loadSession();
+  ['yearFilter','monthFilter','diseaseFilter','barangayFilter','rhuFilter','ageFilter'].forEach(id=>document.getElementById(id).addEventListener('change',()=>loadData().catch(e=>alert(e.message))));
+  await loadData();
+  if(typeof auditLog==='function')auditLog('Viewed Page','Opened Heatmap & Analytics','Heatmap & Analytics');
+}
+init().catch(e=>{console.error(e);document.getElementById('alertsContainer').innerHTML=`<div class="alert-volume">${escapeHtml(e.message)}</div>`});
+</script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

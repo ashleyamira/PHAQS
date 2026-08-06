@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Brevo Email Test</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7fb;margin:0;padding:40px;color:#10213f}
+.card{max-width:560px;margin:auto;background:#fff;border:1px solid #dbe4ef;border-radius:12px;padding:24px}
+h1{font-size:22px;margin:0 0 8px}p{color:#667085;font-size:14px}
+label{display:block;margin:16px 0 6px;font-weight:700;font-size:13px}
+input{width:100%;box-sizing:border-box;border:1px solid #cfd8e5;border-radius:8px;padding:11px;font:inherit}
+button{margin-top:16px;border:0;border-radius:8px;background:#1648b8;color:#fff;padding:11px 16px;font-weight:700;cursor:pointer}
+#result{margin-top:16px;padding:12px;border-radius:8px;display:none;white-space:pre-wrap}
+.success{display:block!important;background:#dcfce7;color:#166534}
+.error{display:block!important;background:#fee2e2;color:#991b1b}
+</style>
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Brevo Email Test</h1>
+  <p>System Administrator login is required. Use an email address you can check.</p>
+
+  <label for="name">Recipient name</label>
+  <input id="name" value="Ashley Marcelo">
+
+  <label for="email">Recipient email</label>
+  <input id="email" type="email" placeholder="patient@example.com">
+
+  <button id="sendBtn">Send Test Email</button>
+  <div id="result"></div>
+</div>
+
+<script>
+document.getElementById('sendBtn').addEventListener('click', async () => {
+  const box=document.getElementById('result');
+  box.className='';
+  box.style.display='block';
+  box.textContent='Sending...';
+
+  try{
+    const response=await fetch('../backend/api.php?action=admin_test_brevo_email',{
+      method:'POST',
+      credentials:'include',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        name:document.getElementById('name').value,
+        email:document.getElementById('email').value
+      })
+    });
+
+    const result=await response.json();
+    box.className=result.ok?'success':'error';
+    box.textContent=result.message+(result.email?.httpCode?'\\nHTTP: '+result.email.httpCode:'');
+  }catch(error){
+    box.className='error';
+    box.textContent='Request failed: '+error.message;
+  }
+});
+</script>
+
+<script src="logout-confirmation.js?v=20260723-all-pages"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

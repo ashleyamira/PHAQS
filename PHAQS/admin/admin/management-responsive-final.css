@@ -1,0 +1,127 @@
+/* Final responsive pass for the authenticated Admin and RHU Staff interface only. */
+body.management-shell-locked .modal{z-index:2050!important;padding:12px!important;overflow-y:auto!important}
+body.management-shell-locked .modal-backdrop{z-index:2040!important}
+body.management-shell-locked .modal-dialog{
+  width:min(820px,calc(100vw - 24px))!important;
+  max-width:820px!important;
+  min-height:calc(100dvh - 24px)!important;
+  margin:0 auto!important;
+  display:flex!important;
+  align-items:center!important
+}
+body.management-shell-locked .modal-dialog.modal-sm{max-width:500px!important}
+body.management-shell-locked .modal-content{
+  width:100%!important;
+  max-height:calc(100dvh - 24px)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:hidden!important
+}
+body.management-shell-locked .modal-header,
+body.management-shell-locked .modal-footer{flex:0 0 auto!important}
+body.management-shell-locked .modal-body{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain}
+body.management-shell-locked #patModal .modal-dialog{max-width:800px!important}
+body.management-shell-locked #patModal .modal-body{padding-bottom:22px!important}
+body.management-shell-locked .case-modal{z-index:2050!important;padding:12px!important;overflow-y:auto!important}
+body.management-shell-locked .case-modal-card{width:min(760px,100%)!important;max-height:calc(100dvh - 24px)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+body.management-shell-locked .case-modal-body{overflow-y:auto!important;min-height:0!important}
+
+body.management-shell-locked .main-content>*{max-width:100%}
+body.management-shell-locked .table-wrap,
+body.management-shell-locked .tbl-wrap,
+body.management-shell-locked .table-responsive,
+body.management-shell-locked .queue-wrap,
+body.management-shell-locked .heatmap-scroll{max-width:100%;overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+body.management-shell-locked canvas{max-width:100%!important}
+body.management-shell-locked .header-actions,
+body.management-shell-locked .filter-bar,
+body.management-shell-locked .filter-card,
+body.management-shell-locked .add-form{max-width:100%}
+body.management-shell-locked .hc-dashboard-stats-five{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+body.management-shell-locked .daily-cap{margin-top:6px}
+body.management-shell-locked .capacity-form{grid-template-columns:repeat(5,minmax(140px,1fr))!important}
+
+.hc-feedback-stack{position:fixed;right:18px;bottom:18px;z-index:2200;display:grid;gap:9px;width:min(390px,calc(100vw - 28px))}
+.hc-feedback-toast{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;border:1px solid #bfdbfe;border-left:4px solid #1e40af;border-radius:10px;background:#fff;color:#334155;box-shadow:0 14px 38px rgba(15,23,42,.2);font:600 12.5px/1.5 Inter,Arial,sans-serif}
+.hc-feedback-toast.success{border-color:#bbf7d0;border-left-color:#15803d}.hc-feedback-toast.danger{border-color:#fecaca;border-left-color:#dc2626}.hc-feedback-toast.warning{border-color:#fde68a;border-left-color:#d97706}
+.hc-feedback-toast button{margin-left:auto;border:0;background:transparent;color:#64748b;cursor:pointer}
+.hc-confirm-overlay{position:fixed;inset:0;z-index:2210;display:grid;place-items:center;padding:18px;background:rgba(15,23,42,.5)}
+.hc-confirm-card{width:min(430px,100%);overflow:hidden;border:1px solid #dbe4ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.3)}
+.hc-confirm-body{padding:22px}.hc-confirm-body h3{margin:0 0 8px;color:#0f172a;font:750 17px Inter,Arial,sans-serif}.hc-confirm-body p{margin:0;color:#64748b;font:400 13px/1.6 Inter,Arial,sans-serif}
+.hc-confirm-actions{display:flex;justify-content:flex-end;gap:9px;padding:13px 22px 18px;border-top:1px solid #eef2f7;background:#f8fafc}
+.hc-confirm-actions button{min-height:38px;padding:9px 15px;border-radius:8px;font:700 12px Inter,Arial,sans-serif;cursor:pointer}.hc-confirm-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-confirm-ok{border:1px solid #1e40af;background:#1e40af;color:#fff}.hc-confirm-ok.danger{border-color:#dc2626;background:#dc2626}
+
+@media(max-width:1250px){
+  body.management-shell-locked .hc-dashboard-stats-five{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body.management-shell-locked .operations-kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  body.management-shell-locked .capacity-form{grid-template-columns:repeat(3,minmax(160px,1fr))!important}
+}
+@media(max-width:900px){
+  body.management-shell-locked .navbar{position:sticky!important}
+  body.management-shell-locked .mobile-sidebar.show{position:fixed!important;top:var(--hc-shell-top)!important;bottom:0!important;max-height:none!important}
+  body.management-shell-locked .page-header{align-items:flex-start!important}
+  body.management-shell-locked .page-header>div:first-child{min-width:0}
+  body.management-shell-locked .header-actions{width:100%!important}
+  body.management-shell-locked .header-actions>*{flex:1 1 auto!important;justify-content:center!important}
+  body.management-shell-locked .stats-grid,
+  body.management-shell-locked .stats-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.management-shell-locked .hc-dashboard-stats-five{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  body.management-shell-locked .charts-grid,
+  body.management-shell-locked .grid-2,
+  body.management-shell-locked .main-grid,
+  body.management-shell-locked .report-insight{grid-template-columns:1fr!important}
+  body.management-shell-locked .filter-bar,
+  body.management-shell-locked .filter-card{align-items:stretch!important}
+  body.management-shell-locked .filter-bar input,
+  body.management-shell-locked .filter-bar select,
+  body.management-shell-locked .filter-card input,
+  body.management-shell-locked .filter-card select{flex:1 1 180px!important;min-width:0!important}
+}
+@media(max-width:600px){
+  body.management-shell-locked .nav-container{padding:0 12px!important}
+  body.management-shell-locked .logo-area{gap:8px!important}
+  body.management-shell-locked .logo-area img{width:34px!important;height:34px!important;min-width:34px!important}
+  body.management-shell-locked .logo-area strong{font-size:12.5px!important}
+  body.management-shell-locked .logo-area small{font-size:9.5px!important}
+  body.management-shell-locked .nav-right{gap:7px!important}
+  body.management-shell-locked .main-content{padding:16px 10px 30px!important}
+  body.management-shell-locked .page-header h1,
+  body.management-shell-locked .page-header h2{font-size:22px!important}
+  body.management-shell-locked .header-actions>*{flex:1 1 calc(50% - 6px)!important;min-width:0!important;padding-left:9px!important;padding-right:9px!important}
+  body.management-shell-locked .stats-grid,
+  body.management-shell-locked .stats-row,
+  body.management-shell-locked .hc-dashboard-stats-five,
+  body.management-shell-locked .operations-kpi-grid{grid-template-columns:1fr!important}
+  body.management-shell-locked .stat-card{min-width:0!important;padding:15px!important}
+  body.management-shell-locked .filter-bar,
+  body.management-shell-locked .filter-card{display:grid!important;grid-template-columns:1fr!important;padding:14px!important}
+  body.management-shell-locked .filter-bar input,
+  body.management-shell-locked .filter-bar select,
+  body.management-shell-locked .filter-bar button,
+  body.management-shell-locked .filter-card input,
+  body.management-shell-locked .filter-card select,
+  body.management-shell-locked .filter-card button{width:100%!important;min-width:0!important}
+  body.management-shell-locked .capacity-form{grid-template-columns:1fr!important}
+  body.management-shell-locked .add-form{display:grid!important;grid-template-columns:1fr!important;padding:12px!important}
+  body.management-shell-locked .add-form input,
+  body.management-shell-locked .add-form select,
+  body.management-shell-locked .add-form button{width:100%!important;min-width:0!important}
+  body.management-shell-locked .modal{padding:6px!important}
+  body.management-shell-locked .modal-dialog{width:calc(100vw - 12px)!important;min-height:calc(100dvh - 12px)!important}
+  body.management-shell-locked .modal-content{max-height:calc(100dvh - 12px)!important;border-radius:11px!important}
+  body.management-shell-locked .modal-header{padding:14px 15px!important}
+  body.management-shell-locked .modal-body{padding:14px!important}
+  body.management-shell-locked .modal-footer{padding:11px 14px!important;display:grid!important;grid-template-columns:1fr!important}
+  body.management-shell-locked .modal-footer>*{width:100%!important;justify-content:center!important;margin:0!important}
+  body.management-shell-locked .pat-modal-header-card{padding:15px!important;gap:11px!important}
+  body.management-shell-locked .pat-modal-avatar{width:48px!important;height:48px!important}
+  body.management-shell-locked .pat-modal-header-card .badge{margin-left:0!important}
+  body.management-shell-locked .detail-grid,
+  body.management-shell-locked .patient-form-grid{grid-template-columns:1fr!important}
+  body.management-shell-locked .detail-cell,
+  body.management-shell-locked .patient-form-full{grid-column:auto!important}
+  body.management-shell-locked .section-card,
+  body.management-shell-locked .card,
+  body.management-shell-locked .chart-card{border-radius:10px!important}
+  .hc-feedback-stack{right:10px;bottom:10px;width:calc(100vw - 20px)}
+}

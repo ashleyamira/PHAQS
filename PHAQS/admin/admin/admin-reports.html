@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports | Pulilan Health Center Admin</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+html, body { height: 100%; overflow: hidden; }
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: white; border-bottom: 3px solid #1e40af;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.nav-container { width: 100%; padding: 14px 32px; display: flex; align-items: center; position: relative; }
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info { text-align: right; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; }
+.admin-avatar {
+  width: 36px; height: 36px; background: #1e40af; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.btn-logout {
+  background: white; color: #dc2626; border: 1.5px solid #fecaca;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+}
+.btn-logout:hover { background: #fef2f2; }
+.hamburger-btn { display: none; background: none; border: none; font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px; }
+.mobile-sidebar {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  background: white; border-top: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px;
+}
+.mobile-sidebar.show { display: flex; }
+.mob-section-label { font-size: 10.5px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px; }
+.mob-sidebar-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 9px;
+  text-decoration: none; font-size: 13.5px; font-weight: 500; color: #374151;
+  transition: 0.15s; border: none; background: none; font-family: 'Inter', sans-serif; cursor: pointer; width: 100%; text-align: left;
+}
+.mob-sidebar-item:hover { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon { width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #6b7280; flex-shrink: 0; }
+.mob-sidebar-item.active .mob-s-icon, .mob-sidebar-item:hover .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+.layout { display: flex; height: calc(100vh - 67px); }
+.sidebar {
+  width: 240px; background: white; border-right: 1px solid #e5e7eb;
+  display: flex; flex-direction: column;
+  position: sticky; top: 67px; height: calc(100vh - 67px); overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-section-label { padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; }
+.sidebar-item {
+  display: flex; align-items: center; gap: 11px; padding: 11px 20px;
+  font-size: 14px; font-weight: 500; color: #374151; cursor: pointer;
+  border: none; background: none; width: 100%; text-align: left;
+  font-family: 'Inter', sans-serif; transition: 0.15s; text-decoration: none; border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon { width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #6b7280; flex-shrink: 0; }
+.sidebar-item.active .s-icon, .sidebar-item:hover .s-icon { background: #dbeafe; color: #1e40af; }
+.main-content { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
+.page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 3px; color: #0f172a; }
+.page-header p { color: #6b7280; margin: 0; font-size: 14px; }
+.header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-print {
+  background: #1e40af; color: white; border: none;
+  padding: 9px 18px; border-radius: 9px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 7px;
+}
+.btn-print:hover { background: #1e3a8a; }
+.btn-export-csv {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 9px 18px; border-radius: 9px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 7px;
+}
+.btn-export-csv:hover { background: #f3f4f6; }
+.staff-notice {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: #a16207; margin-bottom: 20px;
+}
+.filter-bar {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  padding: 16px 20px; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.filter-bar label { font-size: 13px; font-weight: 600; color: #374151; white-space: nowrap; }
+.filter-bar select, .filter-bar input[type="date"] {
+  padding: 8px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px;
+  font-size: 13px; font-family: 'Inter', sans-serif; color: #111827;
+  background: #fafafa; outline: none; transition: 0.18s;
+}
+.filter-bar select:focus, .filter-bar input[type="date"]:focus { border-color: #1e40af; background: white; }
+.filter-bar select:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+.btn-apply {
+  background: #1e40af; color: white; border: none;
+  padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+}
+.btn-apply:hover { background: #1e3a8a; }
+.stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03); padding: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.si-blue   { background: #dbeafe; color: #1e40af; }
+.si-green  { background: #dcfce7; color: #15803d; }
+.si-amber  { background: #fef9c3; color: #a16207; }
+.si-red    { background: #fee2e2; color: #dc2626; }
+.si-purple { background: #ede9fe; color: #7c3aed; }
+.stat-label { font-size: 12px; color: #9ca3af; margin: 0 0 4px; font-weight: 500; }
+.stat-value { font-size: 28px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1; }
+.stat-sub   { font-size: 11.5px; color: #9ca3af; margin-top: 4px; }
+.operations-kpi-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:16px; }
+.operations-kpi { background:#fff; border:1px solid #dbe4ef; border-radius:12px; padding:15px; min-width:0; }
+.operations-kpi span { display:block; color:#64748b; font-size:11px; font-weight:600; margin-bottom:5px; }
+.operations-kpi strong { display:block; color:#0f172a; font-size:21px; line-height:1.2; overflow-wrap:anywhere; }
+.operations-kpi small { display:block; color:#94a3b8; font-size:10.5px; margin-top:4px; }
+.report-insight { display:block; margin-bottom:24px; }
+.insight-panel { background:linear-gradient(135deg,#eff6ff,#fff); border:1px solid #bfdbfe; border-radius:12px; padding:16px 18px; color:#1e3a8a; }
+.insight-panel h3 { font-size:13px; margin:0 0 7px; font-weight:700; }
+.insight-panel p { margin:0; color:#334155; font-size:13px; line-height:1.6; }
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.chart-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); min-width: 0; }
+.chart-card.full { grid-column: 1 / -1; }
+.chart-title { font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9; }
+.chart-title i { color: #1e40af; }
+.chart-wrap    { position: relative; height: 220px; }
+.chart-wrap-sm { position: relative; height: 180px; }
+.section-card { background: white; border-radius: 13px; border: 1px solid #e5e7eb; box-shadow: 0 2px 8px rgba(0,0,0,0.03); overflow: hidden; margin-bottom: 20px; }
+.section-head { padding: 16px 22px 14px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.section-head-left { display: flex; align-items: center; gap: 10px; }
+.section-head-left h6 { font-weight: 600; font-size: 15px; color: #111827; margin: 0; }
+.hicon { width: 32px; height: 32px; border-radius: 8px; background: #dbeafe; display: flex; align-items: center; justify-content: center; color: #1e40af; font-size: 13px; flex-shrink: 0; }
+.section-body { padding: 20px 22px; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.data-table th { text-align: left; padding: 10px 14px; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 1px solid #f1f5f9; background: #fafafa; }
+.data-table td { padding: 12px 14px; border-bottom: 1px solid #f9fafb; color: #374151; vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: #f9fafb; }
+.table-wrap { overflow-x: auto; }
+.badge { display: inline-flex; align-items: center; font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+.badge-confirmed { background: #dcfce7; color: #15803d; }
+.badge-pending   { background: #fef9c3; color: #a16207; }
+.badge-cancelled { background: #fee2e2; color: #dc2626; }
+.badge-done      { background: #dbeafe; color: #1e40af; }
+.report-stat-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.report-pill { display: flex; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 16px; flex: 1; min-width: 120px; }
+.report-pill-icon { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.report-pill-label { font-size: 11.5px; color: #9ca3af; font-weight: 500; }
+.report-pill-value { font-size: 20px; font-weight: 700; color: #0f172a; line-height: 1; }
+
+.print-header { display: none; }
+@media print {
+  .navbar, .sidebar, .filter-bar, .header-actions,
+  .hamburger-btn, .mobile-sidebar, .staff-notice { display: none !important; }
+  .layout { height: auto !important; display: block !important; }
+  .main-content { padding: 0 !important; overflow: visible !important; }
+  html, body { overflow: visible !important; height: auto !important; background: white !important; }
+
+  .print-header {
+    display: flex !important; align-items: center; gap: 16px;
+    padding: 0 0 16px; margin-bottom: 20px;
+    border-bottom: 3px solid #1e40af;
+  }
+  .print-header img { width: 48px; height: 48px; border-radius: 50%; }
+  .print-header h3 { font-size: 17px; font-weight: 700; color: #0f172a; margin: 0 0 2px; }
+  .print-header p  { font-size: 12px; color: #6b7280; margin: 0; }
+
+  .stats-grid { grid-template-columns: repeat(4,1fr) !important; gap: 12px !important; margin-bottom: 18px !important; }
+  .stat-card { box-shadow: none !important; border: 1px solid #e5e7eb !important; padding: 14px !important; break-inside: avoid; }
+  .stat-value { font-size: 22px !important; }
+
+  .charts-grid { display: block !important; }
+  .chart-card {
+    box-shadow: none !important; border: 1px solid #e5e7eb !important;
+    margin-bottom: 16px !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .chart-card.full { grid-column: auto !important; }
+  .chart-wrap    { height: 200px !important; }
+  .chart-wrap-sm { height: 180px !important; }
+  canvas { max-width: 100% !important; }
+
+  .section-card { box-shadow: none !important; border: 1px solid #e5e7eb !important; break-inside: avoid; page-break-inside: avoid; margin-bottom: 16px !important; }
+  .data-table th, .data-table td { font-size: 11.5px !important; padding: 8px 10px !important; }
+  .section-body { padding: 0 !important; }
+
+  @page { margin: 1.5cm 1.8cm; }
+}
+
+@media (max-width: 1100px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 1200px) { .operations-kpi-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+@media (max-width: 900px) {
+  .sidebar { display: none; } .hamburger-btn { display: block; }
+  .main-content { padding: 20px; } html, body { overflow: auto; } .layout { height: auto; }
+  .charts-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .nav-container { padding: 12px 20px; } .admin-info { display: none; }
+  .main-content { padding: 16px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-value { font-size: 22px; } .stat-icon { width: 40px; height: 40px; font-size: 17px; }
+  .operations-kpi-grid { grid-template-columns:1fr 1fr; }
+  .report-insight { grid-template-columns:1fr; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-card { padding: 14px 12px; gap: 10px; }
+  .stat-value { font-size: 20px; } .section-body { padding: 14px; }
+  .btn-logout span { display: none; }
+}
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png">
+      <div><strong>Pulilan Health Center</strong><small>PHAQS · Admin Panel</small></div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout>
+        <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+      </button>
+      <button class="hamburger-btn" onclick="toggleAdminMenu()" id="adminHamburger">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+      <div class="mob-section-label">Main</div>
+      <a class="mob-sidebar-item" href="admin-dashboard.html"><div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+      <a class="mob-sidebar-item" href="admin-appointments.html"><div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+      <a class="mob-sidebar-item" href="admin-queue.html"><div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+      <a class="mob-sidebar-item" href="admin-patients.html"><div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients</a>
+      <a class="mob-sidebar-item active" href="admin-reports.html"><div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+      <div class="mob-divider"></div>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">Analytics</div>
+      <a class="mob-sidebar-item" href="admin-heatmap.html"><div class="mob-s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+      <div class="mob-divider"></div>
+      <div class="mob-section-label">System</div>
+  <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+      <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout><div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html"><div class="s-icon"><i class="fas fa-house"></i></div> Dashboard</a>
+    <a class="sidebar-item" href="admin-appointments.html"><div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments</a>
+    <a class="sidebar-item" href="admin-queue.html"><div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management</a>
+    <a class="sidebar-item" href="admin-patients.html"><div class="s-icon"><i class="fas fa-users"></i></div> Patients</a>
+    <a class="sidebar-item active" href="admin-reports.html"><div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports</a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" onclick="doLogout()" href="#" data-hc-logout><div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout</a>
+  </div>
+
+  <div class="main-content">
+
+    <div class="print-header">
+      <img src="images/mhc-logo.png">
+      <div>
+        <h3>Pulilan Health Center - Reports</h3>
+        <p id="printMeta">-</p>
+      </div>
+    </div>
+
+    <div class="page-header">
+      <div>
+        <h2>Reports</h2>
+        <p id="pageDesc">Summary of appointments, queue, and patient data</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-export-csv" onclick="exportCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+        <button class="btn-export-csv" onclick="exportExcel()"><i class="fas fa-file-excel"></i> Export Excel</button>
+        <button class="btn-export-csv" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> Save as PDF</button>
+        <button class="btn-print" onclick="doPrint()"><i class="fas fa-print"></i> Print Report</button>
+      </div>
+    </div>
+
+    <div class="staff-notice" id="staffNotice" style="display:none;">
+      <i class="fas fa-circle-info"></i>
+      <span id="staffNoticeText"></span>
+    </div>
+
+    <div class="filter-bar">
+      <label><i class="fas fa-filter" style="color:#1e40af;margin-right:4px;"></i> Filter:</label>
+      <select id="filterPeriod" onchange="handlePeriodChange()">
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month" selected>This Month</option>
+        <option value="custom">Custom Range</option>
+      </select>
+      <div id="customRange" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+        <input type="date" id="dateFrom">
+        <span style="color:#9ca3af;font-size:13px;">to</span>
+        <input type="date" id="dateTo">
+      </div>
+      <select id="filterRHU" onchange="applyFilters()">
+        <option value="all">All RHU Branches</option>
+        <option value="RHU I - Poblacion">RHU I - Poblacion</option>
+        <option value="RHU II - Cutcot">RHU II - Cutcot</option>
+        <option value="RHU III - Tinejero">RHU III - Tinejero</option>
+        <option value="RHU IV - Tibag">RHU IV - Tibag</option>
+      </select>
+      <button class="btn-apply" onclick="applyFilters()">Apply</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon si-blue"><i class="fas fa-calendar-check"></i></div>
+        <div><p class="stat-label">Total Appointments</p><p class="stat-value" id="rTotalAppts">0</p><p class="stat-sub" id="rApptsSub">-</p></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-green"><i class="fas fa-circle-check"></i></div>
+        <div><p class="stat-label">Confirmed</p><p class="stat-value" id="rConfirmed">0</p><p class="stat-sub" id="rConfirmedPct">-</p></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-amber"><i class="fas fa-clock"></i></div>
+        <div><p class="stat-label">Pending</p><p class="stat-value" id="rPending">0</p><p class="stat-sub" id="rPendingPct">-</p></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon si-red"><i class="fas fa-circle-xmark"></i></div>
+        <div><p class="stat-label">Cancelled</p><p class="stat-value" id="rCancelled">0</p><p class="stat-sub" id="rCancelledPct">-</p></div>
+      </div>
+    </div>
+
+    <div class="operations-kpi-grid" aria-label="Operational performance">
+      <div class="operations-kpi"><span>Completed Appointments</span><strong id="kpiCompleted">0</strong><small id="kpiCompletedSub">0% completion</small></div>
+      <div class="operations-kpi"><span>No-show Rate</span><strong id="kpiNoShow">0%</strong><small id="kpiNoShowSub">0 no-shows</small></div>
+      <div class="operations-kpi"><span>Average Waiting Time</span><strong id="kpiWait">—</strong><small>Arrival to first call</small></div>
+      <div class="operations-kpi"><span>Emergency Cases Handled</span><strong id="kpiEmergency">0</strong><small>Recorded emergency lane</small></div>
+    </div>
+    <div class="report-insight">
+      <div class="insight-panel">
+        <h3><i class="fas fa-lightbulb"></i> Operational insight</h3>
+        <p id="reportInsight">Report insight will appear after the selected period loads.</p>
+      </div>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <div class="chart-title"><i class="fas fa-chart-bar"></i> Appointments per RHU Branch</div>
+        <div class="chart-wrap"><canvas id="chartBranch"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title"><i class="fas fa-chart-pie"></i> Appointment Status Breakdown</div>
+        <div class="chart-wrap-sm"><canvas id="chartStatus"></canvas></div>
+        <div id="statusLegend" style="display:flex;justify-content:center;flex-wrap:wrap;gap:8px 14px;margin-top:12px;"></div>
+      </div>
+      <div class="chart-card full">
+        <div class="chart-title"><i class="fas fa-stethoscope"></i> Appointments by Service</div>
+        <div class="chart-wrap"><canvas id="chartService"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="hicon"><i class="fas fa-calendar-check"></i></div>
+          <h6>Appointment Details</h6>
+        </div>
+        <span id="apptCount" style="font-size:13px;color:#9ca3af;font-weight:500;"></span>
+      </div>
+      <div class="section-body" style="padding:0;">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Reference Number</th>
+                <th>Patient</th>
+                <th>Date</th>
+                <th>Service</th>
+                <th>RHU Branch</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody id="apptTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="hicon"><i class="fas fa-list-ol"></i></div>
+          <h6>Queue Summary per Branch</h6>
+        </div>
+      </div>
+      <div class="section-body" style="padding:0;">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>RHU Branch</th>
+                <th>Total Queue Entries</th>
+                <th>Waiting</th>
+                <th>Serving</th>
+                <th>Completed</th>
+                <th>Cancelled / No-show</th>
+                <th>Completion Rate</th>
+              </tr>
+            </thead>
+            <tbody id="queueTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-head">
+        <div class="section-head-left">
+          <div class="hicon"><i class="fas fa-users"></i></div>
+          <h6>Patient Demographics</h6>
+        </div>
+      </div>
+      <div class="section-body">
+        <div class="report-stat-row" id="reportStats"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../shared-data.js"></script>
+<script src="admin-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script>
+
+function toggleAdminMenu() {
+  const menu = document.getElementById("mobileSidebar");
+  const icon = document.getElementById("adminHamburgerIcon");
+  menu.classList.toggle("show");
+  icon.className = menu.classList.contains("show") ? "fas fa-times" : "fas fa-bars";
+}
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("mobileSidebar");
+  const btn  = document.getElementById("adminHamburger");
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove("show");
+    document.getElementById("adminHamburgerIcon").className = "fas fa-bars";
+  }
+});
+
+/* connected session check */
+const session = {loggedIn:false,name:'',role:'',branch:'',email:''};
+let isAdmin = false;
+let userBranch = '';
+
+function isFullAdmin(account) {
+  const role = String(account.role || '').toLowerCase();
+  const branch = String(account.branch || '').toLowerCase();
+  return role.includes('system administrator') || role.includes('super administrator') ||
+    (role.includes('admin') && (branch.includes('all branch') || branch.includes('all rhu')));
+}
+
+async function initializeReportsAccess() {
+  const response = await fetch('../backend/api.php?action=admin_me',{credentials:'include',cache:'no-store'});
+  const result = await response.json();
+  if(!response.ok || !result.ok){ location.replace('admin-login.html'); return; }
+  Object.assign(session,result.admin||{});
+  isAdmin=isFullAdmin(session);
+  userBranch=session.branch==='All RHU Branches'?'All Branches':(session.branch||'');
+  if(!isAdmin){ location.replace('admin-dashboard.html?notice=restricted'); return; }
+  document.getElementById('adminName').innerText=session.name||'Administrator';
+  document.getElementById('adminRole').innerText='System Administrator';
+  document.getElementById('adminAvatar').innerText=(session.name||'A').charAt(0).toUpperCase();
+  await loadReports();
+}
+
+function doLogout() {
+  confirmAdminLogout();
+}
+
+function handlePeriodChange() {
+  const val = document.getElementById("filterPeriod").value;
+  document.getElementById("customRange").style.display = val === "custom" ? "flex" : "none";
+}
+
+/* database setup */
+let allAppointments = [];
+let branchData = {};
+let allPatients = [];
+
+function normalizeReportAppointment(a) {
+  return {
+    queue: a.queue || '-',
+    patient: a.patient || 'Patient',
+    date: hcFormatDate(a.date || ''),
+    dateRaw: String(a.date || a.appointmentDate || '').slice(0,10),
+    service: a.service || '-',
+    rhu: a.rhu || a.center || '-',
+    time: a.time || '-',
+    status: a.status || 'Pending',
+    priority: Boolean(a.isPriority || a.priority),
+    emergency: Boolean(a.isEmergency || a.queueType === 'emergency'),
+    queueType: a.queueType || 'regular',
+    barangay: a.barangay || 'Not recorded',
+    arrivedAt: a.arrivedAt || null,
+    serviceStartedAt: a.serviceStartedAt || null,
+    completedAt: a.completedAt || null
+  };
+}
+function normalizeReportPatient(p) {
+  return {
+    senior: Boolean(p.isSenior),
+    pwd: Boolean(p.isPwd),
+    fourPs: Boolean(p.is4ps),
+    philhealth: (p.philhealthNo || p.philhealthNum) ? 'Active' : '-'
+  };
+}
+async function loadReports() {
+  const tableBody = document.getElementById('apptTableBody');
+  if (tableBody) tableBody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:28px;color:#64748b;">Loading report data...</td></tr>';
+  try {
+    const [data, qdata] = await Promise.all([hcApi('admin_reports_data'), hcApi('queue_data')]);
+    allAppointments = (data.appointments || []).map(normalizeReportAppointment);
+    allPatients = (data.patients || []).map(normalizeReportPatient);
+    const q = qdata.queueData || {};
+    branchData = {};
+    Object.entries(q).forEach(([name, bd]) => {
+      const activeQueue = Array.isArray(bd.queue) ? bd.queue : [];
+      const serving = activeQueue.filter(x => String(x.status || '').toLowerCase() === 'serving').length;
+      const waiting = activeQueue.filter(x => String(x.status || '').toLowerCase() !== 'serving').length;
+      const served = Number(bd.served || 0);
+      branchData[name] = {
+        served,
+        serving,
+        waiting,
+        inQueue: activeQueue.length,
+        totalHandled: served + activeQueue.length
+      };
+    });
+    applyFilters();
+  } catch (err) {
+    document.getElementById('apptTableBody').innerHTML = `<tr><td colspan="8" style="text-align:center;padding:28px;color:#b91c1c;font-weight:600;">Reports could not load. Please check the database connection and try again.</td></tr>`;
+    console.error('Reports load failed:', err);
+  }
+}
+
+let chartBranch, chartStatus, chartService;
+
+function reportDateRange() {
+  const value=document.getElementById('filterPeriod').value;
+  const today=new Date(); today.setHours(0,0,0,0);
+  let start=null,end=new Date(today); end.setHours(23,59,59,999);
+  if(value==='today'){start=new Date(today);}
+  else if(value==='week'){start=new Date(today);start.setDate(today.getDate()-today.getDay());}
+  else if(value==='month'){start=new Date(today.getFullYear(),today.getMonth(),1);}
+  else if(value==='year'){start=new Date(today.getFullYear(),0,1);}
+  else if(value==='custom'){
+    const from=document.getElementById('dateFrom')?.value;
+    const to=document.getElementById('dateTo')?.value;
+    start=from?new Date(from+'T00:00:00'):null;
+    end=to?new Date(to+'T23:59:59'):end;
+  }
+  return {start,end};
+}
+function filterReportRecords(records) {
+  const {start,end}=reportDateRange();
+  return records.filter(item=>{
+    const d=new Date(String(item.dateRaw||'')+'T00:00:00');
+    if(Number.isNaN(d.getTime()))return false;
+    return (!start||d>=start)&&(!end||d<=end);
+  });
+}
+function previousReportRecords(records) {
+  const {start,end}=reportDateRange();
+  if(!start||!end)return[];
+  const span=Math.max(0,end.getTime()-start.getTime());
+  const previousEnd=new Date(start.getTime()-1);
+  const previousStart=new Date(previousEnd.getTime()-span);
+  return records.filter(item=>{
+    const d=new Date(String(item.dateRaw||'')+'T00:00:00');
+    return !Number.isNaN(d.getTime())&&d>=previousStart&&d<=previousEnd;
+  });
+}
+function reportCountBy(rows,key) {
+  return rows.reduce((acc,row)=>{const value=String(row[key]||'Not recorded');acc[value]=(acc[value]||0)+1;return acc},{});
+}
+function topReportValue(counts) {
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]))[0]||['No data',0];
+}
+function reportTimestamp(value) {
+  if(!value)return null;
+  const date=new Date(String(value).replace(' ','T'));
+  return Number.isNaN(date.getTime())?null:date;
+}
+function applyFilters() {
+  const rhu = isAdmin
+    ? document.getElementById("filterRHU").value
+    : userBranch;
+
+  const normalizeBranch = value => String(value || '').trim().toLowerCase();
+  const byBranch = rhu === "all" ? allAppointments : allAppointments.filter(a => normalizeBranch(a.rhu) === normalizeBranch(rhu));
+  const filtered = filterReportRecords(byBranch);
+  const total = filtered.length;
+  const statusOf = a => String(a.status || '').trim().toLowerCase();
+  const confirmed = filtered.filter(a => statusOf(a) === 'confirmed').length;
+  const pending = filtered.filter(a => statusOf(a) === 'pending').length;
+  const serving = filtered.filter(a => statusOf(a) === 'serving').length;
+  const cancelled = filtered.filter(a => statusOf(a) === 'cancelled').length;
+  const done = filtered.filter(a => ['done','completed','attended'].includes(statusOf(a))).length;
+  const noShow = filtered.filter(a => ['no show','no-show','missed'].includes(statusOf(a))).length;
+  const periodEl  = document.getElementById("filterPeriod");
+  const period    = periodEl.options[periodEl.selectedIndex].text;
+
+  document.getElementById("rTotalAppts").innerText   = total;
+  document.getElementById("rApptsSub").innerText     = period + (rhu !== "all" ? " - " + rhu : " - All Branches");
+  document.getElementById("rConfirmed").innerText    = confirmed;
+  document.getElementById("rConfirmedPct").innerText = total ? Math.round((confirmed/total)*100) + "% of total" : "-";
+  document.getElementById("rPending").innerText      = pending;
+  document.getElementById("rPendingPct").innerText   = total ? Math.round((pending/total)*100)   + "% of total" : "-";
+  document.getElementById("rCancelled").innerText    = cancelled;
+  document.getElementById("rCancelledPct").innerText = total ? Math.round((cancelled/total)*100) + "% of total" : "-";
+
+  const completionRate=total?Math.round(done/total*100):0;
+  const noShowRate=total?Math.round(noShow/total*100):0;
+  const waits=filtered.map(item=>{
+    const arrived=reportTimestamp(item.arrivedAt),started=reportTimestamp(item.serviceStartedAt);
+    return arrived&&started&&started>=arrived?(started-arrived)/60000:null;
+  }).filter(value=>value!==null);
+  const averageWait=waits.length?Math.round(waits.reduce((sum,value)=>sum+value,0)/waits.length):null;
+  const emergencies=filtered.filter(item=>item.emergency).length;
+  const [busiestRhu,busiestRhuCount]=topReportValue(reportCountBy(filtered,'rhu'));
+  const [busiestService,busiestServiceCount]=topReportValue(reportCountBy(filtered,'service'));
+
+  document.getElementById('kpiCompleted').textContent=done;
+  document.getElementById('kpiCompletedSub').textContent=done?`${completionRate}% queue completion rate`:'No completed appointments in this range';
+  document.getElementById('kpiNoShow').textContent=`${noShowRate}%`;
+  document.getElementById('kpiNoShowSub').textContent=`${noShow} no-show${noShow===1?'':'s'}`;
+  document.getElementById('kpiWait').textContent=averageWait===null?'—':`${averageWait} min`;
+  document.getElementById('kpiEmergency').textContent=emergencies;
+  document.getElementById('reportInsight').textContent=total
+    ? `${busiestRhu} received the highest number of appointments (${busiestRhuCount}) for the selected period. ${busiestService} was the busiest service (${busiestServiceCount}). Completed appointments: ${done}; no-show rate: ${noShowRate}%; average waiting time: ${averageWait===null?'not yet available because valid check-in and first-call timestamps are incomplete':averageWait+' minutes'}.`
+    : 'No appointment activity is available for the selected date range and RHU branch.';
+
+  document.getElementById("apptCount").innerText = total + " record" + (total !== 1 ? "s" : "");
+  document.getElementById("apptTableBody").innerHTML = filtered.length ? filtered.map(a => `
+    <tr>
+      <td><strong style="color:${a.priority?"#a16207":"#1e40af"};">${a.queue}</strong></td>
+      <td><strong>${a.patient}</strong></td>
+      <td style="font-size:12.5px;color:#6b7280;">${a.date}</td>
+      <td>${a.service}</td>
+      <td><span style="font-size:12px;color:#6b7280;">${a.rhu}</span></td>
+      <td>${a.time}</td>
+      <td><span class="badge badge-${a.status.toLowerCase()}">${["done","attended"].includes(String(a.status).toLowerCase())?"Completed":a.status}</span></td>
+      <td>${a.priority ? `<span style="background:#fef9c3;color:#a16207;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;"><i class="fas fa-star" style="font-size:9px;margin-right:3px;"></i>Priority</span>` : "-"}</td>
+    </tr>`).join("") : '<tr><td colspan="8" style="text-align:center;padding:28px;color:#64748b;">No appointment records match the selected period and branch.</td></tr>';
+
+  const reportBranches = [
+    "RHU I - Poblacion",
+    "RHU II - Cutcot",
+    "RHU III - Tinejero",
+    "RHU IV - Tibag"
+  ];
+  const visibleBranches = rhu === "all" ? reportBranches : [rhu];
+  const statusKey = item => String(item.status || "").trim().toLowerCase();
+  const filteredBranches = Object.fromEntries(visibleBranches.map(name => {
+    const rows = filtered.filter(item => normalizeBranch(item.rhu) === normalizeBranch(name));
+    const completedCount = rows.filter(item => ["done","completed","attended"].includes(statusKey(item))).length;
+    const servingCount = rows.filter(item => statusKey(item) === "serving").length;
+    const waitingCount = rows.filter(item => ["pending","confirmed","waiting","hold","arrived"].includes(statusKey(item))).length;
+    const cancelledCount = rows.filter(item => statusKey(item) === "cancelled").length;
+    const noShowCount = rows.filter(item => ["no show","no-show","missed"].includes(statusKey(item))).length;
+    return [name, {
+      total: rows.length,
+      completed: completedCount,
+      serving: servingCount,
+      waiting: waitingCount,
+      cancelledOrNoShow: cancelledCount + noShowCount
+    }];
+  }));
+
+  document.getElementById("queueTableBody").innerHTML = Object.entries(filteredBranches).map(([name, bd]) => {
+    const totalEntries = Number(bd.total || 0);
+    const rate = totalEntries > 0 ? Math.round((Number(bd.completed || 0) / totalEntries) * 100) : 0;
+    return `<tr>
+      <td><strong>${name}</strong></td>
+      <td>${totalEntries}</td>
+      <td style="color:#a16207;font-weight:600;">${Number(bd.waiting || 0)}</td>
+      <td style="color:#6d28d9;font-weight:600;">${Number(bd.serving || 0)}</td>
+      <td style="color:#15803d;font-weight:600;">${Number(bd.completed || 0)}</td>
+      <td>${Number(bd.cancelledOrNoShow || 0)}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="flex:1;background:#f1f5f9;border-radius:99px;height:7px;overflow:hidden;min-width:80px;">
+            <div style="background:#1e40af;height:100%;border-radius:99px;width:${rate}%;"></div>
+          </div>
+          <span style="font-size:12px;font-weight:600;color:#1e40af;min-width:32px;">${rate}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join("");
+
+  const seniors    = allPatients.filter(p => p.senior).length;
+  const pwds       = allPatients.filter(p => p.pwd).length;
+  const fourPs     = allPatients.filter(p => p.fourPs).length;
+  const philhealth = allPatients.filter(p => p.philhealth === "Active").length;
+
+  document.getElementById("reportStats").innerHTML = [
+    { icon:"fa-person-cane",        color:"si-purple", label:"Senior Citizens",   value:seniors            },
+    { icon:"fa-wheelchair",         color:"si-blue",   label:"PWD",               value:pwds               },
+    { icon:"fa-hand-holding-heart", color:"si-green",  label:"4Ps Beneficiaries", value:fourPs             },
+    { icon:"fa-id-card",            color:"si-amber",  label:"PhilHealth Active", value:philhealth         },
+    { icon:"fa-users",              color:"si-blue",   label:"Total Patients",    value:allPatients.length },
+  ].map(d => `
+    <div class="report-pill">
+      <div class="report-pill-icon ${d.color}"><i class="fas ${d.icon}"></i></div>
+      <div>
+        <div class="report-pill-label">${d.label}</div>
+        <div class="report-pill-value">${d.value}</div>
+      </div>
+    </div>`).join("");
+
+  if (chartBranch)  chartBranch.destroy();
+  if (chartStatus)  chartStatus.destroy();
+  if (chartService) chartService.destroy();
+
+  const rhuKeys   = Object.keys(filteredBranches);
+  const rhuCounts = rhuKeys.map(k => filtered.filter(a => normalizeBranch(a.rhu) === normalizeBranch(k)).length);
+  const bgColors  = ["#1e3a8a","#1e40af","#2563eb","#60a5fa"];
+
+  chartBranch = new Chart(document.getElementById("chartBranch"), {
+    type: "bar",
+    data: {
+      labels: rhuKeys.map(k => k.replace("RHU ","RHU\n")),
+      datasets: [{ label:"Appointments", data:rhuCounts, backgroundColor:bgColors.slice(0,rhuKeys.length), borderRadius:8, borderSkipped:false }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      animation: { duration: 400 },
+      plugins: { legend:{ display:false }, tooltip:{ backgroundColor:"#1e3a8a", titleColor:"#fff", bodyColor:"#bfdbfe", padding:10, cornerRadius:8 } },
+      scales: { y:{ beginAtZero:true, ticks:{ stepSize:1, color:"#9ca3af", font:{size:11} }, grid:{ color:"#f1f5f9" } }, x:{ ticks:{ color:"#374151", font:{size:11} }, grid:{ display:false } } }
+    }
+  });
+
+  const statusLabels = ["Confirmed","Pending","Serving","Cancelled","Completed","No-show"];
+  const statusColors = ["#1e40af","#f59e0b","#7c3aed","#ef4444","#10b981","#f97316"];
+  const statusCounts = [confirmed, pending, serving, cancelled, done, noShow];
+
+  chartStatus = new Chart(document.getElementById("chartStatus"), {
+    type: "doughnut",
+    data: { labels:statusLabels, datasets:[{ data:statusCounts, backgroundColor:statusColors, borderWidth:3, borderColor:"#ffffff", hoverOffset:6 }] },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      animation: { duration: 400 },
+      plugins: { legend:{ display:false }, tooltip:{ backgroundColor:"#1e3a8a", titleColor:"#fff", bodyColor:"#bfdbfe", padding:10, cornerRadius:8 } },
+      cutout:"65%"
+    }
+  });
+
+  document.getElementById("statusLegend").innerHTML = statusLabels.map((l,i) => `
+    <div style="display:flex;align-items:center;gap:5px;font-size:11.5px;color:#374151;font-weight:500;">
+      <span style="width:10px;height:10px;border-radius:50%;background:${statusColors[i]};flex-shrink:0;"></span>
+      ${l} <span style="color:#9ca3af;">(${statusCounts[i]})</span>
+    </div>`).join("");
+
+  const serviceCounts = reportCountBy(filtered,'service');
+  const services = Object.keys(serviceCounts).sort((a,b) => serviceCounts[b] - serviceCounts[a] || a.localeCompare(b));
+  const svcCounts = services.map(service => serviceCounts[service]);
+
+  chartService = new Chart(document.getElementById("chartService"), {
+    type: "bar",
+    data: {
+      labels: services.length ? services : ["No data"],
+      datasets: [{ label:"Appointments", data:services.length ? svcCounts : [0], backgroundColor:(services.length ? services : ["No data"]).map((_,index)=>["#1e40af","#2563eb","#3b82f6","#60a5fa","#93c5fd","#bfdbfe"][index%6]), borderRadius:8, borderSkipped:false }]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      animation: { duration: 400 },
+      plugins: { legend:{ display:false }, tooltip:{ backgroundColor:"#1e3a8a", titleColor:"#fff", bodyColor:"#bfdbfe", padding:10, cornerRadius:8 } },
+      scales: { y:{ beginAtZero:true, ticks:{ stepSize:1, color:"#9ca3af", font:{size:11} }, grid:{ color:"#f1f5f9" } }, x:{ ticks:{ color:"#374151", font:{size:11} }, grid:{ display:false } } }
+    }
+  });
+}
+
+function getFilteredReportAppointments() {
+  const rhu = isAdmin ? document.getElementById("filterRHU").value : userBranch;
+  return {
+    rhu,
+    appointments: filterReportRecords(rhu === "all"
+      ? allAppointments
+      : allAppointments.filter(item => String(item.rhu || '').trim().toLowerCase() === String(rhu || '').trim().toLowerCase()))
+  };
+}
+
+function reportFileName(extension) {
+  const rhu = isAdmin ? document.getElementById("filterRHU").value : userBranch;
+  const periodEl = document.getElementById("filterPeriod");
+  const period = periodEl.options[periodEl.selectedIndex].text.replace(/\s+/g,"_");
+  const branch = rhu === "all" ? "All_Branches" : rhu.replace(/[\s-]+/g,"_").replace(/__/g,"_");
+  const dateStamp = new Date().toISOString().split("T")[0];
+  return `PHC_Report_${period}_${branch}_${dateStamp}.${extension}`;
+}
+
+function exportCSV() {
+  const rhu = isAdmin
+    ? document.getElementById("filterRHU").value
+    : userBranch;
+  const filtered = filterReportRecords(rhu === "all" ? allAppointments : allAppointments.filter(a => String(a.rhu || '').trim().toLowerCase() === String(rhu || '').trim().toLowerCase()));
+  const periodEl  = document.getElementById("filterPeriod");
+  const period    = periodEl.options[periodEl.selectedIndex].text.replace(/\s+/g,"_");
+  const branch    = rhu === "all" ? "All_Branches" : rhu.replace(/[\s-]+/g,"_").replace(/__/g,"_");
+  const dateStamp = new Date().toISOString().split("T")[0];
+  const filename  = reportFileName("csv");
+
+  const BOM  = "\uFEFF";
+  const rows = [["Queue #","Patient","Date","Service","RHU Branch","Time","Status","Priority"]];
+  filtered.forEach(a => rows.push([
+    a.queue, a.patient, a.date, a.service, a.rhu, a.time, a.status, a.priority ? "Yes" : "No"
+  ]));
+
+  const csv  = BOM + rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(",")).join("\r\n");
+  const blob = new Blob([csv], { type:"text/csv;charset=utf-8;" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportExcel() {
+  const { appointments } = getFilteredReportAppointments();
+
+  const rows = appointments.map(a => `
+    <tr>
+      <td>${escapeReportCell(a.queue)}</td>
+      <td>${escapeReportCell(a.patient)}</td>
+      <td>${escapeReportCell(a.date)}</td>
+      <td>${escapeReportCell(a.service)}</td>
+      <td>${escapeReportCell(a.rhu)}</td>
+      <td>${escapeReportCell(a.time)}</td>
+      <td>${escapeReportCell(a.status)}</td>
+      <td>${a.priority ? "Yes" : "No"}</td>
+    </tr>`).join("");
+
+  const workbook = `<!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <style>
+      body{font-family:Arial,sans-serif}
+      h2{color:#0b3d91}
+      table{border-collapse:collapse;width:100%}
+      th,td{border:1px solid #b8c2d1;padding:7px;text-align:left}
+      th{background:#0b3d91;color:#fff}
+    </style>
+  </head>
+  <body>
+    <h2>Pulilan Health Center Report</h2>
+    <p>Generated: ${new Date().toLocaleString("en-PH")}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Reference Number</th><th>Patient</th><th>Date</th><th>Service</th>
+          <th>RHU Branch</th><th>Time</th><th>Status</th><th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table></body>
+  </html>`;
+
+  const blob = new Blob(["\uFEFF", workbook], {
+    type:"application/vnd.ms-excel;charset=utf-8;"
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = reportFileName("xls");
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeReportCell(value) {
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+
+function exportPDF() {
+  doPrint();
+}
+
+function doPrint() {
+  const rhu      = isAdmin ? document.getElementById("filterRHU").value : userBranch;
+  const periodEl = document.getElementById("filterPeriod");
+  const period   = periodEl.options[periodEl.selectedIndex].text;
+  const now      = new Date().toLocaleString("en-PH", { weekday:"long", year:"numeric", month:"long", day:"numeric", hour:"2-digit", minute:"2-digit" });
+  const branchLabel = rhu === "all" ? "All RHU Branches" : rhu;
+  document.getElementById("printMeta").textContent =
+    period + " - " + branchLabel + " - Printed " + now;
+  setTimeout(() => window.print(), 300);
+}
+
+document.addEventListener('DOMContentLoaded',()=>initializeReportsAccess().catch(err=>{console.error(err);document.getElementById('apptTableBody').innerHTML=`<tr><td colspan="8">Database/API error: ${err.message}</td></tr>`;}));
+
+</script>
+<script src="audit-trail.js"></script>
+<script>
+auditLog("Viewed Page", "Opened Reports page", "Reports");
+</script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="../backend/backend.js"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

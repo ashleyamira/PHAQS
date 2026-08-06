@@ -1,0 +1,189 @@
+
+body.rhu-staff-session{
+  --staff-topbar:78px;
+  --staff-sidebar:215px;
+  --staff-blue:#123f7b;
+  --staff-blue2:#0e3267;
+  --staff-active:#1e58a4;
+  margin:0!important;
+  height:100vh!important;
+  overflow:hidden!important;
+  background:#f3f6fa!important;
+  font-family:'Inter',Arial,sans-serif!important;
+}
+body.rhu-staff-session .navbar{
+  position:relative!important;top:auto!important;left:auto!important;right:auto!important;
+  width:100%!important;height:78px!important;min-height:78px!important;
+  margin:0!important;padding:0!important;background:#fff!important;
+  border:0!important;border-bottom:1px solid #dbe3ee!important;box-shadow:none!important;
+}
+body.rhu-staff-session .nav-container{
+  width:100%!important;max-width:none!important;height:78px!important;margin:0!important;
+  padding:0 28px!important;display:flex!important;align-items:center!important;box-sizing:border-box!important;
+}
+body.rhu-staff-session .logo-area{display:flex!important;align-items:center!important;gap:11px!important}
+body.rhu-staff-session .logo-area img{width:36px!important;height:36px!important;min-width:36px!important;object-fit:cover!important;border-radius:50%!important}
+body.rhu-staff-session .logo-area strong{display:block!important;margin:0!important;font-size:14px!important;line-height:1.2!important;font-weight:750!important;color:#111827!important}
+body.rhu-staff-session .logo-area small{display:block!important;margin-top:3px!important;font-size:10.5px!important;line-height:1.15!important;font-weight:500!important;color:#64748b!important}
+body.rhu-staff-session .nav-right{margin-left:auto!important;display:flex!important;align-items:center!important;gap:13px!important}
+body.rhu-staff-session .admin-info{text-align:right!important;line-height:1.2!important}
+body.rhu-staff-session .admin-info .a-name{display:block!important;font-size:12.5px!important;font-weight:750!important;color:#111827!important}
+body.rhu-staff-session .admin-info .a-role{display:block!important;margin-top:3px!important;font-size:10.5px!important;font-weight:500!important;color:#64748b!important}
+body.rhu-staff-session .admin-avatar{width:34px!important;height:34px!important;min-width:34px!important;border-radius:50%!important;background:#1f46a8!important;color:#fff!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:13px!important;font-weight:800!important}
+body.rhu-staff-session .btn-logout{min-height:34px!important;padding:7px 13px!important;border:1px solid #fecaca!important;border-radius:8px!important;background:#fff!important;color:#dc2626!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:6px!important;font:700 12px/1 'Inter',Arial,sans-serif!important;box-shadow:none!important}
+body.rhu-staff-session .layout{display:flex!important;width:100%!important;height:calc(100vh - 78px)!important;min-height:calc(100vh - 78px)!important;margin:0!important;padding:0!important;overflow:hidden!important}
+body.rhu-staff-session .sidebar{
+  position:relative!important;inset:auto!important;z-index:20!important;
+  width:215px!important;min-width:215px!important;max-width:215px!important;flex:0 0 215px!important;
+  height:100%!important;min-height:0!important;margin:0!important;padding:12px 0 14px!important;
+  display:flex!important;flex-direction:column!important;overflow-x:hidden!important;overflow-y:auto!important;
+  border:0!important;background:linear-gradient(180deg,#123f7b 0%,#0e3267 100%)!important;box-shadow:none!important;color:#fff!important;
+}
+body.rhu-staff-session .sidebar-section-label{margin:0!important;padding:14px 22px 8px!important;color:#afc4e3!important;font-size:9px!important;line-height:1!important;font-weight:800!important;letter-spacing:.105em!important;text-transform:uppercase!important}
+body.rhu-staff-session .sidebar-section-label.account-label{margin-top:auto!important;padding-top:15px!important}
+body.rhu-staff-session .sidebar-item{
+  box-sizing:border-box!important;width:calc(100% - 18px)!important;min-height:47px!important;height:auto!important;
+  margin:2px 9px!important;padding:7px 10px!important;border:0!important;border-radius:9px!important;
+  background:transparent!important;color:#f8fbff!important;text-decoration:none!important;box-shadow:none!important;
+  display:flex!important;align-items:center!important;gap:10px!important;font:700 13px/1.22 'Inter',Arial,sans-serif!important;white-space:normal!important;
+}
+body.rhu-staff-session .sidebar-item:hover{background:rgba(255,255,255,.09)!important;color:#fff!important}
+body.rhu-staff-session .sidebar-item.active{background:#1e58a4!important;color:#fff!important}
+body.rhu-staff-session .sidebar-item .s-icon{width:34px!important;height:34px!important;min-width:34px!important;flex:0 0 34px!important;border-radius:8px!important;background:rgba(255,255,255,.13)!important;color:#dbeafe!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:14px!important}
+body.rhu-staff-session .sidebar-item.active .s-icon,body.rhu-staff-session .sidebar-item:hover .s-icon{background:rgba(255,255,255,.18)!important;color:#fff!important}
+body.rhu-staff-session .main-content{box-sizing:border-box!important;flex:1 1 auto!important;min-width:0!important;width:calc(100% - 215px)!important;height:100%!important;margin:0!important;padding:28px 28px 38px!important;overflow-y:auto!important;overflow-x:hidden!important;background:#f3f6fa!important}
+body.rhu-staff-session .mobile-sidebar{display:none!important}
+body.rhu-staff-session .hamburger-btn{display:none!important}
+@media(max-width:900px){
+ body.rhu-staff-session{height:auto!important;overflow:auto!important}
+ body.rhu-staff-session .navbar,body.rhu-staff-session .nav-container{height:64px!important;min-height:64px!important}
+ body.rhu-staff-session .nav-container{padding:0 16px!important}
+ body.rhu-staff-session .admin-info,body.rhu-staff-session .btn-logout{display:none!important}
+ body.rhu-staff-session .hamburger-btn{display:inline-flex!important}
+ body.rhu-staff-session .layout{height:auto!important;min-height:calc(100vh - 64px)!important;overflow:visible!important}
+ body.rhu-staff-session .sidebar{display:none!important}
+ body.rhu-staff-session .main-content{width:100%!important;height:auto!important;min-height:calc(100vh - 64px)!important;padding:20px 16px 34px!important;overflow:visible!important}
+}
+
+html body.rhu-staff-session{
+  --staff-shell-nav:67px!important;
+  --staff-shell-side:240px!important;
+}
+html body.rhu-staff-session .navbar{
+  height:67px!important;
+  min-height:67px!important;
+  border-bottom:3px solid #1e40af!important;
+  background:#fff!important;
+}
+html body.rhu-staff-session .nav-container{
+  min-height:67px!important;
+  height:67px!important;
+  padding:0 32px!important;
+}
+html body.rhu-staff-session .logo-area{
+  gap:12px!important;
+}
+html body.rhu-staff-session .logo-area img{
+  width:40px!important;
+  height:40px!important;
+}
+html body.rhu-staff-session .logo-area strong{
+  font-size:15px!important;
+  line-height:1.2!important;
+}
+html body.rhu-staff-session .logo-area small{
+  font-size:12px!important;
+  margin-top:2px!important;
+}
+html body.rhu-staff-session .nav-right{
+  gap:16px!important;
+}
+html body.rhu-staff-session .admin-info .a-name,
+html body.rhu-staff-session .admin-info #adminName{
+  font-size:13.5px!important;
+}
+html body.rhu-staff-session .admin-info .a-role,
+html body.rhu-staff-session .admin-info #adminRole{
+  font-size:12px!important;
+}
+html body.rhu-staff-session .admin-avatar{
+  width:36px!important;
+  height:36px!important;
+  flex-basis:36px!important;
+  font-size:14px!important;
+}
+html body.rhu-staff-session .btn-logout{
+  min-height:36px!important;
+  height:36px!important;
+  padding:0 14px!important;
+  font-size:13px!important;
+  border-radius:8px!important;
+}
+html body.rhu-staff-session .layout{
+  height:calc(100vh - 67px)!important;
+  min-height:calc(100vh - 67px)!important;
+}
+html body.rhu-staff-session .sidebar{
+  position:sticky!important;
+  top:0!important;
+  width:240px!important;
+  min-width:240px!important;
+  max-width:240px!important;
+  height:calc(100vh - 67px)!important;
+  padding:0 0 14px!important;
+  background:linear-gradient(180deg,#123f7b 0%,#0e3267 100%)!important;
+}
+html body.rhu-staff-session .sidebar-section-label{
+  padding:16px 20px 6px!important;
+  font-size:10.5px!important;
+  letter-spacing:.08em!important;
+}
+html body.rhu-staff-session .sidebar-item{
+  width:100%!important;
+  min-height:52px!important;
+  height:auto!important;
+  margin:0!important;
+  padding:10px 20px!important;
+  border-radius:0!important;
+  border-left:3px solid transparent!important;
+  gap:11px!important;
+  font-size:14px!important;
+  font-weight:600!important;
+}
+html body.rhu-staff-session .sidebar-item .s-icon{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  flex-basis:30px!important;
+  border-radius:8px!important;
+  font-size:13px!important;
+}
+html body.rhu-staff-session .sidebar-item:hover{
+  background:rgba(255,255,255,.09)!important;
+}
+html body.rhu-staff-session .sidebar-item.active{
+  background:#1e58a4!important;
+  border-left-color:#fff!important;
+  box-shadow:none!important;
+}
+html body.rhu-staff-session .main-content{
+  width:calc(100% - 240px)!important;
+  padding:32px!important;
+}
+html body.rhu-staff-session .page-header{
+  margin-bottom:20px!important;
+}
+html body.rhu-staff-session .page-header h2{
+  font-size:26px!important;
+}
+html body.rhu-staff-session .page-header p{
+  font-size:14px!important;
+}
+@media(max-width:900px){
+  html body.rhu-staff-session{--staff-shell-nav:64px!important}
+  html body.rhu-staff-session .navbar,
+  html body.rhu-staff-session .nav-container{height:64px!important;min-height:64px!important}
+  html body.rhu-staff-session .nav-container{padding:0 16px!important}
+  html body.rhu-staff-session .layout{height:auto!important;min-height:calc(100vh - 64px)!important}
+  html body.rhu-staff-session .main-content{width:100%!important;padding:20px 16px 36px!important}
+}

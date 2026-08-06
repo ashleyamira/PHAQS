@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login | Pulilan Health Center</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+
+<link rel="stylesheet" href="../assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+html,body{
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:'Inter',sans-serif;
+color:#071a44;
+background:#fff;
+}
+
+.admin-page{
+height:100vh;
+width:100%;
+display:grid;
+grid-template-columns:46% 54%;
+background:#fff;
+overflow:hidden;
+}
+
+.left-panel{
+position:relative;
+height:100vh;
+padding:54px 62px 38px 66px;
+overflow:hidden;
+background:#08235a url('../patient/images/pulilan-health-center.jpg') center/cover no-repeat;
+}
+
+.left-panel:before{
+content:"";
+position:absolute;
+inset:0;
+background:
+linear-gradient(90deg,rgba(4,20,55,.96) 0%,rgba(8,35,90,.88) 42%,rgba(13,64,140,.55) 74%,rgba(13,64,140,.25) 100%);
+z-index:1;
+}
+
+.left-panel:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(180deg,rgba(4,20,55,.05),rgba(4,20,55,.42));
+z-index:1;
+}
+
+.left-content{
+position:relative;
+z-index:2;
+height:100%;
+display:flex;
+flex-direction:column;
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:17px;
+margin-bottom:72px;
+}
+
+.brand img{
+width:70px;
+height:70px;
+border-radius:50%;
+object-fit:cover;
+filter:drop-shadow(0 5px 12px rgba(0,0,0,.25));
+}
+
+.brand h1{
+font-size:25px;
+font-weight:800;
+color:#fff;
+line-height:1.05;
+margin:0 0 7px;
+letter-spacing:-.02em;
+}
+
+.brand p{
+font-size:17px;
+color:#e8f1ff;
+line-height:1.35;
+margin:0;
+}
+
+.admin-icon{
+width:72px;
+height:72px;
+border-radius:50%;
+border:1px solid rgba(96,165,250,.55);
+background:rgba(13,90,216,.18);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-size:29px;
+margin-bottom:24px;
+}
+
+.hero-copy h2{
+font-size:43px;
+font-weight:800;
+line-height:1.12;
+letter-spacing:-.045em;
+margin:0 0 22px;
+color:#fff;
+}
+
+.hero-copy h2 span{
+color:#3b82f6;
+}
+
+.blue-line{
+width:76px;
+height:4px;
+background:#3b82f6;
+border-radius:999px;
+margin-bottom:28px;
+}
+
+.hero-copy>p{
+font-size:17px;
+line-height:1.65;
+color:#f1f7ff;
+width:420px;
+margin-bottom:34px;
+}
+
+.admin-features{
+display:flex;
+flex-direction:column;
+gap:12px;
+width:390px;
+}
+
+.feature{
+display:grid;
+grid-template-columns:58px 1fr;
+gap:17px;
+align-items:center;
+padding:14px 16px;
+border:1px solid rgba(147,197,253,.22);
+border-radius:8px;
+background:rgba(15,23,42,.22);
+backdrop-filter:blur(8px);
+}
+
+.feature-icon{
+width:58px;
+height:58px;
+border-radius:8px;
+background:#0d5ad8;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#fff;
+font-size:24px;
+box-shadow:0 12px 28px rgba(13,90,216,.24);
+}
+
+.feature strong{
+display:block;
+font-size:15.5px;
+font-weight:800;
+color:#fff;
+margin-bottom:5px;
+}
+
+.feature span{
+display:block;
+font-size:13.5px;
+color:#eaf2ff;
+line-height:1.45;
+}
+
+.left-footer{
+margin-top:auto;
+font-size:13px;
+color:#fff;
+}
+
+.right-panel{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+padding:36px 70px;
+}
+
+.login-card{
+background:#fff;
+width:min(500px,100%);
+padding:42px 40px 36px;
+border-radius:16px;
+box-shadow:0 24px 60px rgba(15,23,42,.12),0 8px 24px rgba(15,23,42,.05);
+border:1px solid #e6edf7;
+}
+
+.login-top{
+text-align:center;
+margin-bottom:30px;
+}
+
+.admin-badge{
+width:92px;
+height:92px;
+border-radius:50%;
+background:#eaf2ff;
+color:#0d47c9;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:43px;
+margin:0 auto 20px;
+}
+
+.login-top h3{
+font-size:28px;
+font-weight:800;
+color:#071a44;
+letter-spacing:-.025em;
+margin-bottom:9px;
+}
+
+.login-top p{
+font-size:15px;
+color:#475569;
+line-height:1.5;
+margin:0;
+}
+
+.error-box{
+background:#fee2e2;
+color:#b91c1c;
+border:1px solid #fecaca;
+border-radius:8px;
+padding:10px 12px;
+font-size:13px;
+font-weight:600;
+display:none;
+align-items:center;
+gap:8px;
+margin-bottom:15px;
+}
+
+.form-group{
+margin-bottom:19px;
+}
+
+.form-label{
+display:block;
+font-size:14px;
+font-weight:800;
+color:#071a44;
+margin-bottom:9px;
+}
+
+.input-wrap{
+position:relative;
+}
+
+.input-wrap i.left{
+position:absolute;
+left:18px;
+top:50%;
+transform:translateY(-50%);
+font-size:17px;
+color:#71819c;
+z-index:2;
+}
+
+.input-wrap i.eye{
+position:absolute;
+right:18px;
+top:50%;
+transform:translateY(-50%);
+font-size:17px;
+color:#71819c;
+cursor:pointer;
+z-index:2;
+}
+
+.form-control{
+height:52px;
+border:1.5px solid #cfd8e5;
+border-radius:7px;
+padding:0 50px;
+font-size:15px;
+color:#071a44;
+background:#fff;
+box-shadow:none;
+}
+
+.form-control::placeholder{
+color:#64748b;
+}
+
+.form-control:focus{
+border-color:#0d5ad8;
+box-shadow:0 0 0 4px rgba(13,90,216,.10);
+}
+
+.form-control.is-error{
+border-color:#dc2626;
+box-shadow:0 0 0 4px rgba(220,38,38,.08);
+}
+
+.field-error{
+font-size:12px;
+color:#dc2626;
+font-weight:600;
+display:none;
+align-items:center;
+gap:6px;
+margin-top:6px;
+}
+
+.field-error.show{
+display:flex;
+}
+
+.login-options{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+margin:2px 0 20px;
+}
+
+.remember-wrap{
+display:flex;
+align-items:center;
+gap:9px;
+font-size:13.5px;
+color:#475569;
+cursor:pointer;
+}
+
+.remember-wrap input{
+width:17px;
+height:17px;
+accent-color:#0b46c8;
+cursor:pointer;
+}
+
+.forgot-link{
+font-size:13.5px;
+font-weight:800;
+color:#0d5ad8;
+text-decoration:none;
+}
+
+.forgot-link:hover{
+text-decoration:underline;
+}
+
+.btn-login{
+height:52px;
+width:100%;
+border:none;
+border-radius:7px;
+background:linear-gradient(180deg,#0d63e6 0%,#0b46c8 100%);
+color:#fff;
+font-weight:800;
+font-size:17px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:11px;
+box-shadow:0 14px 32px rgba(13,90,216,.22);
+transition:.2s;
+}
+
+.btn-login:hover{
+transform:translateY(-1px);
+filter:brightness(.98);
+}
+
+.btn-login:disabled{
+opacity:.7;
+cursor:not-allowed;
+}
+
+.spinner{
+width:17px;
+height:17px;
+border:2.5px solid rgba(255,255,255,.35);
+border-top-color:white;
+border-radius:50%;
+animation:spin .7s linear infinite;
+display:none;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg)}
+}
+
+.security-divider{
+display:flex;
+align-items:center;
+gap:16px;
+margin:28px 0 14px;
+color:#9aa8bd;
+}
+
+.security-divider:before,
+.security-divider:after{
+content:"";
+height:1px;
+background:#d8dee8;
+flex:1;
+}
+
+.security-divider i{
+font-size:24px;
+color:#9aa8bd;
+}
+
+.secure-text{
+text-align:center;
+font-size:15px;
+color:#475569;
+margin:0;
+}
+
+.footer-mobile{
+display:none;
+text-align:center;
+font-size:12.5px;
+color:#64748b;
+margin-top:30px;
+}
+
+.portal-links{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:18px;
+margin-top:14px;
+font-size:12.5px;
+font-weight:700;
+}
+.portal-links a{
+color:#0d5ad8;
+text-decoration:none;
+display:inline-flex;
+align-items:center;
+gap:6px;
+}
+.portal-links a:hover{text-decoration:underline}
+
+@media(max-height:820px) and (min-width:1101px){
+.left-panel{padding-top:42px;padding-bottom:30px}
+.brand{margin-bottom:54px}
+.admin-icon{width:62px;height:62px;font-size:25px;margin-bottom:20px}
+.hero-copy h2{font-size:37px}
+.hero-copy>p{font-size:15.5px;margin-bottom:24px}
+.admin-features{gap:10px}
+.feature{padding:11px 14px;grid-template-columns:50px 1fr}
+.feature-icon{width:50px;height:50px;font-size:21px}
+.feature strong{font-size:14.5px}
+.feature span{font-size:12.7px}
+.login-card{width:min(470px,100%);padding:34px 38px 30px}
+.admin-badge{width:78px;height:78px;font-size:36px;margin-bottom:16px}
+.login-top{margin-bottom:24px}
+.login-top h3{font-size:26px}
+.login-top p{font-size:14px}
+.form-group{margin-bottom:15px}
+.form-control{height:47px}
+.btn-login{height:48px}
+.security-divider{margin:22px 0 12px}
+}
+
+@media(max-width:1100px){
+html,body{overflow:auto}
+.admin-page{height:auto;min-height:100vh;grid-template-columns:1fr}
+.left-panel{height:auto;min-height:520px;padding:38px 28px}
+.brand{margin-bottom:44px}
+.right-panel{height:auto;padding:34px 22px}
+.left-footer{display:none}
+.footer-mobile{display:block}
+}
+
+@media(max-width:640px){
+.left-panel{padding:30px 22px;min-height:auto}
+.brand img{width:56px;height:56px}
+brand h1{font-size:20px}
+.brand p{font-size:14px}
+.hero-copy h2{font-size:33px}
+.hero-copy>p{width:100%;font-size:15px}
+.admin-features{width:100%}
+.right-panel{padding:22px 14px}
+.login-card{padding:30px 22px;border-radius:14px}
+.admin-badge{width:74px;height:74px;font-size:34px}
+.login-top h3{font-size:24px}
+.login-options{align-items:flex-start;flex-direction:column;gap:10px}
+}
+</style>
+
+<script src="audit-trail.js"></script>
+<script>
+document.getElementById('email')?.addEventListener('input', function () {
+  const passwordInput = document.getElementById('password');
+  const form = this.closest('form');
+  const isAdmin = isSystemAdministratorEmail(this.value);
+
+  if (isAdmin) {
+    this.setAttribute('autocomplete', 'off');
+    passwordInput?.setAttribute('autocomplete', 'new-password');
+    passwordInput?.removeAttribute('name');
+    form?.setAttribute('autocomplete', 'off');
+  } else {
+    this.setAttribute('autocomplete', 'username');
+    if (passwordInput) {
+      passwordInput.setAttribute('autocomplete', 'current-password');
+      passwordInput.setAttribute('name', 'password');
+    }
+    form?.setAttribute('autocomplete', 'on');
+  }
+});
+
+</script>
+<link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="../patient/css/auth-unified.css">
+<link rel="stylesheet" href="admin-login.css?v=20260721-reference-split-v6">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+</head>
+
+<body>
+<div class="admin-page">
+
+<section class="left-panel">
+<div class="left-content">
+
+<div class="brand">
+<img src="images/mhc-logo.png" alt="Pulilan Health Center Logo" onerror="this.style.display='none'">
+<div>
+<h1>PULILAN HEALTH CENTER</h1>
+<p>Appointment &amp; Queue<br>Management System</p>
+</div>
+</div>
+
+<div class="hero-copy">
+<h2>Health Center Access,<br><span>Authorized Personnel Only.</span></h2>
+<div class="blue-line"></div>
+<p>This portal is reserved for authorized health center administrators and RHU staff managing appointments, queues, and service records.</p>
+</div>
+
+<div class="admin-features">
+<div class="feature">
+<div class="feature-icon blue"><i class="fa-solid fa-user-shield"></i></div>
+<div>
+<strong>Role-based Access</strong>
+<span>Administrators and RHU staff are directed to the correct dashboard after sign in.</span>
+</div>
+</div>
+
+<div class="feature">
+<div class="feature-icon green"><i class="fa-solid fa-house-medical"></i></div>
+<div>
+<strong>RHU Data Scope</strong>
+<span>Staff accounts are intended for their assigned RHU branch only.</span>
+</div>
+</div>
+
+<div class="feature">
+<div class="feature-icon amber"><i class="fa-solid fa-clock-rotate-left"></i></div>
+<div>
+<strong>Activity Monitoring</strong>
+<span>Important management actions are recorded in system audit logs.</span>
+</div>
+</div>
+</div>
+
+<div class="left-footer">© 2026 Pulilan Health Center. All rights reserved.</div>
+
+</div>
+</section>
+
+<section class="right-panel">
+<div class="login-card">
+
+<div class="login-top">
+<div class="admin-badge">
+<i class="fa-solid fa-lock"></i>
+</div>
+<h3>Staff / Administrator Login</h3>
+<p>Sign in using your authorized management account.</p>
+<div class="authorized-pill"><i class="fa-solid fa-shield-halved"></i> Authorized personnel only</div>
+</div>
+
+<div class="error-box" id="errorBox">
+<i class="fas fa-circle-xmark"></i>
+<span id="errorText">Invalid email or password.</span>
+</div>
+
+<div aria-hidden="true" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">
+  <input type="text" name="username" autocomplete="username" tabindex="-1">
+  <input type="password" name="password" autocomplete="current-password" tabindex="-1">
+</div>
+<div class="form-group">
+<label class="form-label">Email Address</label>
+<div class="input-wrap">
+<i class="fa-regular fa-envelope left"></i>
+<input type="text" inputmode="email" id="email" class="form-control" placeholder="Enter your email address" oninput="clearFieldError('email','emailError')" name="phc_identity_20260712" autocomplete="off" autocapitalize="none" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true">
+</div>
+<div class="field-error" id="emailError">
+<i class="fas fa-circle-exclamation"></i>
+<span>Please enter a valid email address.</span>
+</div>
+</div>
+
+<div class="form-group">
+<label class="form-label">Password</label>
+<div class="input-wrap">
+<i class="fa-solid fa-lock left"></i>
+<input type="password" id="password" class="form-control" placeholder="Enter your password" oninput="clearFieldError('password','passwordError')" name="phc_secret_20260712" autocomplete="new-password" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true">
+<i class="fa-regular fa-eye-slash eye" id="togglePw"></i>
+</div>
+<div class="field-error" id="passwordError">
+<i class="fas fa-circle-exclamation"></i>
+<span>Password is required.</span>
+</div>
+</div>
+
+<div id="otpPanel" class="otp-panel" hidden>
+  <div class="otp-heading">
+    <i class="fa-solid fa-shield-halved"></i>
+    <div>
+      <strong>Verify your account</strong>
+      <span id="otpDestination">We sent a 6-digit verification code to your official email.</span>
+    </div>
+  </div>
+
+  <div class="otp-code-group" id="otpCodeGroup" role="group" aria-label="6-digit verification code">
+    <input class="otp-digit" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" aria-label="Digit 1">
+    <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2">
+    <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 3">
+    <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 4">
+    <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5">
+    <input class="otp-digit" type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6">
+  </div>
+
+  <div class="otp-resend-row">
+    <span id="otpResendTimer">Resend code in 00:30</span>
+    <button id="otpResendBtn" class="otp-resend-btn" type="button" onclick="resendOtp()" disabled>Click to resend</button>
+  </div>
+
+  <div class="otp-actions">
+    <button class="otp-cancel-btn" type="button" onclick="resetOtpStep()">Cancel</button>
+    <button class="otp-verify-btn" id="verifyOtpBtn" type="button" onclick="verifyOtp()"><i class="fa-solid fa-shield-check"></i> Verify</button>
+  </div>
+</div>
+
+<button class="btn-login" id="loginBtn" type="button" onclick="doLogin()">
+<div class="spinner" id="spinner"></div>
+<span id="btnText"><i class="fa-solid fa-lock"></i> Sign In</span>
+</button>
+
+<div class="security-notice">
+<i class="fa-solid fa-circle-exclamation"></i>
+<span>Unauthorized access is prohibited. All sign-ins and important system activities may be monitored for accountability.</span>
+</div>
+<p class="footer-mobile">&copy; 2026 Pulilan Health Center. All rights reserved.</p>
+
+</div>
+</section>
+
+</div>
+
+<footer class="auth-footer">
+  <div class="auth-footer-brand">
+    <img src="../patient/images/pulilan-seal.png" alt="Pulilan municipal seal">
+    <div><strong>PHAQS — Pulilan Health Appointment and Queueing System</strong><span>Secure personnel access</span></div>
+  </div>
+  <div class="auth-footer-item"><i class="fa-solid fa-location-dot"></i><span>Pulilan, Bulacan, Philippines</span></div>
+  <div class="auth-footer-item"><i class="fa-solid fa-shield-halved"></i><span>Authorized personnel access only</span></div>
+  <div class="auth-footer-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Sign-ins and key actions are recorded</span></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+try{sessionStorage.removeItem('phc-admin-shell-role')}catch(_){ }
+window.onload=function(){
+  const email=document.getElementById('email');
+  const password=document.getElementById('password');
+  if(email) email.value='';
+  if(password) password.value='';
+  setTimeout(()=>{ if(email) email.value=''; if(password) password.value=''; },150);
+};
+
+document.getElementById("togglePw").addEventListener("click",function(){
+const input=document.getElementById("password");
+if(input.type==="password"){
+input.type="text"; this.classList.remove("fa-eye-slash"); this.classList.add("fa-eye");
+}else{
+input.type="password"; this.classList.remove("fa-eye"); this.classList.add("fa-eye-slash");
+}
+});
+
+function clearFieldError(inputId,errorId){
+document.getElementById(inputId).classList.remove("is-error");
+document.getElementById(errorId).classList.remove("show");
+document.getElementById("errorBox").style.display="none";
+}
+function normalizeEmailValue(value){
+  return String(value || '')
+    .normalize('NFKC')
+    .replace(/[\u200B-\u200D\u2060\uFEFF]/g,'')
+    .replace(/\u00A0/g,' ')
+    .trim()
+    .toLowerCase();
+}
+function isValidEmail(email){
+  const value=normalizeEmailValue(email);
+  return /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+$/i.test(value);
+}
+function showFieldError(inputId,errorId,msg){
+document.getElementById(inputId).classList.add("is-error");
+const errEl=document.getElementById(errorId); errEl.querySelector("span").innerText=msg; errEl.classList.add("show");
+}
+let awaitingOtp=false;
+let otpResendSeconds=30;
+let otpResendInterval=null;
+document.addEventListener("keydown",function(e){ if(e.key==="Enter") awaitingOtp ? verifyOtp() : doLogin(); });
+
+function isSystemAdministratorEmail(emailValue) {
+  return String(emailValue || '').trim().toLowerCase() === 'admin@pulilan.gov.ph';
+}
+
+function suppressAdminPasswordSavePrompt() {
+  const emailInput=document.getElementById('email');
+  const passwordInput=document.getElementById('password');
+
+  [emailInput,passwordInput].forEach((input,index)=>{
+    if(!input)return;
+    input.value='';
+    input.setAttribute('autocomplete','off');
+    input.setAttribute('data-lpignore','true');
+    input.setAttribute('data-1p-ignore','true');
+    input.setAttribute('data-form-type','other');
+    input.name='completed_secure_field_'+index+'_'+Date.now();
+    input.readOnly=true;
+    input.disabled=true;
+  });
+
+  // password handling
+  // otp handling
+  window.setTimeout(()=>{
+    emailInput?.remove();
+    passwordInput?.remove();
+  },10);
+}
+
+async function doLogin(){
+const emailInput=document.getElementById("email");
+const email=normalizeEmailValue(emailInput.value);
+emailInput.value=email;
+const password=document.getElementById("password").value;
+const btn=document.getElementById("loginBtn");
+const spinner=document.getElementById("spinner");
+const btnText=document.getElementById("btnText");
+const errorBox=document.getElementById("errorBox");
+errorBox.style.display="none";
+document.getElementById("email").classList.remove("is-error");
+document.getElementById("password").classList.remove("is-error");
+document.getElementById("emailError").classList.remove("show");
+document.getElementById("passwordError").classList.remove("show");
+let hasError=false;
+if(!email){ showFieldError("email","emailError","Email is required."); hasError=true; }
+else if(!isValidEmail(email)){ showFieldError("email","emailError","Please enter a valid email address."); hasError=true; }
+if(!password){ showFieldError("password","passwordError","Password is required."); hasError=true; }
+else if(password.length<6){ showFieldError("password","passwordError","Password must be at least 6 characters."); hasError=true; }
+if(hasError)return;
+btn.disabled=true; spinner.style.display="block"; btnText.style.display="none";
+try{
+  const res = await fetch('../backend/api.php?action=admin_login',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});
+  const r = await res.json();
+  if(r.ok && r.requiresOtp){
+    awaitingOtp=true;
+    document.querySelectorAll('.form-group').forEach(el=>el.style.display='none');
+    document.getElementById('loginBtn').style.display='none';
+    document.getElementById('otpPanel').hidden=false;
+    document.getElementById('otpDestination').innerText='We sent a 6-digit verification code to '+(r.maskedEmail||'your official email')+'.';
+    clearOtpDigits();
+    startOtpResendTimer(30);
+    document.querySelector('.otp-digit')?.focus();
+    btn.disabled=false; spinner.style.display='none'; btnText.style.display='flex';
+    return;
+  }
+  if(r.ok){ try{sessionStorage.setItem('phc-admin-shell-role','staff')}catch(_){ } window.location.href='admin-dashboard.html'; return; }
+  throw new Error(r.message || 'Invalid email or password.');
+}catch(e){
+  btn.disabled=false; spinner.style.display="none"; btnText.style.display="flex"; errorBox.style.display="flex";
+  document.getElementById("errorText").innerText=e.message || "Invalid email or password. Please try again.";
+  document.getElementById("email").classList.add("is-error"); document.getElementById("password").classList.add("is-error");
+}
+}
+
+function getOtpDigits(){
+  return Array.from(document.querySelectorAll('.otp-digit'));
+}
+
+function getOtpValue(){
+  return getOtpDigits().map(input=>input.value.replace(/\D/g,'')).join('');
+}
+
+function clearOtpDigits(){
+  getOtpDigits().forEach(input=>input.value='');
+}
+
+function startOtpResendTimer(seconds=30){
+  window.clearInterval(otpResendInterval);
+  otpResendSeconds=seconds;
+  const timer=document.getElementById('otpResendTimer');
+  const resend=document.getElementById('otpResendBtn');
+  resend.disabled=true;
+  const render=()=>{
+    const value=Math.max(0,otpResendSeconds);
+    timer.textContent='Resend code in 00:'+String(value).padStart(2,'0');
+    if(value<=0){
+      window.clearInterval(otpResendInterval);
+      timer.textContent='Did not receive the code?';
+      resend.disabled=false;
+    }
+    otpResendSeconds-=1;
+  };
+  render();
+  otpResendInterval=window.setInterval(render,1000);
+}
+
+async function resendOtp(){
+  const resend=document.getElementById('otpResendBtn');
+  const errorBox=document.getElementById('errorBox');
+  resend.disabled=true;
+  errorBox.style.display='none';
+  try{
+    const response=await fetch('../backend/api.php?action=admin_resend_otp',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});
+    const result=await response.json();
+    if(!result.ok) throw new Error(result.message||'Unable to resend the verification code.');
+    document.getElementById('otpDestination').innerText='We sent a new 6-digit verification code to '+(result.maskedEmail||'your official email')+'.';
+    clearOtpDigits();
+    document.querySelector('.otp-digit')?.focus();
+    startOtpResendTimer(30);
+  }catch(error){
+    document.getElementById('errorText').innerText=error.message;
+    errorBox.style.display='flex';
+    resend.disabled=false;
+  }
+}
+
+async function verifyOtp(){
+  const otp=getOtpValue();
+  const button=document.getElementById('verifyOtpBtn');
+  const errorBox=document.getElementById('errorBox');
+  if(otp.length!==6){ document.getElementById('errorText').innerText='Enter the complete 6-digit verification code.'; errorBox.style.display='flex'; getOtpDigits().find(input=>!input.value)?.focus(); return; }
+  button.disabled=true; errorBox.style.display='none';
+  try{
+    const res=await fetch('../backend/api.php?action=admin_verify_otp',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({otp})});
+    const result=await res.json();
+    if(result.ok){
+      try{sessionStorage.setItem('phc-admin-shell-role','full')}catch(_){ }
+      suppressAdminPasswordSavePrompt();
+      window.setTimeout(()=>window.location.replace('admin-dashboard.html'),80);
+      return;
+    }
+    throw new Error(result.message||'Unable to verify the code.');
+  }catch(error){
+    button.disabled=false;
+    clearOtpDigits();
+    document.querySelector('.otp-digit')?.focus();
+    document.getElementById('errorText').innerText=error.message;
+    errorBox.style.display='flex';
+  }
+}
+
+function resetOtpStep(){
+  awaitingOtp=false;
+  window.clearInterval(otpResendInterval);
+  document.getElementById('otpPanel').hidden=true;
+  document.querySelectorAll('.form-group').forEach(el=>el.style.display='block');
+  document.getElementById('loginBtn').style.display='flex';
+  clearOtpDigits();
+  document.getElementById('errorBox').style.display='none';
+  document.getElementById('password').value='';
+  document.getElementById('email').focus();
+}
+
+document.querySelectorAll('.otp-digit').forEach((input,index,inputs)=>{
+  input.addEventListener('input',event=>{
+    const digits=event.target.value.replace(/\D/g,'');
+    event.target.value=digits.slice(-1);
+    if(event.target.value && index<inputs.length-1) inputs[index+1].focus();
+    document.getElementById('errorBox').style.display='none';
+    if(getOtpValue().length===6) document.getElementById('verifyOtpBtn').focus();
+  });
+  input.addEventListener('keydown',event=>{
+    if(event.key==='Backspace' && !input.value && index>0){
+      inputs[index-1].focus();
+      inputs[index-1].value='';
+    }
+    if(event.key==='ArrowLeft' && index>0) inputs[index-1].focus();
+    if(event.key==='ArrowRight' && index<inputs.length-1) inputs[index+1].focus();
+  });
+  input.addEventListener('paste',event=>{
+    const pasted=(event.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'').slice(0,6);
+    if(!pasted)return;
+    event.preventDefault();
+    inputs.forEach((box,i)=>box.value=pasted[i]||'');
+    inputs[Math.min(pasted.length,6)-1]?.focus();
+  });
+});
+</script>
+
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script src="../backend/backend.js"></script>
+
+<script src="logout-confirmation.js?v=20260723-all-pages"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>

@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/phaqs-feedback.js?v=20260730-alert-ui-v1"></script>
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Patient Inquiries | Pulilan Health Center Staff</title>
+<link rel="icon" type="image/png" href="images/mhc-logo.png">
+<link rel="apple-touch-icon" href="images/mhc-logo.png">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+* { box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f6f8fb; margin: 0; }
+html, body { height: 100%; overflow: hidden; }
+
+.navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: white; border-bottom: 3px solid #1e40af;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+.nav-container {
+  width: 100%; padding: 14px 32px;
+  display: flex; align-items: center; position: relative;
+}
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-area img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.logo-area strong { font-size: 15px; color: #111827; }
+.logo-area small  { color: #6b7280; font-size: 12px; display: block; }
+.nav-right { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.admin-info { text-align: right; }
+.admin-info .a-name { font-size: 13.5px; font-weight: 600; color: #111827; display: block; }
+.admin-info .a-role { font-size: 12px; color: #6b7280; display: block; }
+.admin-avatar {
+  width: 36px; height: 36px; background: #1e40af; color: white;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px; flex-shrink: 0;
+}
+.btn-logout {
+  background: white; color: #dc2626; border: 1.5px solid #fecaca;
+  padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-logout:hover { background: #fef2f2; }
+
+.hamburger-btn {
+  display: none; background: none; border: none;
+  font-size: 22px; color: #374151; cursor: pointer; padding: 4px; margin-left: 10px;
+}
+.mobile-sidebar {
+  display: none; position: absolute; top: 100%; left: 0; right: 0;
+  background: white; border-top: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  padding: 10px 12px 16px; z-index: 999; flex-direction: column; gap: 4px;
+}
+.mobile-sidebar.show { display: flex; }
+.mob-section-label {
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 10px 4px;
+}
+.mob-sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: 9px; text-decoration: none;
+  font-size: 13.5px; font-weight: 500; color: #374151; transition: 0.15s;
+  border: none; background: none; font-family: 'Inter', sans-serif;
+  cursor: pointer; width: 100%; text-align: left;
+}
+.mob-sidebar-item:hover  { background: #f1f5f9; color: #1e40af; }
+.mob-sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; }
+.mob-s-icon {
+  width: 28px; height: 28px; border-radius: 7px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #6b7280; flex-shrink: 0;
+}
+.mob-sidebar-item.active .mob-s-icon,
+.mob-sidebar-item:hover  .mob-s-icon { background: #dbeafe; color: #1e40af; }
+.mob-divider { height: 1px; background: #e5e7eb; margin: 6px 0; }
+
+.layout { display: flex; height: calc(100vh - 67px); }
+
+.sidebar {
+  width: 240px; background: white; border-right: 1px solid #e5e7eb;
+  display: flex; flex-direction: column;
+  position: sticky; top: 67px;
+  height: calc(100vh - 67px); overflow-y: auto; flex-shrink: 0;
+}
+.sidebar-section-label {
+  padding: 16px 20px 6px; font-size: 10.5px; font-weight: 700;
+  color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 11px;
+  padding: 11px 20px; font-size: 14px; font-weight: 500;
+  color: #374151; cursor: pointer; border: none; background: none;
+  width: 100%; text-align: left; font-family: 'Inter', sans-serif;
+  transition: 0.15s; text-decoration: none; border-left: 3px solid transparent;
+}
+.sidebar-item:hover { background: #f9fafb; color: #1e40af; }
+.sidebar-item.active { background: #eff6ff; color: #1e40af; font-weight: 600; border-left-color: #1e40af; }
+.s-icon {
+  width: 30px; height: 30px; border-radius: 8px; background: #f3f4f6;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: #6b7280; flex-shrink: 0;
+}
+.sidebar-item.active .s-icon,
+.sidebar-item:hover  .s-icon { background: #dbeafe; color: #1e40af; }
+
+.main-content { flex: 1; padding: 32px; overflow-y: auto; min-width: 0; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+.page-header h2 { font-weight: 700; font-size: 26px; margin: 0 0 3px; color: #0f172a; }
+.page-header p  { color: #6b7280; margin: 0; font-size: 14px; }
+
+.staff-notice {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; color: #a16207; margin-bottom: 20px;
+}
+
+.stats-row {
+  display: grid; grid-template-columns: repeat(5,1fr);
+  gap: 14px; margin-bottom: 24px;
+}
+.stat-box {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03); padding: 16px 18px;
+  display: flex; align-items: center; gap: 12px; transition: 0.2s;
+}
+.stat-box:hover { border-color: #bfdbfe; box-shadow: 0 4px 14px rgba(30,64,175,0.08); }
+.stat-icon {
+  width: 42px; height: 42px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.si-blue   { background: #dbeafe; color: #1e40af; }
+.si-green  { background: #dcfce7; color: #15803d; }
+.si-amber  { background: #fef9c3; color: #a16207; }
+.si-purple { background: #ede9fe; color: #7c3aed; }
+.si-red    { background: #fee2e2; color: #dc2626; }
+.stat-label { font-size: 11px; color: #9ca3af; margin: 0 0 3px; font-weight: 500; }
+.stat-value { font-size: 22px; font-weight: 700; color: #0f172a; margin: 0; line-height: 1; }
+
+.filter-bar {
+  background: white; border-radius: 13px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  padding: 14px 18px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.filter-bar input,
+.filter-bar select {
+  padding: 9px 12px; border: 1.5px solid #e5e7eb; border-radius: 8px;
+  font-size: 13.5px; font-family: 'Inter', sans-serif;
+  color: #111827; background: #fafafa; outline: none; transition: 0.18s;
+}
+.filter-bar input  { flex: 1; min-width: 180px; }
+.filter-bar select { min-width: 140px; }
+.filter-bar input:focus,
+.filter-bar select:focus { border-color: #1e40af; background: white; box-shadow: 0 0 0 3px rgba(30,64,175,0.08); }
+.btn-export {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 9px 16px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: flex; align-items: center; gap: 6px; margin-left: auto; white-space: nowrap;
+}
+.btn-export:hover { background: #f3f4f6; }
+
+.card {
+  background: white; border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); overflow: hidden;
+}
+.card-head {
+  padding: 15px 22px 12px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-head-left { display: flex; align-items: center; gap: 9px; }
+.card-head-left h6 { font-weight: 600; font-size: 15px; color: #111827; margin: 0; }
+.hicon {
+  width: 32px; height: 32px; border-radius: 8px; background: #dbeafe;
+  display: flex; align-items: center; justify-content: center;
+  color: #1e40af; font-size: 13px; flex-shrink: 0;
+}
+
+.tbl-wrap { overflow-x: auto; }
+.pat-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 900px; }
+.pat-table th {
+  text-align: left; padding: 10px 16px;
+  font-size: 10.5px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  border-bottom: 1px solid #f1f5f9; background: #fafafa;
+}
+.pat-table td {
+  padding: 12px 16px; border-bottom: 1px solid #f9fafb;
+  color: #374151; vertical-align: middle;
+}
+.pat-table tr:last-child td { border-bottom: none; }
+.pat-table tr:hover td { background: #f9fafb; }
+
+.pat-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #dbeafe; color: #1e40af;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0;
+}
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px;
+}
+.b-active     { background: #dcfce7; color: #15803d; }
+.b-philhealth { background: #dbeafe; color: #1e40af; }
+.b-inactive   { background: #fee2e2; color: #dc2626; }
+.b-4ps        { background: #fef9c3; color: #a16207; }
+.b-senior     { background: #ede9fe; color: #7c3aed; }
+.b-pwd        { background: #fce7f3; color: #9d174d; }
+.b-none       { background: #f3f4f6; color: #9ca3af; }
+
+.btn-sm {
+  padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 600;
+  font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: 0.15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.bs-blue { background: #dbeafe; color: #1e40af; }
+.bs-blue:hover { background: #bfdbfe; }
+
+.pagination-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 22px; border-top: 1px solid #f1f5f9;
+  font-size: 13px; color: #6b7280; flex-wrap: wrap; gap: 8px;
+}
+.pagination-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+.page-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid #e5e7eb;
+  background: white; color: #374151; font-size: 13px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif; transition: 0.15s;
+}
+.page-btn:hover { background: #f3f4f6; }
+.page-btn.active { background: #1e40af; color: white; border-color: #1e40af; }
+
+.simple-modal .modal-content {
+  border-radius: 14px; border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12); font-family: 'Inter', sans-serif;
+}
+.simple-modal .modal-header { padding: 18px 24px 14px; border-bottom: 1px solid #f1f5f9; }
+.simple-modal .modal-title { font-size: 16px; font-weight: 700; color: #111827; display: flex; align-items: center; gap: 9px; }
+.mti { width: 24px; height: 24px; border-radius: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.mti-blue { background: none; color: #1e40af; }
+.simple-modal .modal-body   { padding: 20px 24px; }
+.simple-modal .modal-footer { padding: 14px 24px 20px; border-top: 1px solid #f1f5f9; gap: 10px; justify-content: flex-end; }
+.btn-dark-blue {
+  background: #1e40af; color: white; border: none;
+  padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+.btn-dark-blue:hover { background: #1d4ed8; }
+.btn-outline-cancel {
+  background: white; color: #374151; border: 1.5px solid #e5e7eb;
+  padding: 10px 18px; border-radius: 8px; font-weight: 500; font-size: 14px;
+  font-family: 'Inter', sans-serif; cursor: pointer; transition: 0.2s;
+}
+.btn-outline-cancel:hover { background: #f3f4f6; }
+
+.pat-modal-header-card {
+  background: #1e40af; border-radius: 12px; padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;
+}
+.pat-modal-avatar {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+  color: white; display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 700; flex-shrink: 0;
+}
+.pat-modal-name { font-size: 17px; font-weight: 700; color: white; margin: 0 0 3px; }
+.pat-modal-id   { font-size: 12px; color: rgba(255,255,255,0.7); margin: 0; }
+
+.detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden;
+  margin-bottom: 14px;
+}
+.detail-cell {
+  padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 13.5px;
+}
+.detail-cell:nth-last-child(-n+2) { border-bottom: none; }
+.detail-cell:nth-child(odd) { border-right: 1px solid #f3f4f6; }
+.detail-label { font-size: 11.5px; color: #9ca3af; margin-bottom: 3px; font-weight: 500; }
+.detail-value { font-weight: 600; color: #111827; }
+
+.section-title {
+  font-size: 11px; font-weight: 700; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em; margin: 14px 0 8px;
+}
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+
+.empty-state { text-align: center; padding: 60px 24px; color: #9ca3af; }
+.empty-icon {
+  width: 64px; height: 64px; background: #f3f4f6; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px; font-size: 26px; color: #d1d5db;
+}
+
+@media (max-width: 900px) {
+  .sidebar       { display: none; }
+  .hamburger-btn { display: block; }
+  .main-content  { padding: 24px; }
+  html, body     { overflow: auto; }
+  .layout        { height: auto; }
+}
+
+@media (max-width: 768px) {
+  .nav-container { padding: 12px 20px; }
+  .admin-info    { display: none; }
+  .main-content  { padding: 16px; }
+  .stats-row     { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .filter-bar    { flex-direction: column; align-items: stretch; gap: 8px; }
+  .filter-bar input,
+  .filter-bar select { min-width: unset; width: 100%; }
+  .btn-export    { margin-left: 0; width: 100%; justify-content: center; }
+  .page-header h2 { font-size: 22px; }
+  .stat-icon     { width: 36px; height: 36px; font-size: 15px; }
+  .stat-value    { font-size: 20px; }
+}
+
+@media (max-width: 480px) {
+  .stats-row     { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-box      { padding: 12px 10px; gap: 8px; }
+  .stat-value    { font-size: 18px; }
+  .detail-grid   { grid-template-columns: 1fr; }
+  .detail-cell:nth-child(odd) { border-right: none; }
+  .detail-cell:nth-last-child(-n+2) { border-bottom: 1px solid #f3f4f6; }
+  .detail-cell:last-child    { border-bottom: none; }
+  .btn-logout span { display: none; }
+}
+</style>
+  <link rel="stylesheet" href="../theme-clean.css">
+<link rel="stylesheet" href="admin-sidebar.css">
+<link rel="stylesheet" href="../final-polish.css?v=20260712">
+<style>
+.inquiry-layout{display:grid;grid-template-columns:340px minmax(0,1fr);gap:18px;height:calc(100vh - 185px)}
+.inquiry-panel{background:#fff;border:1px solid #e5e7eb;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.inquiry-head{padding:14px 16px;border-bottom:1px solid #f1f5f9}.inquiry-head h6{margin:0;font-size:14px}.inquiry-scope{display:flex;align-items:center;gap:7px;margin-top:7px;color:#475569;font-size:10.5px}.inquiry-scope i{color:#1e40af}.inquiry-search{padding:10px;border-bottom:1px solid #f1f5f9}.inquiry-search input{width:100%;padding:9px 11px;border:1.5px solid #e5e7eb;border-radius:8px;background:#fff;color:#111827;font:12px 'Inter',sans-serif;outline:none}.inquiry-search input:focus{border-color:#1e40af;box-shadow:0 0 0 3px rgba(30,64,175,.08)}
+.thread-list{overflow-y:auto;flex:1}.thread-item{width:100%;border:0;border-bottom:1px solid #f1f5f9;background:#fff;text-align:left;padding:13px 15px;cursor:pointer}.thread-item:hover,.thread-item.active{background:#eff6ff}.thread-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.thread-item strong{font-size:12.5px;color:#111827}.thread-item p{font-size:11px;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:5px 0}.thread-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:9.5px;color:#9ca3af}.thread-branch{display:inline-flex;align-items:center;padding:3px 7px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:650}.unread{background:#dc2626;color:#fff;border-radius:999px;padding:2px 6px;font-size:9px}.thread-status{border-radius:999px;padding:3px 7px;font-size:9px;font-weight:600}.Open{background:#dbeafe;color:#1e40af}.Waiting-for-Patient{background:#fef3c7;color:#92400e}.Resolved{background:#dcfce7;color:#166534}
+.chat-main{display:flex;flex-direction:column;min-width:0}.chat-title{padding:14px 18px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between}.chat-title h6{margin:0;font-size:14px}.chat-title small{display:block;color:#6b7280;margin-top:3px}.chat-actions{display:flex;gap:7px;align-items:center}.chat-actions select{padding:7px 9px;border:1px solid #d1d5db;border-radius:7px;font-size:11px}
+.messages{flex:1;overflow-y:auto;padding:18px;background:#f8fafc}.message{max-width:72%;padding:10px 12px;border-radius:11px;margin-bottom:10px;font-size:12px;line-height:1.5}.message.patient{background:#fff;border:1px solid #e5e7eb;margin-right:auto}.message.admin{background:#1e40af;color:#fff;margin-left:auto}.message.automated{border:1px solid #f5c76a;border-right:4px solid #d97706;background:#fffbeb;color:#713f12}.message-auto-tag{display:block;width:max-content;margin-bottom:5px;padding:2px 5px;border-radius:3px;background:#fef3c7;color:#92400e;font-size:8px;font-weight:800;text-transform:uppercase}.message small{display:block;margin-top:5px;font-size:9px;opacity:.7}
+.reply{display:flex;gap:9px;padding:13px;border-top:1px solid #e5e7eb}.reply textarea{flex:1;min-height:44px;max-height:100px;resize:vertical;border:1.5px solid #e5e7eb;border-radius:8px;padding:10px;font:12px 'Inter',sans-serif}.reply button{background:#1e40af;color:#fff;border:0;border-radius:8px;padding:0 18px;font-size:12px;font-weight:600}.chat-empty{display:grid;place-items:center;height:100%;color:#9ca3af;text-align:center}
+.chat-unread-badge{margin-left:auto;background:#dc2626;color:#fff;border-radius:999px;padding:2px 6px;font-size:9px}
+@media(max-width:900px){.inquiry-layout{grid-template-columns:1fr;height:auto}.inquiry-panel{min-height:280px}.chat-main{min-height:520px}}
+</style>
+
+<link rel="stylesheet" href="management-shell-lock.css?v=20260722-exact-v1"><link rel="stylesheet" href="admin-shell.css?v=20260727-auto-confirm-v2">
+<link rel="stylesheet" href="staff-exact-patients-shell.css?v=20260722-final">
+
+<style id="hcLogoutConfirmationStyles">
+.hc-logout-backdrop{position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(15,23,42,.48);backdrop-filter:blur(2px)}
+.hc-logout-backdrop.show{display:flex}.hc-logout-dialog{width:min(430px,100%);overflow:hidden;border:1px solid #dbe3ef;border-radius:14px;background:#fff;box-shadow:0 24px 70px rgba(15,23,42,.28);font-family:Inter,Arial,sans-serif}
+.hc-logout-dialog-head{display:flex;align-items:center;gap:12px;padding:20px 22px 14px}.hc-logout-dialog-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fee2e2;color:#dc2626;font-size:17px}.hc-logout-dialog-head h3{margin:0;color:#0f172a;font-size:18px;font-weight:750}.hc-logout-dialog-body{padding:0 22px 20px;color:#64748b;font-size:14px;line-height:1.55}.hc-logout-dialog-actions{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;border-top:1px solid #e7edf5;background:#f8fafc}.hc-logout-dialog-actions button{min-width:94px;height:40px;border-radius:8px;font:700 13px Inter,Arial,sans-serif;cursor:pointer}.hc-logout-cancel{border:1px solid #cbd5e1;background:#fff;color:#334155}.hc-logout-confirm{border:1px solid #dc2626;background:#dc2626;color:#fff}.hc-logout-confirm:disabled{opacity:.65;cursor:wait}
+</style>
+<link rel="stylesheet" href="inquiries-modern.css?v=20260723-polished">
+<link rel="stylesheet" href="../targeted-visual-fixes-20260723.css?v=20260723-c">
+<style id="forcedAdminHeaderNoGap">
+
+body.management-shell-locked .inquiries-shell,
+body.management-shell-locked .messages-layout,
+body.management-shell-locked .chat-layout,
+body.management-shell-locked .announcement-records-card,
+body.management-shell-locked .announcements-card,
+body.management-shell-locked .content-card{
+  align-content:start!important;
+}
+body.management-shell-locked .conversation-panel,
+body.management-shell-locked .chat-panel,
+body.management-shell-locked .announcement-records-card{
+  padding-top:0!important;
+}
+body.management-shell-locked .conversation-panel > header,
+body.management-shell-locked .conversation-header,
+body.management-shell-locked .chat-panel > header,
+body.management-shell-locked .chat-header,
+body.management-shell-locked .announcement-records-card > header,
+body.management-shell-locked .records-header,
+body.management-shell-locked .section-header{
+  box-sizing:border-box!important;
+  min-height:64px!important;
+  height:64px!important;
+  max-height:64px!important;
+  margin:0!important;
+  padding:12px 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  transform:none!important;
+  position:relative!important;
+  top:0!important;
+  overflow:hidden!important;
+}
+body.management-shell-locked .conversation-panel > header h2,
+body.management-shell-locked .conversation-header h2,
+body.management-shell-locked .chat-panel > header h2,
+body.management-shell-locked .chat-header h2,
+body.management-shell-locked .announcement-records-card > header h2,
+body.management-shell-locked .records-header h2,
+body.management-shell-locked .section-header h2{
+  margin:0!important;
+  padding:0!important;
+  line-height:1.2!important;
+  transform:none!important;
+}
+body.management-shell-locked .conversation-toolbar,
+body.management-shell-locked .chat-toolbar,
+body.management-shell-locked .records-toolbar{
+  margin:0!important;
+  padding:10px 14px!important;
+}
+</style>
+<style>
+
+body.management-shell-locked .inquiry-panel{
+  padding-top:0!important;
+  align-content:start!important;
+}
+body.management-shell-locked .inquiry-panel > .inquiry-head,
+body.management-shell-locked .inquiry-panel > .chat-title{
+  box-sizing:border-box!important;
+  width:100%!important;
+  height:58px!important;
+  min-height:58px!important;
+  max-height:58px!important;
+  margin:0!important;
+  padding:10px 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  position:relative!important;
+  top:0!important;
+  transform:none!important;
+  overflow:hidden!important;
+  flex:0 0 58px!important;
+}
+body.management-shell-locked .inquiry-panel > .inquiry-head h6,
+body.management-shell-locked .inquiry-panel > .chat-title h6,
+body.management-shell-locked .inquiry-panel > .chat-title small{
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  line-height:1.2!important;
+}
+body.management-shell-locked .inquiry-panel > .inquiry-search{
+  margin:0!important;
+  padding:10px 12px!important;
+}
+body.management-shell-locked .announcement-card{
+  padding-top:0!important;
+  align-content:start!important;
+}
+body.management-shell-locked .announcement-card > .announcement-toolbar{
+  box-sizing:border-box!important;
+  width:100%!important;
+  height:58px!important;
+  min-height:58px!important;
+  max-height:58px!important;
+  margin:0!important;
+  padding:9px 14px!important;
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  position:relative!important;
+  top:0!important;
+  transform:none!important;
+  overflow:hidden!important;
+}
+body.management-shell-locked .announcement-card > .announcement-toolbar h6{
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+  line-height:1.2!important;
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:14px!important;
+  font-weight:700!important;
+}
+body.management-shell-locked .announcement-card > .announcement-toolbar .announcement-filter{
+  margin:0!important;
+  min-height:36px!important;
+  align-self:center!important;
+}
+@media(max-width:700px){
+  body.management-shell-locked .announcement-card > .announcement-toolbar{
+    height:auto!important;
+    min-height:58px!important;
+    max-height:none!important;
+    flex-wrap:wrap!important;
+  }
+}
+</style>
+
+<style id="patientInquiryMessageVisibilityFix">
+
+.inquiry-panel .message.admin,
+.inquiry-panel .message.admin.automated,
+#messageList .message.admin,
+#messageList .message.admin.automated {
+  background: #0b3d91 !important;
+  color: #ffffff !important;
+  border-color: #0b3d91 !important;
+}
+
+.inquiry-panel .message.admin *,
+.inquiry-panel .message.admin.automated *,
+#messageList .message.admin *,
+#messageList .message.admin.automated * {
+  color: #ffffff !important;
+}
+
+.inquiry-panel .message.admin small,
+.inquiry-panel .message.admin.automated small,
+#messageList .message.admin small,
+#messageList .message.admin.automated small {
+  color: #dbeafe !important;
+  opacity: 1 !important;
+}
+
+.inquiry-panel .message.admin.automated .message-auto-tag,
+#messageList .message.admin.automated .message-auto-tag {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1px solid #f5c76a !important;
+}
+
+.inquiry-panel .message.patient,
+#messageList .message.patient {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.inquiry-panel .message.patient *,
+#messageList .message.patient * {
+  color: #0f172a !important;
+}
+
+.inquiry-panel .message.patient small,
+#messageList .message.patient small {
+  color: #64748b !important;
+  opacity: 1 !important;
+}
+</style>
+
+</head>
+<body>
+<script>try{if(sessionStorage.getItem('phc-admin-shell-role')==='staff')document.body.classList.add('rhu-staff-session')}catch(e){}</script>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="logo-area">
+      <img src="images/mhc-logo.png">
+      <div>
+        <strong>Pulilan Health Center</strong>
+        <small>PHAQS · RHU Staff Panel</small>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div class="admin-info">
+        <span class="a-name" id="adminName">Administrator</span>
+        <span class="a-role" id="adminRole">Admin</span>
+      </div>
+      <div class="admin-avatar" id="adminAvatar">A</div>
+      <button class="btn-logout" onclick="doLogout()" data-hc-logout>
+        <i class="fas fa-right-from-bracket"></i> <span>Logout</span>
+      </button>
+      <button class="hamburger-btn" onclick="toggleAdminMenu()" id="adminHamburger">
+        <i class="fas fa-bars" id="adminHamburgerIcon"></i>
+      </button>
+    </div>
+
+<div class="mobile-sidebar" id="mobileSidebar">
+  <div class="mob-section-label">Main</div>
+  <a class="mob-sidebar-item" href="admin-dashboard.html">
+    <div class="mob-s-icon"><i class="fas fa-house"></i></div> Dashboard
+  </a>
+  <a class="mob-sidebar-item" href="admin-appointments.html">
+    <div class="mob-s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+  </a>
+  <a class="mob-sidebar-item" href="admin-queue.html">
+    <div class="mob-s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+  </a>
+  <a class="mob-sidebar-item" href="admin-patients.html">
+    <div class="mob-s-icon"><i class="fas fa-users"></i></div> Patients
+  </a>
+  <a class="mob-sidebar-item" href="admin-reports.html">
+    <div class="mob-s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+  </a>
+  <div class="mob-divider"></div>
+  <div class="mob-section-label">System</div>
+  <a class="mob-sidebar-item" href="admin-users.html"><div class="mob-s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+      <a class="mob-sidebar-item" href="admin-logs.html"><div class="mob-s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+      <a class="mob-sidebar-item" href="admin-archive.html"><div class="mob-s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+      <a class="mob-sidebar-item" href="admin-backup.html"><div class="mob-s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+  <button class="mob-sidebar-item" onclick="doLogout()" data-hc-logout>
+    <div class="mob-s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+  </button>
+</div>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <div class="sidebar">
+    <div class="sidebar-section-label">Main</div>
+    <a class="sidebar-item" href="admin-dashboard.html">
+      <div class="s-icon"><i class="fas fa-house"></i></div> Dashboard
+    </a>
+    <a class="sidebar-item" href="admin-appointments.html">
+      <div class="s-icon"><i class="fas fa-calendar-check"></i></div> Appointments
+    </a>
+    <a class="sidebar-item" href="admin-queue.html">
+      <div class="s-icon"><i class="fas fa-list-ol"></i></div> Queue Management
+    </a>
+    <a class="sidebar-item" href="admin-patients.html">
+      <div class="s-icon"><i class="fas fa-users"></i></div> Patients
+    </a>
+    <a class="sidebar-item" href="admin-reports.html">
+      <div class="s-icon"><i class="fas fa-chart-bar"></i></div> Reports
+    </a>
+    <div class="sidebar-section-label">Analytics</div>
+    <a class="sidebar-item" href="admin-heatmap.html"><div class="s-icon"><i class="fas fa-fire-flame-curved"></i></div> Disease Trends</a>
+    <div class="sidebar-section-label">System</div>
+    <a class="sidebar-item" href="admin-users.html"><div class="s-icon"><i class="fas fa-user-shield"></i></div> User Management</a>
+    <a class="sidebar-item" href="admin-logs.html"><div class="s-icon"><i class="fas fa-clipboard-list"></i></div> Audit Trail</a>
+    <a class="sidebar-item" href="admin-archive.html"><div class="s-icon"><i class="fas fa-box-archive"></i></div> Archive</a>
+    <a class="sidebar-item" href="admin-backup.html"><div class="s-icon"><i class="fas fa-database"></i></div> Backup & Restore</a>
+    <a class="sidebar-item" onclick="doLogout()" href="#" data-hc-logout>
+      <div class="s-icon"><i class="fas fa-right-from-bracket"></i></div> Logout
+    </a>
+  </div>
+
+  <div class="main-content">
+    <div class="page-header">
+      <div><h2>Patient Inquiries</h2><p id="pageDesc">Read and respond to patient questions and requests.</p></div>
+    </div>
+    
+<div class="staff-notice" id="staffNotice" style="display:none"><i class="fas fa-circle-info"></i><span id="staffNoticeText"></span></div>
+<div class="inquiry-layout">
+  <section class="inquiry-panel">
+    <div class="inquiry-head"><h6><i class="fas fa-comments" style="color:#1e40af"></i> Conversations</h6><div class="inquiry-scope"><i class="fas fa-location-dot"></i><span id="staffInquiryScope">Your assigned RHU</span></div></div>
+    <div class="inquiry-search"><input id="threadSearch" placeholder="Search patient..." oninput="renderThreads()"></div>
+    <div class="thread-list" id="threadList"></div>
+  </section>
+  <section class="inquiry-panel chat-main">
+    <div class="chat-title"><div><h6 id="chatPatient">Select a patient inquiry</h6><small id="chatEmail"></small></div><div class="chat-actions"><select id="chatStatus" disabled onchange="updateThreadStatus()"><option>Open</option><option>Waiting for Patient</option><option>Resolved</option></select></div></div>
+    <div class="messages" id="messageList"><div class="chat-empty"><div><i class="fas fa-comments" style="font-size:30px"></i><p>Select a conversation to read and reply.</p></div></div></div>
+    <form class="reply" onsubmit="sendReply(event)"><textarea id="replyText" placeholder="Type your reply..." disabled maxlength="1000"></textarea><button id="replyBtn" disabled><i class="fas fa-paper-plane"></i> Send</button></form>
+  </section>
+</div>
+
+  </div>
+</div>
+
+<script src="../shared-data.js"></script>
+<script src="admin-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../ui-utils.js?v=20260721-context-tip"></script>
+<script>
+
+let session={};
+async function pageApi(action,data=null,method='GET'){
+  let url='../backend/staff-inquiries.php?action='+encodeURIComponent(action);
+  const opts={credentials:'include',cache:'no-store'};
+  if(data&&method==='GET')url+='&'+new URLSearchParams(data);
+  else if(data){opts.method=method;opts.headers={'Content-Type':'application/json'};opts.body=JSON.stringify(data)}
+  opts.headers=Object.assign({'Accept':'application/json'},opts.headers||{});
+  const response=await fetch(url,opts);
+  const raw=await response.text();
+  let result={};
+  try{ result=raw?JSON.parse(raw):{ok:false,message:'The server returned an empty response.'}; }
+  catch(_){ result={ok:false,message:raw ? 'Server error: '+raw.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim().slice(0,320) : 'The server returned an invalid response.'}; }
+  if(!response.ok||!result.ok){
+    const error=new Error(result.message||'Request failed.');
+    error.status=response.status;
+    throw error;
+  }
+  return result;
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fullAdmin(){const r=String(session.role||'').toLowerCase(),b=String(session.branch||'').toLowerCase();return r.includes('system administrator')||(r.includes('admin')&&b.includes('all'))}
+async function loadSession(){
+  const r=await pageApi('admin_me');session=r.admin||{};
+  if(fullAdmin()){ location.replace('admin-messages.html'); throw new Error('Opening administrator inquiry page.'); }
+  const n=document.getElementById('adminName'),role=document.getElementById('adminRole'),av=document.getElementById('adminAvatar');
+  if(n)n.innerText=session.name||'Administrator';if(role)role.innerText=session.role||'Admin';if(av)av.innerText=(session.name||'A')[0].toUpperCase();
+}
+function doLogout(){confirmAdminLogout()}
+function toggleAdminMenu(){const menu=document.getElementById('mobileSidebar'),icon=document.getElementById('adminHamburgerIcon');if(!menu)return;menu.classList.toggle('show');if(icon)icon.className=menu.classList.contains('show')?'fas fa-times':'fas fa-bars'}
+
+let threads=[],selectedPatient=0,poll=null,threadFingerprint='',messageFingerprint='';
+async function loadThreads(force=false){
+  const r=await pageApi('chat_threads'),next=r.threads||[],fingerprint=next.map(t=>`${t.patient_id}:${t.last_at}:${t.unread}:${t.status}:${t.rhu_branch}`).join('|');threads=next;if(force||fingerprint!==threadFingerprint){threadFingerprint=fingerprint;renderThreads()}
+  if(selectedPatient){const t=threads.find(x=>Number(x.patient_id)===Number(selectedPatient));if(t){document.getElementById('chatStatus').value=t.status||'Open'}}
+}
+function renderThreads(){
+  const q=(document.getElementById('threadSearch').value||'').toLowerCase(),box=document.getElementById('threadList');
+  const rows=threads.filter(t=>(t.patient_name+' '+t.email).toLowerCase().includes(q));
+  box.innerHTML=rows.length?rows.map(t=>`<button class="thread-item ${Number(t.patient_id)===Number(selectedPatient)?'active':''}" onclick="openThread(${Number(t.patient_id)})"><div class="thread-top"><strong>${esc(t.patient_name)}</strong>${Number(t.unread)?`<span class="unread">${Number(t.unread)}</span>`:''}</div><p>${esc(t.last_message||'No message')}</p><div class="thread-meta"><span class="thread-branch">${esc(t.rhu_branch||session.branch||'Assigned RHU')}</span><span>${esc(t.last_at||'')}</span><span class="thread-status ${esc((t.status||'Open').replaceAll(' ','-'))}">${esc(t.status||'Open')}</span></div></button>`).join(''):'<div class="empty-page">No patient inquiries routed to your RHU.</div>';
+}
+async function openThread(id){
+  selectedPatient=id;messageFingerprint='';const t=threads.find(x=>Number(x.patient_id)===Number(id));document.getElementById('chatPatient').innerText=t?.patient_name||'Patient';document.getElementById('chatEmail').innerText=[t?.email,t?.rhu_branch].filter(Boolean).join(' • ');document.getElementById('chatStatus').disabled=false;document.getElementById('chatStatus').value=t?.status||'Open';document.getElementById('replyText').disabled=false;document.getElementById('replyBtn').disabled=false;await loadMessages(true);await loadThreads();
+}
+async function loadMessages(force=false){
+  if(!selectedPatient)return;const r=await pageApi('chat_messages',{patient_id:selectedPatient});const box=document.getElementById('messageList');
+  const messages=r.messages||[],fingerprint=messages.map(m=>`${m.id}:${m.sender_type}:${Number(m.is_automated)}:${m.created_at}`).join('|');if(!force&&fingerprint===messageFingerprint)return;const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<90;messageFingerprint=fingerprint;box.innerHTML=messages.map(m=>`<div class="message ${m.sender_type==='admin'?'admin':'patient'} ${Number(m.is_automated)?'automated':''}">${Number(m.is_automated)?'<span class="message-auto-tag">Automated reply</span>':''}${esc(m.message)}<small>${esc(m.name)} · ${esc(m.created_at)}</small></div>`).join('');if(force||nearBottom)box.scrollTop=box.scrollHeight;
+}
+function chatNotice(message){if(window.showPlainAlert)window.showPlainAlert(message,{title:'Patient inquiry',tone:'danger'});else console.error(message)}
+async function sendReply(e){e.preventDefault();const input=document.getElementById('replyText'),text=input.value.trim();if(!selectedPatient||!text)return;document.getElementById('replyBtn').disabled=true;try{await pageApi('chat_send',{patient_id:selectedPatient,message:text},'POST');input.value='';await loadMessages(true);await loadThreads(true)}catch(err){chatNotice(err.message)}finally{document.getElementById('replyBtn').disabled=false;input.focus()}}
+async function updateThreadStatus(){if(!selectedPatient)return;try{await pageApi('chat_set_status',{patient_id:selectedPatient,status:document.getElementById('chatStatus').value},'POST');await loadThreads(true)}catch(e){chatNotice(e.message)}}
+async function pollInquiries(){clearTimeout(poll);if(!document.hidden){await loadThreads();if(selectedPatient)await loadMessages()}poll=setTimeout(pollInquiries,15000)}
+(async()=>{try{await loadSession();if(!fullAdmin()){document.getElementById('staffNotice').style.display='flex';document.getElementById('staffNoticeText').innerText='You can view and reply only to patient inquiries routed to '+session.branch+'.';document.getElementById('staffInquiryScope').innerText=session.branch+' inquiries only'}await loadThreads(true);const requestedPatient=Number(new URLSearchParams(location.search).get('patient_id')||0);if(requestedPatient&&threads.some(thread=>Number(thread.patient_id)===requestedPatient))await openThread(requestedPatient);poll=setTimeout(pollInquiries,15000)}catch(e){chatNotice(e.message);if(Number(e.status)===401){try{await new Promise(r=>setTimeout(r,500));await loadSession();location.reload()}catch(confirmError){chatNotice('Your session could not be verified. Please open Dashboard first, then return to Patient Inquiries.');}}}})();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pollInquiries().catch(()=>{})});
+
+</script>
+<script src="../backend/backend.js"></script>
+<script src="admin-shell.js?v=20260727-auto-confirm-v2"></script>
+<script src="logout-confirmation.js?v=20260722-exact-v1"></script>
+<script src="staff-exact-patients-shell.js?v=20260722-final"></script>
+<script src="zero-trust.js?v=20260723"></script>
+
+<script src="management-shell-lock.js?v=20260724-force-l"></script>
+
+<script src="role-connectivity.js?v=20260725-role-final"></script>
+</body>
+</html>
